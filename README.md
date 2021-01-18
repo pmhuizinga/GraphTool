@@ -12,7 +12,7 @@ Containerized
 Deployed in AWS
 
 ## Database
-Very basic setup
+Very basic setup  
 tbl_node
 - node_id
 - node_name
