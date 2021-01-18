@@ -19,3 +19,6 @@ Sample:
 6. tool suggest all known node name, of the previously selected node type, starting with 'p', adjusting itself on each new character
 7. if node exists all know properties of the node will be displayed below the 2 source node fields.
  
+## Query
+
+## Modify and delete
