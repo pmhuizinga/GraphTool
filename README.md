@@ -1,5 +1,15 @@
 # GraphTool
-GraphTool
+
+
+## Requirements
+Easy to use to tool for small scale graph analytics. Users should be able to add new nodes and edges fast and easy.
+The tool should supply several analytical options, like
+- shortest path to node y
+- basic graph analytics: degree, centrality, betweenness
+- proces analytics based on edge types
+Graphical interface using d3.js
+Containerized 
+Deployed in AWS
 
 ## Input
 Basic setup: 
