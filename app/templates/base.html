@@ -2,34 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Default Flask UI for CRUD transactions</title>
+    <title>Graph tool</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{url_for('static', filename='main.css', id=1)}}"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css', id=8) }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    </head>
-    <body class="body">
-        <div>
-            <img src="{{url_for('static', filename='aam_logo.jpg')}}" width="150"/>
-            <br/>
-            <br/>
-        </div>
-        <div class="menu">
-            <p>
-            <a href="{{ url_for('home.index') }}">Home</a> |
-            <a href="{{ url_for('home.create') }}">Create</a> |
-            <a href="{{ url_for('home.read') }}">Read</a> |
-            <a href="{{ url_for('home.update') }}">Update</a> |
-            <a href="{{ url_for('home.delete') }}">Delete</a> |
-            <a href="{{ url_for('home.create_place') }}">Places</a> |
-            <a href="{{ url_for('home.aws') }}">AWS</a> |
-{#            <a href="{{ url_for('home.users') }}">Users</a>#}
+    <SCRIPT language="javascript">
+    function add(type) {
 
-            </p>
-        </div>
-        <hr>
-        {% block content %}{% endblock %}
-    </body>
+    //Create an input type dynamically.
+    var element = document.createElement("input");
+
+    //Assign different attributes to the element.
+    element.setAttribute("type", type);
+    element.setAttribute("value", type);
+    element.setAttribute("name", type);
+
+
+    var foo = document.getElementById("fooBar");
+
+    //Append the element in page (in span).
+    foo.appendChild(element);
+
+    }
+    </SCRIPT>
+
+</head>
+<body>
+<div class="header">GraphTool</div>
+
+{% block content %}{% endblock %}
+
+</body>
 </html>

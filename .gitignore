@@ -1,6 +1,5 @@
 # folders
 venv/
-migrations/
 
 # files
 config.py

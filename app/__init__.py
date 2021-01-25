@@ -1,18 +1,14 @@
 from flask import Flask
 from config import config
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+import pymongo
 
-db = SQLAlchemy()
+# todo: put db conn in config
+conn = pymongo.MongoClient("mongodb://localhost:27017/")
+db = conn['testdb']
 
 def create_app(config_name='default'):
     app = Flask(__name__)
-
-    app.config.from_object(config[config_name])
-
-    db.init_app(app)
-    migrate = Migrate(app, db)
-
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     from .home import home as home_blueprint
 
     app.register_blueprint(home_blueprint, url_prefix="/")

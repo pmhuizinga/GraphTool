@@ -1,9 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div> Read Data</div>
-        <br>
-    {% for ent in data %}
-        <div>{{ ent.name }} {{ ent.lastname }} {{ ent.place }}</div>
+
+    {% for k,v  in data.items() %}
+        <div style="color: white">
+            {{ k }}<br>
+            {% for i in v %}#}
+                {{ i }} <br>
+            {% endfor %}
+            ---------------------<br>
+        </div>
     {% endfor %}
+
 {% endblock %}
+
+
+
+
+

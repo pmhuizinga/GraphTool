@@ -1,6 +1,5 @@
 # GraphTool
 
-
 ## Requirements
 Easy to use to tool for small scale graph analytics. Users should be able to add new nodes and edges fast and easy.
 The tool should supply several analytical options, like

@@ -1,7 +1,0 @@
-QUERY FROM PROMPT:
-from app import create_app
-app = create_app()
-app.app_context().push()
-with app.app_context():
-    d = entity.query.all()
-
