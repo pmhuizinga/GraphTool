@@ -42,7 +42,7 @@
             <br>
 
             <div id="fields">
-{#                dynamic content#}
+                {#                dynamic content#}
             </div>
 
         </form>
@@ -74,13 +74,13 @@
 
                                 document.getElementById("fields").innerHTML = "";
 
-                                $.each(field_data, function(k,v) {
+                                $.each(field_data, function (k, v) {
                                     document.getElementById('fields').innerHTML += '<div class="white" id="white">\n' +
                                         '                    <table class="input">\n' +
                                         '\n' +
                                         '                        <tr>\n' +
                                         '                            <td class="input">\n' +
-                                        '                                <label id="" type="text" value="'+v+'" name="'+v+'" placeholder="'+v+'">'+v+'</label>\n' +
+                                        '                                <label id="" type="text" value="' + v + '" name="' + v + '" placeholder="' + v + '">' + v + '</label>\n' +
                                         '                            </td>\n' +
                                         '                            <td class="input">\n' +
                                         '                                <input id="" type="text" name="" placeholder="">\n' +
@@ -92,9 +92,9 @@
                                         '                    </table>\n' +
                                         '                </div>';
 
-                                {#var option_item = '<option value="' + val + '">' + val + '</option>'#}
-                                {#$('#food').append(option_item);#}
-              });
+                                    {#var option_item = '<option value="' + val + '">' + val + '</option>'#}
+                                    {#$('#food').append(option_item);#}
+                                });
 
 
                             });
