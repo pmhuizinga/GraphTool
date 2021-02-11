@@ -4,10 +4,20 @@
 
 body {
 	font: 16px Arial;
-	background-image: url("background1.JPG");
+	background-image: url("winter.jpg");
 	background-size: 100%, 100%;
 	background-attachment: fixed;
 	background-repeat: no-repeat;
+}
+div.menu{
+    /*font-family: Consolas;*/
+    color: white;
+    font-size: 11pt;
+    font-weight: bold;
+}
+a.menu {
+    text-decoration: none;
+    color: white;
 }
 div.header{
 	margin-right: 150px;
@@ -15,20 +25,31 @@ div.header{
 	font-family: verdana;
 	font-size: 18pt;
 	font-weight: bold;
-	color: #3399ff;
+	/*color: #3399ff;*/
 }
 div.main{
-    margin-top: 100px;
+    /*margin-top: 100px;*/
+    float: left;
 }
 div.white{
 	background: rgba(255, 255, 255, 0.6);
-	margin-left: 250px;
-	margin-right: 250px;
+	/*margin-left: 250px;*/
+	/*margin-right: 250px;*/
 	/*margin-bottom: 20px;*/
 	border-style: solid;
 	border-width: 2px;
 	border-color: black;
 	border-radius: 10px;
+}
+div.button{
+    /*background: rgba(255, 255, 255, 0.6);*/
+	/*margin-left: 250px;*/
+	/*margin-right: 250px;*/
+	/*margin-bottom: 20px;*/
+	/*border-style: solid;*/
+	/*border-width: 2px;*/
+	/*border-color: darkgreen;*/
+	/*border-radius: 10px;*/
 }
 table.input{
     width: 80%;
@@ -65,7 +86,7 @@ input[type=text] {
 /*  width: 50px;*/
 /*}*/
 input.enter{
-  background-color: red;
+  background-color: darkgreen;
   color: #fff;
   cursor: pointer;
   width: 80px;
@@ -76,7 +97,16 @@ input.add{
   cursor: pointer;
   width: 80px;
 }
-
+input.collection{
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  width: 80px;
+	border-style: solid;
+	border-width: 2px;
+	border-color: white;
+    border-radius: 10px;
+}
 .autocomplete-items {
   position: absolute;
   border: 1px solid #d4d4d4;

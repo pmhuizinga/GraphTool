@@ -48,3 +48,4 @@ def getCollectionId(collection):
     id_set = list(set(id_list))
 
     return id_set
+

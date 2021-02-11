@@ -8,7 +8,7 @@ db = conn['testdb']
 
 def create_app(config_name='default'):
     app = Flask(__name__)
-    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
     from .home import home as home_blueprint
 
     app.register_blueprint(home_blueprint, url_prefix="/")

@@ -6,16 +6,15 @@ from bson.objectid import ObjectId
 import logging
 from app.functions import database_functions as dbf
 
-
 # logging setup
-# logging.basicConfig(filename='log/homelog.log',
-#                     filemode='a',
-#                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-#                     datefmt='%H:%M:%S',
-#                     level=logging.NOTSET)
-#
-# logger = logging.getLogger(__name__)  # initialize logger
-# logger.handlers = []
+logging.basicConfig(filename='log/homelog.log',
+                    filemode='a',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.NOTSET)
+
+logger = logging.getLogger(__name__)  # initialize logger
+logger.handlers = []
 
 
 @home.route('/index')
@@ -29,7 +28,11 @@ def get_collections():
     get all collectino names
     :return: list of collections names
     """
-    types = db.list_collection_names()
+    try:
+        types = db.list_collection_names()
+    except:
+        types = []
+
     return jsonify(types)
 
 
@@ -40,7 +43,12 @@ def get_collection_fieldnames(collection):
     :param collection: collection name
     :return: list of fieldnames
     """
-    field_list = dbf.getCollectionKeys(collection)
+    try:
+        field_list = dbf.getCollectionKeys(collection)
+        field_list.remove('_id')
+    except:
+
+        field_list = []
 
     return jsonify(field_list)
 
@@ -76,6 +84,11 @@ def get_collection_record(collection, id):
         if x not in result:
             result[x] = ''
 
+    try:
+        result.pop('_id')
+    except:
+        result = []
+
     return dumps(result)
 
 
@@ -83,39 +96,54 @@ def get_collection_record(collection, id):
 def create():
     # get collections names for populating inputbox
     types = db.list_collection_names()
-    # get fieldnames
-    # todo: make dependent on collection type input
-    fieldlist = dbf.getCollectionKeys('persons')
 
     if request.method == 'GET':
-        return render_template('create.html', types=types, fieldlist=fieldlist)
+        return render_template('create.html', types=types)
 
     elif request.method == 'POST':
-        # get all form keys
-        test = [k for k in request.form.keys()]
-        print(test)
 
-        t = request.form["SourceNodeType"].lower()
-        p = request.form["SourceNodeName"].lower()
-        prop_name1 = request.form["NewPropValue"]
-        prop_type1 = request.form["NewPropName"]
+        fixed_values = ['SourceNodeType', 'NewPropValue', 'NewPropName']
+        new_prop_fields = ['NewPropValue', 'NewPropName']
 
-        props = {prop_type1: prop_name1}
+        existing_props = {}
+        for k, v in request.form.items():
+            if k not in fixed_values and v != '':
+                print('existing props; key: {}, value: {}'.format(k, v))
+                if k == 'SourceNodeId':
+                    existing_props['id'] = v
+                else:
+                    existing_props[k] = v
 
+        new_props2 = {}
+        for k, v in request.form.items():
+            if ('NewPropValue' in k or 'NewPropName' in k) and v != '':
+                print('new props2; key: {}, value: {}'.format(k, v))
+                new_props2[k] = v
+        print(new_props2)
+
+        node_type = request.form["SourceNodeType"].lower()
+        node_id = request.form["SourceNodeId"].lower()
+        prop_name1 = request.form["NewPropValue1"]
+        prop_type1 = request.form["NewPropName1"]
+
+        new_props = {prop_type1: prop_name1}
+        props = {}
+        if existing_props:
+            props.update(existing_props)
+            if prop_name1 != '':
+                props.update(new_props)
+        elif prop_name1 != '':
+            props = new_props
+
+        # update database
         try:
-            if not p == '':
-                # todo: change to upsert
-                # db[t].insert_one({'id': p, prop_type1: prop_name1})
-                db[t].update_one({'id': p}, {"$set": props}, upsert=True)
-                print("inserting {} in collection {}".format(p, t))
+            if not node_id == '':
+                db[node_type].update_one({'id': node_id}, {"$set": props}, upsert=True)
+                print("upserting {} in collection {}".format(node_id, node_type))
         except:
             print('input error')
-            print  # db[t].insert_one({'id': p})
 
-        # get collections names for populating inputbox
-        types = db.list_collection_names()
-
-    return render_template('create.html', types=types, fieldlist=fieldlist)
+    return render_template('create.html', types=types)
 
 
 @home.route('/')
