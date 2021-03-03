@@ -4,12 +4,13 @@
 
     <div class="main">
 
-        <div class="button">
-            {% for type in types %}
-                <input id="collection_button" type="submit" value="{{ type }}" class="collection" onclick="fillValuesInTextBoxes('{{ type }}');"/>
-            {% endfor %}
-
-        </div>
+{#        <div class="button">#}
+{#            {% for type in types %}#}
+{#                <input id="collection_button" type="submit" value="{{ type }}" class="collection"#}
+{#                       onclick="fillValuesInTextBoxes('{{ type }}');"/>#}
+{#            {% endfor %}#}
+{##}
+{#        </div>#}
         <br>
         <form autocomplete="off" method="POST" action="{{ url_for('home.create') }}">
             <div class="white">
@@ -31,27 +32,30 @@
                 </div>
             </div>
             <br>
-            <div class="white">
-                <table class="input" id="newproptable">
-                    <tr>
-                        <td class="input">
-                            <input id="" type="text" name="NewPropName1" placeholder="property type">
-                        </td>
-                        <td class="input">
-                            <input id="" type="text" name="NewPropValue1" placeholder="property value">
-                        </td>
-                        <td class="button">
-                            <input value="add field" class="add" onclick="addNewRow()"/>
-                        </td>
-                    </tr>
-                </table>
+
+            <div class="source_node_collapse"><span>Expand</span>
             </div>
-            <div id="fields">
-                <!-- dynamic content -->
+            <div class="collapse">
+                <div class="white">
+                    <table class="input" id="newproptable">
+                        <tr>
+                            <td class="input">
+                                <input id="" type="text" name="NewPropName1" placeholder="property type">
+                            </td>
+                            <td class="input">
+                                <input id="" type="text" name="NewPropValue1" placeholder="property value">
+                            </td>
+                            <td class="button">
+                                <input value="add field" class="add" onclick="addNewRow()"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="fields">
+                    <!-- dynamic content -->
+                </div>
             </div>
         </form>
-    </div>
-
 
 
     <script>
@@ -66,7 +70,7 @@
                         // Make Ajax Request and expect JSON-encoded data
                         // get node id's
                         $.getJSON(
-                            '/get_collection_ids' + '/' + collection,
+                            '/get_collection_ids/node/' + collection,
                             function (id_data) {
                                 var node_id = (id_data);
                                 console.log(node_id)
@@ -74,7 +78,7 @@
                             });
                         // get node fields
                         $.getJSON(
-                            '/get_collection_fieldnames' + '/' + collection,
+                            '/get_collection_fieldnames/node/' + collection,
                             function (field_data) {
                                 var field_name = (field_data);
                                 console.log(field_name)
@@ -108,6 +112,23 @@
                 )
             });
 
+        $(".source_node_collapse").click(function () {
+
+            $header = $(this);
+            //getting the next element
+            $content = $header.next();
+            //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+            $content.slideToggle(500, function () {
+                //execute this after slideToggle is done
+                //change text of header based on visibility of content div
+                $header.text(function () {
+                    //change text based on condition
+                    return $content.is(":visible") ? "Collapse" : "Expand";
+                });
+            });
+
+        });
+
         $(document).ready(
             function () {
                 var collection;
@@ -127,7 +148,7 @@
                         {#    });#}
                         // get node fields
                         $.getJSON(
-                            '/get_collection_record' + '/' + collection + '/' + record_id,
+                            '/get_collection_record/node/' + collection + '/' + record_id,
                             function (field_data) {
                                 var field_name = (field_data);
                                 console.log(field_name)
@@ -143,7 +164,7 @@
                                         '                                <label id="" type="text" value="' + k + '" name="' + k + '" placeholder="' + k + '">' + k + '</label>\n' +
                                         '                            </td>\n' +
                                         '                            <td class="input">\n' +
-                                        '                                <input type="text" name="' + k + '" value="'+ v +'">\n' +
+                                        '                                <input type="text" name="' + k + '" value="' + v + '">\n' +
                                         '                            </td>\n' +
                                         '                            <td class="button">\n' +
                                         '                                &nbsp;\n' +
@@ -170,7 +191,7 @@
                         // Make Ajax Request and expect JSON-encoded data
                         // get node id's
                         $.getJSON(
-                            '/get_collection_ids' + '/' + collection,
+                            '/get_collection_ids/node/' + collection,
                             function (id_data) {
                                 var node_id = (id_data);
                                 console.log(node_id)
@@ -178,7 +199,7 @@
                             });
                         // get node fields
                         $.getJSON(
-                            '/get_collection_fieldnames' + '/' + collection,
+                            '/get_collection_fieldnames/node/' + collection,
                             function (field_data) {
                                 var field_name = (field_data);
                                 console.log(field_name)
@@ -212,7 +233,7 @@
                 )
             });
 
-                $(document).ready(
+        $(document).ready(
             function () {
                 var collection;
                 $('#target_node_id').change(function () {
@@ -231,7 +252,7 @@
                         {#    });#}
                         // get node fields
                         $.getJSON(
-                            '/get_collection_record' + '/' + collection + '/' + record_id,
+                            '/get_collection_record/node/' + collection + '/' + record_id,
                             function (field_data) {
                                 var field_name = (field_data);
                                 console.log(field_name)
@@ -247,7 +268,7 @@
                                         '                                <label id="" type="text" value="' + k + '" name="' + k + '" placeholder="' + k + '">' + k + '</label>\n' +
                                         '                            </td>\n' +
                                         '                            <td class="input">\n' +
-                                        '                                <input type="text" name="' + k + '" value="'+ v +'">\n' +
+                                        '                                <input type="text" name="' + k + '" value="' + v + '">\n' +
                                         '                            </td>\n' +
                                         '                            <td class="button">\n' +
                                         '                                &nbsp;\n' +
@@ -374,7 +395,7 @@
 
         /*initiate the autocomplete function on the "myInput" element, and pass along the node_type array as possible autocomplete values:*/
         autocomplete(document.getElementById("source_node_type"), node_type);
-        autocomplete(document.getElementById("target_node_type"), node_type);
+        {#autocomplete(document.getElementById("target_node_type"), node_type);#}
 
 
     </script>

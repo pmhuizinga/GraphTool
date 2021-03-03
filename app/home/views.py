@@ -4,6 +4,7 @@ from . import home
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 import logging
+import requests
 from app.functions import database_functions as dbf
 
 # logging setup
@@ -22,27 +23,38 @@ def index():
     return render_template('index.html')
 
 
-@home.route('/get_collections')
-def get_collections():
+@home.route('/get_collections/<type>')
+def get_collections(type):
     """
-    get all collectino names
+    get collectino names depending on type node or type edge
+    :param type: collection type, can be node or edge
     :return: list of collections names
     """
+    collections = db.list_collection_names()
+    # colls = dbf.drop_collection_identifier(collections)
+
     try:
-        types = db.list_collection_names()
+        if type == 'node':
+            colls = [x[5:] for x in collections if x[:5] == 'node_']
+
+        elif type == 'edge':
+            colls = [x[5:] for x in collections if x[:5] == 'edge_']
+
     except:
-        types = []
+        colls = []
 
-    return jsonify(types)
+    return jsonify(colls)
 
 
-@home.route('/get_collection_fieldnames/<collection>')
-def get_collection_fieldnames(collection):
+@home.route('/get_collection_fieldnames/<type>/<collection>')
+def get_collection_fieldnames2(type, collection):
     """
     get all field names of a specified collection
+    :param type: collection type, can be node or edge
     :param collection: collection name
     :return: list of fieldnames
     """
+    collection = type + "_" + collection
     try:
         field_list = dbf.getCollectionKeys(collection)
         field_list.remove('_id')
@@ -53,29 +65,33 @@ def get_collection_fieldnames(collection):
     return jsonify(field_list)
 
 
-@home.route('/get_collection_ids/<collection>')
-def get_collection_ids(collection):
+@home.route('/get_collection_ids/<type>/<collection>')
+def get_collection_ids2(type, collection):
     """
     get all record id's of a specified collection
+    :param type: collection type, can be node or edge
     :param collection: collection name
     :return: list of record is's
     """
+    collection = type + "_" + collection
     id_list = dbf.getCollectionId(collection)
 
     return jsonify(id_list)
 
 
-@home.route('/get_collection_record/<collection>/<id>')
-def get_collection_record(collection, id):
+@home.route('/get_collection_record/<type>/<collection>/<id>')
+def get_collection_record2(type, collection, id):
     """
     get all field names of a specified collection
     remove empty values
     get all fields for a specific record
     add missing fields to the record.
+    :param type: collection type, can be node or edge
     :param collection:
     :param id:
     :return:
     """
+    collection = type + "_" + collection
     available_fields = dbf.getCollectionKeys(collection)
     result = db[collection].find_one({'id': id})
 
@@ -94,11 +110,14 @@ def get_collection_record(collection, id):
 
 @home.route('/create', methods=['GET', 'POST'])
 def create():
+
     # get collections names for populating inputbox
-    types = db.list_collection_names()
+    nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
+
+    # types = db.list_collection_names()
 
     if request.method == 'GET':
-        return render_template('create.html', types=types)
+        return render_template('create.html', types=nodes)
 
     elif request.method == 'POST':
 
@@ -121,7 +140,7 @@ def create():
                 new_props2[k] = v
         print(new_props2)
 
-        node_type = request.form["SourceNodeType"].lower()
+        node_type = 'node_' + request.form["SourceNodeType"].lower()
         node_id = request.form["SourceNodeId"].lower()
         prop_name1 = request.form["NewPropValue1"]
         prop_type1 = request.form["NewPropName1"]
@@ -143,7 +162,7 @@ def create():
         except:
             print('input error')
 
-    return render_template('create.html', types=types)
+    return render_template('create.html', types=nodes)
 
 
 @home.route('/')
@@ -158,3 +177,8 @@ def read_all():
         data[col] = content
 
     return render_template('read.html', data=data)
+
+@home.route('/d3_test_1')
+def d3_test_1():
+
+    return render_template('d3_test_1.html')

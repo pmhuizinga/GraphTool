@@ -1,5 +1,26 @@
 from app import db
 
+
+def add_collection_identifier(in_list, type):
+    """
+    add 'node_' or 'edge_' to callection name
+    :return: list
+    """
+    out_list = [type + '_' + x for x in in_list]
+
+    return out_list
+
+
+def drop_collection_identifier(in_list, type):
+    """
+    drop 'node_' or 'edge_' from callection name
+    :return: list
+    """
+    out_list = [x[5:] for x in in_list if x[:4] == type]
+
+    return out_list
+
+
 def find_matching_collections(input):
     """
     -check on lenght
@@ -24,7 +45,11 @@ def find_matching_collections(input):
 
 
 def getCollectionKeys(collection):
-    """Get full set of keys from a collection"""
+    """
+    Get full set of keys from a collection
+    :param collection: collection name
+    :return: all keys for the collection as a list
+    """
 
     keys_list = []
     collection_list = db[collection].find()
@@ -35,6 +60,7 @@ def getCollectionKeys(collection):
     keys_set = list(set(keys_list))
 
     return keys_set
+
 
 def getCollectionId(collection):
     """Get full set of ids from a collection"""
@@ -48,4 +74,3 @@ def getCollectionId(collection):
     id_set = list(set(id_list))
 
     return id_set
-
