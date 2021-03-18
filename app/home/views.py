@@ -7,6 +7,8 @@ import logging
 import requests
 from app.functions import database_functions as dbf
 
+# todo: use objectID as identifier
+
 # logging setup
 logging.basicConfig(filename='log/homelog.log',
                     filemode='a',
@@ -110,49 +112,48 @@ def get_collection_record2(type, collection, id):
 
 @home.route('/create', methods=['GET', 'POST'])
 def create():
-
     # get collections names for populating inputbox
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
-
-    # types = db.list_collection_names()
 
     if request.method == 'GET':
         return render_template('create.html', types=nodes)
 
     elif request.method == 'POST':
 
-        fixed_values = ['SourceNodeType', 'NewPropValue', 'NewPropName']
-        new_prop_fields = ['NewPropValue', 'NewPropName']
-
-        existing_props = {}
+        props = {}
+        edge_data = {}
         for k, v in request.form.items():
-            if k not in fixed_values and v != '':
-                print('existing props; key: {}, value: {}'.format(k, v))
+            # print(k, v)
+            if ('NewEdgeValue' not in k) and ('NewPropValue' not in k) and ('SourceNodeType' not in k) and ('id' not in k):
                 if k == 'SourceNodeId':
-                    existing_props['id'] = v
+                    # check if id has changed
+                    if 'id' in request.form.keys():
+                        if request.form['id'] == '':
+                            props['id'] = v
+                        else:
+                            props['id'] = request.form['id']
+                    else:
+                        props['id'] = request.form["SourceNodeId"].lower()
+                    # print(k, v)
+                elif 'NewPropName' in k:
+                    value = "NewPropValue" + k[11:]
+                    value2 = request.form[value]
+                    if value2 != '':
+                        props[v] = value2
+                elif 'Edge' in k[:4]:
+                    if k == 'EdgeType':
+                        edge_data['EdgeType'] = v
+                elif 'NewEdgeName' in k:
+                    print('hebbes')
+                    value = "NewEdgeValue" + k[11:]
+                    value2 = request.form[value]
+                    if value2 != '':
+                        edge_data[v] = value2
                 else:
-                    existing_props[k] = v
-
-        new_props2 = {}
-        for k, v in request.form.items():
-            if ('NewPropValue' in k or 'NewPropName' in k) and v != '':
-                print('new props2; key: {}, value: {}'.format(k, v))
-                new_props2[k] = v
-        print(new_props2)
+                    props[k] = v
 
         node_type = 'node_' + request.form["SourceNodeType"].lower()
         node_id = request.form["SourceNodeId"].lower()
-        prop_name1 = request.form["NewPropValue1"]
-        prop_type1 = request.form["NewPropName1"]
-
-        new_props = {prop_type1: prop_name1}
-        props = {}
-        if existing_props:
-            props.update(existing_props)
-            if prop_name1 != '':
-                props.update(new_props)
-        elif prop_name1 != '':
-            props = new_props
 
         # update database
         try:
@@ -178,7 +179,17 @@ def read_all():
 
     return render_template('read.html', data=data)
 
+
 @home.route('/d3_test_1')
 def d3_test_1():
-
     return render_template('d3_test_1.html')
+
+
+@home.route('/api')
+def api():
+    return render_template('api.html')
+
+
+@home.route('/test')
+def test():
+    return render_template('test.html')

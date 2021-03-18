@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div style="color: white">
+    <a href="{{ url_for('home.get_collections', type='node') }}" style="color: white">extract all node types</a> <br>
+    http://127.0.0.1:5000/get_collections/[type]<br><br>
+
+    <a href="{{ url_for('home.get_collection_fieldnames2', type='node', collection="persons") }}" style="color: white">extract
+        all available fieldnames from a specific node</a><br>
+         http://127.0.0.1:5000/get_collection_fieldnames/[type]/[collection]<br><br>
+    <a href="{{ url_for('home.get_collection_ids2', type='node', collection="persons") }}" style="color: white">extract
+        all record id's specific node</a><br>
+         | http://127.0.0.1:5000/get_collection_ids/[type]/[collection]<br><br>
+
+    <a href="{{ url_for('home.get_collection_record2', type='node', collection="persons", id="huizinga, paul") }}" style="color: white">extract
+        all values for a specific node's ID</a><br>
+     | http://127.0.0.1:5000/get_collection_record/[type]/[collection]/[id]<br><br>
+    </div>
+
+{% endblock %}

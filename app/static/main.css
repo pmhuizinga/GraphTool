@@ -33,9 +33,6 @@ div.main{
 }
 div.white{
 	background: rgba(255, 255, 255, 0.6);
-	/*margin-left: 250px;*/
-	/*margin-right: 250px;*/
-	/*margin-bottom: 20px;*/
 	border-style: solid;
 	border-width: 2px;
 	border-color: black;
@@ -52,10 +49,11 @@ div.button{
 	/*border-radius: 10px;*/
 }
 table.input{
-    width: 80%;
+background-color: #f1f1f1;
 }
 td.input{
     width: 40%;
+    background-color: #f1f1f1;
 }
 td.button{
     width: 20%;
@@ -78,6 +76,10 @@ input[type=text] {
   background-color: #f1f1f1;
   width: 100%;
 }
+/*label[type=text] {*/
+/*  background-color: #f1f1f1;*/
+/*  width: 100%;*/
+/*}*/
 
 /*input[type=submit] {*/
 /*  background-color: dodgerblue;*/
