@@ -109,62 +109,26 @@ def get_collection_record2(type, collection, id):
 
     return dumps(result)
 
-
 @home.route('/create', methods=['GET', 'POST'])
 def create():
-    # get collections names for populating inputbox
+
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
 
     if request.method == 'GET':
         return render_template('create.html', types=nodes)
 
     elif request.method == 'POST':
+        logger.debug('upserting source node')
+        dbf.upsert_node_data(request.form, 'source')
 
-        props = {}
-        edge_data = {}
-        for k, v in request.form.items():
-            # print(k, v)
-            if ('NewEdgeValue' not in k) and ('NewPropValue' not in k) and ('SourceNodeType' not in k) and ('id' not in k):
-                if k == 'SourceNodeId':
-                    # check if id has changed
-                    if 'id' in request.form.keys():
-                        if request.form['id'] == '':
-                            props['id'] = v
-                        else:
-                            props['id'] = request.form['id']
-                    else:
-                        props['id'] = request.form["SourceNodeId"].lower()
-                    # print(k, v)
-                elif 'NewPropName' in k:
-                    value = "NewPropValue" + k[11:]
-                    value2 = request.form[value]
-                    if value2 != '':
-                        props[v] = value2
-                elif 'Edge' in k[:4]:
-                    if k == 'EdgeType':
-                        edge_data['EdgeType'] = v
-                elif 'NewEdgeName' in k:
-                    print('hebbes')
-                    value = "NewEdgeValue" + k[11:]
-                    value2 = request.form[value]
-                    if value2 != '':
-                        edge_data[v] = value2
-                else:
-                    props[k] = v
+        logger.debug('upserting target node')
+        dbf.upsert_node_data(request.form, 'target')
 
-        node_type = 'node_' + request.form["SourceNodeType"].lower()
-        node_id = request.form["SourceNodeId"].lower()
+        logger.debug('upserting edge')
+        dbf.upsert_edge_data(request.form)
 
-        # update database
-        try:
-            if not node_id == '':
-                db[node_type].update_one({'id': node_id}, {"$set": props}, upsert=True)
-                print("upserting {} in collection {}".format(node_id, node_type))
-        except:
-            print('input error')
 
-    return render_template('create.html', types=nodes)
-
+        return render_template('create.html', types=nodes)
 
 @home.route('/')
 @home.route('/read', methods=['GET'])
@@ -192,4 +156,4 @@ def api():
 
 @home.route('/test')
 def test():
-    return render_template('test.html')
+    return render_template('create.html')

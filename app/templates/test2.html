@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Graph tool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main2.css', id=19) }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js2.js') }}"></script>
+    {#        <script src="https://code.jquery.com/jquery-3.2.1.min.js"#}
+    {#            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>#}
+</head>
+<body>
+
+<div class="top">
+    <a href="{{ url_for('home.index') }}" class="menu">Home</a> |
+    <a href="{{ url_for('home.read_all') }}" class="menu">Read</a> |
+    <a href="{{ url_for('home.create') }}" class="menu">Create</a> |
+    <a href="{{ url_for('home.api') }}" class="menu">API's</a> |
+    <a href="{{ url_for('home.test') }}" class="menu">Test</a> |
+</div>
+
+<div class="left">
+    <div class="menu">
+        <form autocomplete="off" method="POST" action="{{ url_for('home.create2') }}">
+            <div class="autocomplete" style="width:100%;">
+                <div class="menu_row">
+                    <input type="text" class="menu_node_item_name" id="menu_node_item_name" placeholder="node type"/>
+                    <input type="text" class="menu_node_item_value" id="menu_node_item_value"
+                           placeholder="unique node id"/>
+                    <input type="submit" value="enter" class="submit"/>
+                </div>
+            </div>
+                <div class="menu_row" id="new_property">
+                    <input type="text" class="menu_node_item_name" placeholder="property type"/>
+                    <input type="text" class="menu_node_item_value" placeholder="property value"/>
+                    <input type="button" value="add" class="add" onclick="addNewRow()"/>
+                </div>
+
+                <div id="fields">
+                    <!-- dynamic content for source node -->
+                </div>
+
+
+                <br>
+
+                <div>
+                    edge<br>
+                    <input type="text" class="menu_edge_item_value" placeholder="edge type"/>
+                    <input type="button" value="add" class="add"/><br>
+                </div>
+
+                <br>
+
+                <div>
+                    target node<br>
+                    <input type="text" class="menu_node_item_name" placeholder="target node type"/>
+                    <input type="text" class="menu_node_item_value" placeholder="unique node id"/>
+                    <br>
+                    <input type="text" class="menu_node_item_name" placeholder="property type"/>
+                    <input type="text" class="menu_node_item_value" placeholder="property value"/>
+                    <input type="button" value="add" class="add"/>
+                </div>
+        </form>
+    </div>
+</div>
+
+<div class="right">
+    content
+</div>
+
+<script src="{{ url_for('static', filename='js3.js', id=8) }}"></script>
+
+</body>
+</html>

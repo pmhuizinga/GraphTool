@@ -15,6 +15,10 @@ pymongo==3.11.2
 requests
 bson
 pytest
+logging
+
+
+
 
 
 

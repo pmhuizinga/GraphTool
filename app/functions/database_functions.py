@@ -39,7 +39,7 @@ def find_matching_collections(input):
         set_match = c / len(set(input))
         len_match = min(len(input), len(collection)) / max(len(input), len(collection))
         result = set_match * len_match
-        print('matching result {} for {} is {} (character match: {}, lenght match {})'.format(input, collection,
+        print('matching result {} for {} is {} (character match: {}, length match {})'.format(input, collection,
                                                                                               int(result * 100),
                                                                                               set_match, len_match))
 
@@ -74,3 +74,82 @@ def getCollectionId(collection):
     id_set = list(set(id_list))
 
     return id_set
+
+def get_node_id(data, source_target_id):
+    """
+    get node id from request.form based on source or target node.
+    :param data: form.request
+    :param source_target_id: source or target
+    :return: id value (string)
+    """
+    if source_target_id + '_id' in data.keys():
+        if data[source_target_id + '_id'] == '':
+            id = data[source_target_id + '_collection_id'].lower()
+        else:
+            id = data[source_target_id + '_id'].lower()
+    else:
+        id = data[source_target_id + '_collection_id'].lower()
+
+    return id
+
+
+def upsert_node_data(data, source_target_id):
+    """
+    Update or insert new node data
+    :param data: dictionoiry with form request data
+    :param source_target_id: 'source' or 'target
+    :return:
+    """
+
+    props = {}
+    for k, v in data.items():
+        # filter by source or target node
+        if source_target_id in k:
+            # exclude property value and the *_id field. These are being handled within the procedure.
+            if (source_target_id + '_property_value' not in k) and (source_target_id + '_id' not in k):
+                # get node type
+                if k == source_target_id + '_collection_name':
+                    node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
+                    print('node_type: {}'.format(node_type))
+
+                # get id stuff
+                elif k == source_target_id + '_collection_id':
+                    props['id'] = get_node_id(data, source_target_id)
+                    node_id = props['id'].lower()
+
+                # new properties
+                elif source_target_id + '_property_name' in k:
+                    value = source_target_id + "_property_value" + k[20:]
+                    value2 = data[value]
+                    if value2 != '':
+                        props[v] = value2
+
+                # all other properties
+                else:
+                    newkey = k[len(source_target_id)+1:]
+                    props[newkey] = v
+
+    # update database
+    try:
+        if not node_id == '':
+            db[node_type].update_one({'id': node_id}, {"$set": props}, upsert=True)
+            print("upserting {} node {} in collection {}".format(source_target_id, node_id, node_type))
+    except:
+        print('input error')
+
+def upsert_edge_data(data):
+
+    source_id = get_node_id(data, 'source')
+    target_id = get_node_id(data, 'target')
+    props = {'source': source_id, 'target': target_id}
+    # create edge
+    for k, v in data.items():
+        if 'edge' in k:
+            if k == 'edge_value':
+                value = data[k]
+                if value != '':
+                    db['edge_' + v].update_one(props, {"$set": props}, upsert=True)
+                    print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id, target_id, v))
+
+
+
