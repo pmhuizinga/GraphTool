@@ -6,8 +6,10 @@ from bson.objectid import ObjectId
 import logging
 import requests
 from app.functions import database_functions as dbf
+from app.functions import analytic_functions as af
 
 # todo: use objectID as identifier
+# todo: hide node/edge properties
 
 # logging setup
 logging.basicConfig(filename='log/homelog.log',
@@ -23,6 +25,16 @@ logger.handlers = []
 @home.route('/index')
 def index():
     return render_template('index.html')
+
+
+@home.route('/graph_nodes')
+def get_graph_nodes():
+    return jsonify(af.get_all_nodes_list())
+
+
+@home.route('/graph_edges')
+def get_graph_edges():
+    return jsonify(af.get_all_edge_list())
 
 
 @home.route('/get_collections/<type>')

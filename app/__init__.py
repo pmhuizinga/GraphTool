@@ -3,6 +3,9 @@ from config import config
 import pymongo
 
 # todo: put db conn in config
+# todo: create blank db as an option
+# todo: select db as an option
+
 conn = pymongo.MongoClient("mongodb://localhost:27017/")
 db = conn['testdb']
 

@@ -128,7 +128,6 @@ def upsert_node_data(data, source_target_id):
                 else:
                     newkey = k[len(source_target_id)+1:]
                     props[newkey] = v
-
     # update database
     try:
         if not node_id == '':
@@ -141,8 +140,14 @@ def upsert_edge_data(data):
 
     source_id = get_node_id(data, 'source')
     target_id = get_node_id(data, 'target')
+
+    if source_id == '' or target_id == '':
+        return
+
     props = {'source': source_id, 'target': target_id}
-    # create edge
+
+    # todo: handle null values in nodes
+    # todo: add edge properties
     for k, v in data.items():
         if 'edge' in k:
             if k == 'edge_value':

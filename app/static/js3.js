@@ -271,7 +271,6 @@ $.getJSON(
     '/get_collections/node',
     function (id_data) {
         var node_type = (id_data);
-        console.log(node_type)
         autocomplete(document.getElementById("source_collection_name"), node_type);
         autocomplete(document.getElementById("target_collection_name"), node_type);
     });
@@ -280,7 +279,6 @@ $.getJSON(
     '/get_collections/edge',
     function (id_data) {
         var node_type = (id_data);
-        console.log(node_type)
         autocomplete(document.getElementById("edge_value"), node_type);
     });
 
