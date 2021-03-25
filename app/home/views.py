@@ -9,7 +9,6 @@ from app.functions import database_functions as dbf
 from app.functions import analytic_functions as af
 
 # todo: use objectID as identifier
-# todo: hide node/edge properties
 
 # logging setup
 logging.basicConfig(filename='log/homelog.log',
@@ -22,11 +21,7 @@ logger = logging.getLogger(__name__)  # initialize logger
 logger.handlers = []
 
 
-@home.route('/index')
-def index():
-    return render_template('index.html')
-
-
+# API's
 @home.route('/graph_nodes')
 def get_graph_nodes():
     return jsonify(af.get_all_nodes_list())
@@ -80,7 +75,7 @@ def get_collection_fieldnames2(type, collection):
 
 
 @home.route('/get_collection_ids/<type>/<collection>')
-def get_collection_ids2(type, collection):
+def get_collection_ids(type, collection):
     """
     get all record id's of a specified collection
     :param type: collection type, can be node or edge
@@ -94,7 +89,7 @@ def get_collection_ids2(type, collection):
 
 
 @home.route('/get_collection_record/<type>/<collection>/<id>')
-def get_collection_record2(type, collection, id):
+def get_collection_record(type, collection, id):
     """
     get all field names of a specified collection
     remove empty values
@@ -120,6 +115,11 @@ def get_collection_record2(type, collection, id):
         result = []
 
     return dumps(result)
+
+#pages
+@home.route('/index')
+def index():
+    return render_template('index.html')
 
 @home.route('/create', methods=['GET', 'POST'])
 def create():
@@ -155,17 +155,17 @@ def read_all():
 
     return render_template('read.html', data=data)
 
-
-@home.route('/d3_test_1')
-def d3_test_1():
-    return render_template('d3_test_1.html')
-
-
 @home.route('/api')
 def api():
     return render_template('api.html')
 
 
-@home.route('/test')
-def test():
-    return render_template('create.html')
+@home.route('/analytics')
+def analytics():
+    degrees = dict(af.get_graph_degrees())
+    pagerank = dict(af.get_graph_pagerank())
+    betweennes_centrality = dict(af.get_graph_betweennes_centrality())
+
+    data = [degrees, pagerank, betweennes_centrality]
+
+    return render_template('analytics.html', data=data)

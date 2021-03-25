@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div style="color: white" >
+        content
+    </div>
+
+    <div style="color: white; float: left;">
+        Graph degrees
+        <table>
+            <tr>
+                <td>Node</td><td>Degree</td>
+            </tr>
+        {% for k,v  in data[0].items() %}
+            <tr>
+                <td>{{ k }}</td><td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div style="color: white; float: left; margin-left: 20px;">
+        Graph pagerank:<br>
+        <table>
+            <tr>
+                <td>Node</td><td>Pagerank</td>
+            </tr>
+        {% for k,v  in data[1].items() %}
+            <tr>
+                <td>{{ k }}</td><td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    <div style="color: white; float: left; margin-left: 20px;">
+        Graph betweennes centrality:<br>
+        <table>
+            <tr>
+                <td>Node</td><td>Betweennes</td>
+            </tr>
+        {% for k,v  in data[2].items() %}
+            <tr>
+                <td>{{ k }}</td><td>{{ v }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+{% endblock %}

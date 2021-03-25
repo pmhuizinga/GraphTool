@@ -7,10 +7,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
     <meta http-equiv="Pragma" content="no-cache"/>
     <meta http-equiv="Expires" content="0"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main2.css', id=27) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css', id=1) }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='js2.js', id=3) }}"></script>
+    <script src="{{ url_for('static', filename='general_functions.js', id=3) }}"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     {#        <script src="https://code.jquery.com/jquery-3.2.1.min.js"#}
     {#            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>#}
@@ -19,9 +19,11 @@
 
 <div class="top">
     <a href="{{ url_for('home.index') }}" class="menu">Home</a> |
-    <a href="{{ url_for('home.read_all') }}" class="menu">Read</a> |
     <a href="{{ url_for('home.create') }}" class="menu">Create</a> |
+    <a href="{{ url_for('home.analytics') }}" class="menu">Analytics</a> |
+    <a href="{{ url_for('home.read_all') }}" class="menu">Read</a> |
     <a href="{{ url_for('home.api') }}" class="menu">API's</a> |
+
 {#    <a href="{{ url_for('home.test') }}" class="menu">Test</a> |#}
 </div>
 

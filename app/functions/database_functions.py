@@ -100,7 +100,7 @@ def upsert_node_data(data, source_target_id):
     :param source_target_id: 'source' or 'target
     :return:
     """
-
+    # todo: when changing an id a new node is created...should be fixed
     props = {}
     for k, v in data.items():
         # filter by source or target node
@@ -110,7 +110,6 @@ def upsert_node_data(data, source_target_id):
                 # get node type
                 if k == source_target_id + '_collection_name':
                     node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
-                    print('node_type: {}'.format(node_type))
 
                 # get id stuff
                 elif k == source_target_id + '_collection_id':

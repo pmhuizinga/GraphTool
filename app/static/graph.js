@@ -38,7 +38,8 @@ d3.json('/graph_nodes',function(error, nodes){
     d3.json('/graph_edges',function(error, links){
 
    if (error) throw error;
-
+    console.log(nodes)
+    console.log(links)
     // Add lines for every link in the dataset
     var link = svg.append("g")
         .attr("class", "links")
@@ -55,7 +56,7 @@ d3.json('/graph_nodes',function(error, nodes){
       .enter().append("g")
 
   var circles = node.append("circle")
-      .attr("r", 7)
+      .attr("r", 5)
       .attr("fill", function(d) { return color(d.group); })
       .call(d3.drag()
           .on("start", dragstarted)
