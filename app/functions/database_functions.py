@@ -75,6 +75,7 @@ def getCollectionId(collection):
 
     return id_set
 
+
 def get_node_id(data, source_target_id):
     """
     get node id from request.form based on source or target node.
@@ -125,7 +126,7 @@ def upsert_node_data(data, source_target_id):
 
                 # all other properties
                 else:
-                    newkey = k[len(source_target_id)+1:]
+                    newkey = k[len(source_target_id) + 1:]
                     props[newkey] = v
     # update database
     try:
@@ -135,8 +136,8 @@ def upsert_node_data(data, source_target_id):
     except:
         print('input error')
 
-def upsert_edge_data(data):
 
+def upsert_edge_data(data):
     source_id = get_node_id(data, 'source')
     target_id = get_node_id(data, 'target')
 
@@ -153,7 +154,23 @@ def upsert_edge_data(data):
                 value = data[k]
                 if value != '':
                     db['edge_' + v].update_one(props, {"$set": props}, upsert=True)
-                    print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id, target_id, v))
+                    print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
+                                                                                                   target_id, v))
 
 
+def remove_node(data, source_target_id):
+    node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
+    id = get_node_id(data, source_target_id)
 
+    print(node_type, id)
+    # 1 remove from edges
+    collections = db.list_collection_names()
+
+    edge_list = []
+    for item in collections:
+        if item[:4] == 'edge':
+            db[item].delete_many({'source': id})
+            db[item].delete_many({'target': id})
+
+    # 2 remove node
+    db[node_type].remove({'id': id})

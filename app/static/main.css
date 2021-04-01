@@ -18,7 +18,7 @@ div.top {
 
 div.left {
     float: left;
-    width: 550px;
+    width: 600px;
 }
 
 div.right {
@@ -80,6 +80,14 @@ input.submit {
     width: 80px;
 }
 
+input.remove {
+    background-color: darkred;
+    border-color: darkred;
+    color: #fff;
+    cursor: pointer;
+    width: 80px;
+}
+
 input.add {
     background-color: dodgerblue;
     border-color: dodgerblue;
@@ -130,7 +138,7 @@ a.menu {
 
 /*graph stuff*/
 .links line {
-  stroke: darkgray ;
+  stroke: white ;
   stroke-opacity: 0.6;
 }
 
@@ -141,5 +149,5 @@ a.menu {
 
 text {
   font-family: sans-serif;
-  font-size: 10px;
+  font-size: 12px;
 }

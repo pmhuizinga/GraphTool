@@ -130,15 +130,19 @@ def create():
         return render_template('create.html', types=nodes)
 
     elif request.method == 'POST':
-        logger.debug('upserting source node')
-        dbf.upsert_node_data(request.form, 'source')
+        if request.form['submitbutton'] == 'enter':
+            logger.debug('upserting source node')
+            dbf.upsert_node_data(request.form, 'source')
 
-        logger.debug('upserting target node')
-        dbf.upsert_node_data(request.form, 'target')
+            logger.debug('upserting target node')
+            dbf.upsert_node_data(request.form, 'target')
 
-        logger.debug('upserting edge')
-        dbf.upsert_edge_data(request.form)
+            logger.debug('upserting edge')
+            dbf.upsert_edge_data(request.form)
 
+        elif request.form['submitbutton'] == 'remove':
+            print('remove')
+            dbf.remove_node(request.form, 'source')
 
         return render_template('create.html', types=nodes)
 

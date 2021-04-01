@@ -14,7 +14,7 @@
                         <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id"
                            placeholder="unique node id"/>
                     </div>
-                    <input type="submit" value="enter" class="submit"/>
+                    <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="remove" class="remove"/>
                 </div>
             </div>
 
@@ -58,7 +58,7 @@
                         <input type=open"text" class="menu_node_item_value" name="target_collection_id" id="target_collection_id"
                            placeholder="unique node id"/>
                     </div>
-                    <input type="submit" value="enter" class="submit"/>
+                    <input type="submit" name="submitbutton" value="enter" class="submit"/>
                 </div>
             </div>
             <div class="source_node_collapse"><span>Expand</span></div>
@@ -84,11 +84,11 @@
 </div>
 
 <div class="right">
-    <svg width="500" height="500"></svg>
+    <svg width="600" height="600"></svg>
 
 </div>
 
 <script src="{{ url_for('static', filename='create_functions.js', id=10) }}"></script>
-<script src="{{ url_for('static', filename='graph.js', id=12) }}"></script>
+<script src="{{ url_for('static', filename='graph.js', id=13) }}"></script>
 
 {% endblock %}

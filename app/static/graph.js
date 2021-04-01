@@ -56,7 +56,7 @@ d3.json('/graph_nodes',function(error, nodes){
       .enter().append("g")
 
   var circles = node.append("circle")
-      .attr("r", 5)
+      .attr("r",7)
       .attr("fill", function(d) { return color(d.group); })
       .call(d3.drag()
           .on("start", dragstarted)
