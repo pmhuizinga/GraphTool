@@ -22,14 +22,15 @@ logger.handlers = []
 
 
 # API's
-@home.route('/graph_nodes')
-def get_graph_nodes():
-    return jsonify(af.get_all_nodes_list())
+@home.route('/graph_nodes/<node>')
+def get_graph_nodes(node):
+
+    return jsonify(af.get_all_nodes_list(node=node))
 
 
-@home.route('/graph_edges')
-def get_graph_edges():
-    return jsonify(af.get_all_edge_list())
+@home.route('/graph_edges/<node>')
+def get_graph_edges(node):
+    return jsonify(af.get_all_edge_list(node=node))
 
 
 @home.route('/get_collections/<type>')
@@ -110,6 +111,7 @@ def get_collection_record(type, collection, id):
             result[x] = ''
 
     try:
+        # remove '_id'
         result.pop('_id')
     except:
         result = []
@@ -117,6 +119,7 @@ def get_collection_record(type, collection, id):
     return dumps(result)
 
 #pages
+@home.route('/')
 @home.route('/index')
 def index():
     return render_template('index.html')
@@ -146,7 +149,6 @@ def create():
 
         return render_template('create.html', types=nodes)
 
-@home.route('/')
 @home.route('/read', methods=['GET'])
 def read_all():
     data = {}

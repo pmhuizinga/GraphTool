@@ -174,3 +174,5 @@ def remove_node(data, source_target_id):
 
     # 2 remove node
     db[node_type].remove({'id': id})
+    # todo: if node is completely empty -> remove node
+

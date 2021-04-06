@@ -1,4 +1,7 @@
 // asynchronic jquery function for retrieving inputbox data dynamically
+
+
+
 $(document).ready(
     function () {
         var collection;
@@ -59,6 +62,7 @@ $(document).ready(
                                 '</div>';
                         });
                     });
+                create_graph(record_id)
             }
         )
     });
@@ -123,6 +127,7 @@ $(document).ready(
                                 '</div>';
                         });
                     });
+                test()
             }
         )
     });

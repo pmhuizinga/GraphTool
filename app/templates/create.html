@@ -40,8 +40,10 @@
 
             <div>
                 <div class="autocomplete" style="width:100%;">
-                    <input type="text" name="edge_value" id="edge_value" class="menu_edge_item_value" placeholder="edge type"/>
-                    <input type="button" value="add" class="add"/><br>
+                    <div class="menu_edge_item">
+                        <input type="text" name="edge_value" id="edge_value" class="menu_edge_item_value" placeholder="edge type"/>
+                    </div>
+                    <input type="button" value="add" class="add"/>
                 </div>
             </div>
             <div class="edge_collapse"><span>Expand</span></div>
@@ -84,11 +86,12 @@
 </div>
 
 <div class="right">
-    <svg width="600" height="600"></svg>
-
+    <svg width="800" height="800"></svg>
 </div>
 
-<script src="{{ url_for('static', filename='create_functions.js', id=10) }}"></script>
-<script src="{{ url_for('static', filename='graph.js', id=13) }}"></script>
+<script src="{{ url_for('static', filename='graph.js', id=5) }}"></script>
+<script src="{{ url_for('static', filename='create_functions.js', id=5) }}"></script>
+    <script>create_graph('all')</script>
+
 
 {% endblock %}

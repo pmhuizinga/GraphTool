@@ -1,10 +1,9 @@
 body {
+    background-color: lightgray;
     background-image: url("../static/winter.jpg");
     background-size: 100%, 100%;
     background-attachment: fixed;
     background-repeat: no-repeat;
-    background-color: #999999;
-    /*{#font-family: 'Courier New', Courier, monospace;#}*/
     font-size: 9pt;
 }
 
@@ -36,6 +35,13 @@ div.menu_row {
 div.menu_item {
     float: left;
     width: 200px;
+    height: 35px;
+    background-color: white;
+}
+
+div.menu_edge_item {
+    float: left;
+    width: 400px;
     height: 35px;
     background-color: white;
 }
