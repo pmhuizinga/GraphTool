@@ -15,14 +15,15 @@ import pymongo
 # todo: add warning before removal
 # todo: auto 'close' relations when a node is 'closed' (with dates).
 # todo: add posibility to remove an edge
+# todo: visualize per edge type (show all datafeeds)
 # done: enlarge graphics on graph
 # done: add color code to nodes in graph
 # done: avoid adding duplicate edges
 # done: add view on a single node (view all nodes relations)
 
 conn = pymongo.MongoClient("mongodb://localhost:27017/")
-# db = conn['paul_db']
-db = conn['testdb']
+db = conn['paul_db']
+# db = conn['testdb']
 # db = conn['blank']
 
 def create_app(config_name='default'):
