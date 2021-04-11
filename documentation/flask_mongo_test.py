@@ -13,8 +13,6 @@ import json
 
 app = Flask(__name__)
 
-# app.config['MONGODB_NAME'] = 'testdb'
-# app.config['MONGO_URI'] = "mongodb://localhost:27017/"
 mongo = PyMongo(app)
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")

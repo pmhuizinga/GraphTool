@@ -1,6 +1,6 @@
-function create_graph(input_selector) {
+function create_graph(base, id) {
 
-    console.log('graph input selector: ' + input_selector)
+    console.log('base: ' + base + ' ,id: ' + id)
 
     d3.select('svg').selectAll("*").remove();
 
@@ -17,8 +17,8 @@ function create_graph(input_selector) {
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
 
-    d3.json('/graph_nodes/' + input_selector, function (error, nodes) {
-        d3.json('/graph_edges/' + input_selector, function (error, links) {
+    d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
+        d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
 
             if (error) throw error;
             console.log(nodes)
