@@ -63,6 +63,24 @@ def get_all_edge_list(node="all"):
 
     return edge_list
 
+def get_all_edge_list_base_is_edge(edge="all"):
+
+    collections = db.list_collection_names()
+    edge_list = []
+
+    if edge == 'all':
+        for item in collections:
+            if item[:4] == 'edge':
+                coll = db[item].find()
+                for record in coll:
+                    if edge == "all":
+                        edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+    else:
+        coll = db['edge_' + edge].find()
+        for record in coll:
+            edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+
+    return edge_list
 
 def get_graph_degrees():
     """

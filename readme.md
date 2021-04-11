@@ -12,7 +12,7 @@ Deployed in AWS
 
 
 ## Database
-Very basic setup. 1 'table' per node type, 1 'table' per edge type.
+Very basic setup. 1 'table' per node type, 1 'table' per edge type.  
 tbl_node [node type name, eg. 'person']  
 - node_id
 - node_name

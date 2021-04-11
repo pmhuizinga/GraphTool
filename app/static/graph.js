@@ -1,6 +1,6 @@
 function create_graph(input_selector) {
 
-    console.log('/graph_nodes/' + input_selector)
+    console.log('graph input selector: ' + input_selector)
 
     d3.select('svg').selectAll("*").remove();
 

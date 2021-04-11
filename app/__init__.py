@@ -22,9 +22,10 @@ import pymongo
 # done: add view on a single node (view all nodes relations)
 
 conn = pymongo.MongoClient("mongodb://localhost:27017/")
-db = conn['paul_db']
-# db = conn['testdb']
+# db = conn['paul_db']
+db = conn['testdb']
 # db = conn['blank']
+# db = conn['familytree']
 
 def create_app(config_name='default'):
     app = Flask(__name__)
