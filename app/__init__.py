@@ -2,6 +2,7 @@ from flask import Flask
 from config import config
 import pymongo
 
+# todo: rebase to objectID
 # todo: fix input error
 # todo: put db conn in config
 # todo: create blank db as an option
