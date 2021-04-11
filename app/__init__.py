@@ -16,6 +16,7 @@ import pymongo
 # todo: auto 'close' relations when a node is 'closed' (with dates).
 # todo: add posibility to remove an edge
 # todo: visualize per edge type (show all datafeeds)
+# todo: add legend to graph viz
 # done: enlarge graphics on graph
 # done: add color code to nodes in graph
 # done: avoid adding duplicate edges

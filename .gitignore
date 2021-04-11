@@ -8,5 +8,8 @@ app.db
 aws.txt
 pycharm_aws_flask_default.pem
 sample_database.py
+pymongo_test.py
+possible_inputs.txt
+demo.txt
 
 *.log
