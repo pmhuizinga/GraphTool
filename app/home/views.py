@@ -8,8 +8,6 @@ import requests
 from app.functions import database_functions as dbf
 from app.functions import analytic_functions as af
 
-# todo: use objectID as identifier
-
 # logging setup
 logging.basicConfig(filename='log/homelog.log',
                     filemode='a',
@@ -22,15 +20,23 @@ logger.handlers = []
 
 
 # API's
-@home.route('/graph_nodes/<node>')
-def get_graph_nodes(node):
+# @home.route('/graph_nodes/<node>')
+# def get_graph_nodes(node):
+#     return jsonify(af.get_all_nodes_list(node=node))
 
-    return jsonify(af.get_all_nodes_list(node=node))
 
+@home.route('/graph_nodes/<base>/<id>')
+def get_graph_nodes(base, id):
+    return jsonify(af.get_all_nodes_list(base=base, id=id))
 
-@home.route('/graph_edges/<node>')
-def get_graph_edges(node):
-    return jsonify(af.get_all_edge_list(node=node))
+#
+# @home.route('/graph_edges/<node>')
+# def get_graph_edges(node):
+#     return jsonify(af.get_all_edge_list(node=node))
+
+@home.route('/graph_edges/<base>/<id>')
+def get_graph_edges(base, id):
+    return jsonify(af.get_all_edge_list(base=base, id=id))
 
 
 @home.route('/get_collections/<type>')
@@ -118,15 +124,16 @@ def get_collection_record(type, collection, id):
 
     return dumps(result)
 
-#pages
+
+# pages
 @home.route('/')
 @home.route('/index')
 def index():
     return render_template('index.html')
 
+
 @home.route('/create', methods=['GET', 'POST'])
 def create():
-
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
 
     if request.method == 'GET':
@@ -149,6 +156,7 @@ def create():
 
         return render_template('create.html', types=nodes)
 
+
 @home.route('/read', methods=['GET'])
 def read_all():
     data = {}
@@ -160,6 +168,7 @@ def read_all():
         data[col] = content
 
     return render_template('read.html', data=data)
+
 
 @home.route('/api')
 def api():

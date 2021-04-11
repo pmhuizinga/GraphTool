@@ -16,7 +16,6 @@ requests
 bson
 pytest
 logging
-matplotlib==3.2
 networkx
 pandas
 

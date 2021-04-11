@@ -7,14 +7,14 @@ $(document).ready(
         var collection;
         $('#source_collection_name').change(function () {
                 collection = $('#source_collection_name').val();
-                console.log(collection)
+                // console.log(collection)
                 // Make Ajax Request and expect JSON-encoded data
                 // get node id's
                 $.getJSON(
                     '/get_collection_ids/node/' + collection,
                     function (id_data) {
                         var node_id = (id_data);
-                        console.log(node_id)
+                        // console.log(node_id)
                         autocomplete(document.getElementById("source_collection_id"), node_id);
                     });
                 // get node fields
@@ -22,7 +22,7 @@ $(document).ready(
                     '/get_collection_fieldnames/node/' + collection,
                     function (field_data) {
                         var field_name = (field_data);
-                        console.log(field_name)
+                        // console.log(field_name)
                         document.getElementById("source_fields").innerHTML = "";
                         $.each(field_data, function (k, v) {
                             document.getElementById('source_fields').innerHTML += '<div class="menu_row">' +
@@ -42,8 +42,8 @@ $(document).ready(
         $('#source_collection_id').change(function () {
                 collection = $('#source_collection_name').val();
                 record_id = $('#source_collection_id').val();
-                console.log(collection)
-                console.log(record_id)
+                // console.log(collection)
+                // console.log(record_id)
                 // Make Ajax Request and expect JSON-encoded data
                 // get node id's
                 // get node fields
@@ -51,7 +51,7 @@ $(document).ready(
                     '/get_collection_record/node/' + collection + '/' + record_id,
                     function (field_data) {
                         var field_name = (field_data);
-                        console.log(field_name)
+                        // console.log(field_name)
                         document.getElementById("source_fields").innerHTML = "";
                         $.each(field_data, function (k, v) {
                             document.getElementById('source_fields').innerHTML += '<div class="menu_row">' +
@@ -62,10 +62,22 @@ $(document).ready(
                                 '</div>';
                         });
                     });
-                create_graph(record_id)
+                create_graph('node', record_id)
             }
         )
     });
+
+$(document).ready(
+    function () {
+        var collection;
+        $('#edge_value').change(function () {
+                // collection = $('#source_collection_name').val();
+                record_id = $('#edge_value').val();
+                create_graph('edge', record_id)
+            }
+        )
+    });
+
 
 $(document).ready(
     function () {
