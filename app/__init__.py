@@ -10,13 +10,14 @@ import pymongo
 # todo: backup database
 # todo: add function to merge tables
 # todo: add function to rename table name
+# todo: add function to change a node id (also in all edges)
 # todo: add default 'geldigheid' to edges
 # todo: remove unrelated nodes
 # todo: write data to neo4j
 # todo: add warning before removal
 # todo: auto 'close' relations when a node is 'closed' (with dates).
 # todo: add possibility to remove an edge
-# todo: add legend to graph viz
+# done: add legend to graph viz
 # done: visualize per edge type (show all datafeeds)
 # done: enlarge graphics on graph
 # done: add color code to nodes in graph
