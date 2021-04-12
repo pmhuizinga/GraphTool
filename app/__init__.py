@@ -10,13 +10,14 @@ import pymongo
 # todo: backup database
 # todo: add function to merge tables
 # todo: add function to rename table name
-# todo: add function to change a node id (also in all edges)
 # todo: add default 'geldigheid' to edges
 # todo: remove unrelated nodes
-# todo: write data to neo4j
-# todo: add warning before removal
 # todo: auto 'close' relations when a node is 'closed' (with dates).
 # todo: add possibility to remove an edge
+# todo: add selection to graph (show what has been selected)
+# done: add warning before removal and merge
+# done: add option to merge 2 nodes into 1.
+# done: add function to change a node id (also in all edges)
 # done: add legend to graph viz
 # done: visualize per edge type (show all datafeeds)
 # done: enlarge graphics on graph
@@ -25,8 +26,8 @@ import pymongo
 # done: add view on a single node (view all nodes relations)
 
 conn = pymongo.MongoClient("mongodb://localhost:27017/")
-db = conn['paul_db']
-# db = conn['testdb']
+# db = conn['paul_db']
+db = conn['testdb']
 # db = conn['blank']
 # db = conn['familytree']
 

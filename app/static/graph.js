@@ -22,9 +22,6 @@ function create_graph(base, id) {
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
             // LEGEND
-            //
-            // var typelist = d3.scaleOrdinal()
-            //     .domain(nodes)
 
             // get unique list of nodes
             node_names = d3.set(nodes.map(d => d.type)).values()

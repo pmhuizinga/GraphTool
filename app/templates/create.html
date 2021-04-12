@@ -14,7 +14,7 @@
                         <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id"
                            placeholder="unique node id"/>
                     </div>
-                    <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="remove" class="remove"/>
+                    <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="remove" class="remove" onclick="return confirm('Are you sure you want to remove this item?')"/>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
                         <input type=open"text" class="menu_node_item_value" name="target_collection_id" id="target_collection_id"
                            placeholder="unique node id"/>
                     </div>
-                    <input type="submit" name="submitbutton" value="enter" class="submit"/>
+                    <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="merge" class="merge" onclick="return confirm('Are you sure you want to merge these items?')"/>
                 </div>
             </div>
             <div class="source_node_collapse"><span>Expand</span></div>

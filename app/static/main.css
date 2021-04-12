@@ -98,6 +98,14 @@ input.remove {
     width: 80px;
 }
 
+input.merge {
+    background-color: darkorange;
+    border-color: darkorange;
+    color: #fff;
+    cursor: pointer;
+    width: 80px;
+}
+
 input.add {
     background-color: dodgerblue;
     border-color: dodgerblue;

@@ -116,6 +116,7 @@ def get_collection_record(type, collection, id):
         if x not in result:
             result[x] = ''
 
+
     try:
         # remove '_id'
         result.pop('_id')
@@ -153,6 +154,10 @@ def create():
         elif request.form['submitbutton'] == 'remove':
             print('remove')
             dbf.remove_node(request.form, 'source')
+
+        elif request.form['submitbutton'] == 'merge':
+            print('merge')
+            dbf.merge_nodes(request.form)
 
         return render_template('create.html', types=nodes)
 

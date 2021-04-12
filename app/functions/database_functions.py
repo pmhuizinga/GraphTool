@@ -176,3 +176,68 @@ def remove_node(data, source_target_id):
     db[node_type].remove({'id': id})
     # todo: if node is completely empty -> remove node
 
+
+def update_node_id(type, old_id, new_id):
+    """
+    update a node id and also update al instances in the edge collections
+    :param type: node name
+    :param old_id: old id
+    :param new_id: new id
+    :return: nothing
+    """
+    mycol = db["node_" + type]
+
+    myquery = {"id": old_id}
+    newvalues = {"$set": {"id": new_id}}
+
+    mycol.update_one(myquery, newvalues)
+
+    collections = db.list_collection_names()
+
+    for item in collections:
+        if item[:4] == 'edge':
+            coll = db[item]
+            my_source_query = {"source": old_id}
+            new_source_values = {"$set": {"source": new_id}}
+            my_target_query = {"target": old_id}
+            new_target_values = {"$set": {"target": new_id}}
+            coll.update_many(my_source_query, new_source_values)
+            coll.update_many(my_target_query, new_target_values)
+
+
+def merge_nodes(data):
+    """
+    merge target node into source node. The source node properties will be leading.
+
+    :param sourcetype:
+    :param sourceid:
+    :param targettype:
+    :param targetid:
+    :return: nothing
+    """
+
+    source_type = "node_" + data['source_collection_name']
+    source_id = data['source_collection_id']
+    target_type = "node_" + data['target_collection_name']
+    target_id = data['target_collection_id']
+
+    # handle non existing source node
+    upsert_node_data(data, 'source')
+
+    # handle null values
+
+    # merge proc
+    if source_type == target_type:
+        # remove target in node collection
+        db[target_type].remove({'id': target_id})
+        # replace target in edge collections
+        collections = db.list_collection_names()
+        for item in collections:
+            if item[:4] == 'edge':
+                coll = db[item]
+                my_source_query = {"source": target_id}
+                new_source_values = {"$set": {"source": source_id}}
+                my_target_query = {"target": target_id}
+                new_target_values = {"$set": {"target": source_id}}
+                coll.update_many(my_source_query, new_source_values)
+                coll.update_many(my_target_query, new_target_values)
