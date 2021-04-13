@@ -1,7 +1,5 @@
 function create_graph(base, id) {
 
-    console.log('base: ' + base + ' ,id: ' + id)
-
     d3.select('svg').selectAll("*").remove();
 
     var svg = d3.select("svg"),
@@ -9,6 +7,8 @@ function create_graph(base, id) {
         height = +svg.attr("height");
 
     var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // var node_type = d3.scaleOrdinal();
 
     var simulation = d3.forceSimulation()
         .force("link", d3.forceLink().id(function (d) {
@@ -19,10 +19,39 @@ function create_graph(base, id) {
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
+            // LEGEND
 
+            // get unique list of nodes
+            node_names = d3.set(nodes.map(d => d.type)).values()
+
+            // console.log(node_names)
+            const legend = svg.append("g")
+                .attr("transform", `translate(${50}, ${10})`)
+
+            node_names.forEach((name, i) => {
+
+                const legendRow = legend.append("g")
+                    .attr("transform", `translate(0, ${i * 20})`)
+
+                legendRow.append("circle")
+                    .attr("class", "nodes")
+                    .attr("r", 7)
+                    .attr("fill", color(name))
+                    .attr("stroke", "white")
+                    .attr("stroke-width", "1.5px")
+
+                legendRow.append("text")
+                    .attr("x", 10)
+                    .attr("y", 5)
+                    .attr("text-anchor", "start")
+                    .text(name)
+            })
+
+            // END LEGEND
             if (error) throw error;
             console.log(nodes)
             console.log(links)
+
             // Add lines for every link in the dataset
             var link = svg.append("g")
                 .attr("class", "links")
@@ -38,10 +67,6 @@ function create_graph(base, id) {
                 .data(nodes)
                 .enter().append("g")
 
-            console.log(function (d) {
-                return color(d.type);
-            })
-
             var circles = node.append("circle")
                 .attr("r", 7)
                 .attr("fill", function (d) {
@@ -52,7 +77,7 @@ function create_graph(base, id) {
                     .on("drag", dragged)
                     .on("end", dragended));
 
-            var lables = node.append("text")
+            var labels = node.append("text")
                 .text(function (d) {
                     return d.id;
                 })
@@ -95,7 +120,7 @@ function create_graph(base, id) {
     });
 
     function dragstarted(d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+        if (!d3.event.active) simulation.alphaTarget(0.7).restart();
         d.fx = d.x;
         d.fy = d.y;
     }

@@ -116,6 +116,7 @@ def get_collection_record(type, collection, id):
         if x not in result:
             result[x] = ''
 
+
     try:
         # remove '_id'
         result.pop('_id')
@@ -137,7 +138,7 @@ def create():
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
 
     if request.method == 'GET':
-        return render_template('create.html', types=nodes)
+        return render_template('create2.html', types=nodes)
 
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
@@ -154,7 +155,11 @@ def create():
             print('remove')
             dbf.remove_node(request.form, 'source')
 
-        return render_template('create.html', types=nodes)
+        elif request.form['submitbutton'] == 'merge':
+            print('merge')
+            dbf.merge_nodes(request.form)
+
+        return render_template('create2.html', types=nodes)
 
 
 @home.route('/read', methods=['GET'])

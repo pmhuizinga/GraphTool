@@ -47,7 +47,6 @@ def get_all_nodes_list(base, id="all"):
 
 
 def get_all_edge_list(base, id="all"):
-
     collections = db.list_collection_names()
     edge_list = []
 
@@ -58,7 +57,8 @@ def get_all_edge_list(base, id="all"):
                     coll = db[item].find()
                     for record in coll:
                         if id == "all":
-                            edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+                            edge_list.append(
+                                {"source": str(record['source']), "target": str(record['target']), "value": 1})
         else:
             coll = db['edge_' + id].find()
             for record in coll:
@@ -76,6 +76,7 @@ def get_all_edge_list(base, id="all"):
                         edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
 
     return edge_list
+
 
 def get_graph_degrees():
     """
@@ -122,5 +123,6 @@ def get_graph_betweennes_centrality():
 
     return b
 
+
 def get_direct_node_relations():
-        pass
+    pass
