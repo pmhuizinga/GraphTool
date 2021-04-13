@@ -1,7 +1,5 @@
 function create_graph(base, id) {
 
-    // console.log('base: ' + base + ' ,id: ' + id)
-
     d3.select('svg').selectAll("*").remove();
 
     var svg = d3.select("svg"),
@@ -25,6 +23,7 @@ function create_graph(base, id) {
 
             // get unique list of nodes
             node_names = d3.set(nodes.map(d => d.type)).values()
+
             // console.log(node_names)
             const legend = svg.append("g")
                 .attr("transform", `translate(${50}, ${10})`)

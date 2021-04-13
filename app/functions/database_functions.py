@@ -88,6 +88,9 @@ def get_node_id(data, source_target_id):
             id = data[source_target_id + '_collection_id'].lower()
         else:
             id = data[source_target_id + '_id'].lower()
+            # update node id change in all edges
+            if data[source_target_id + '_id'].lower() != data[source_target_id + '_collection_id'].lower():
+                update_node_id(data[source_target_id + "_collection_name"].lower(), data[source_target_id + '_collection_id'].lower(), data[source_target_id + '_id'].lower())
     else:
         id = data[source_target_id + '_collection_id'].lower()
 
@@ -190,10 +193,11 @@ def update_node_id(type, old_id, new_id):
     myquery = {"id": old_id}
     newvalues = {"$set": {"id": new_id}}
 
+    # update node
     mycol.update_one(myquery, newvalues)
 
+    # update edges
     collections = db.list_collection_names()
-
     for item in collections:
         if item[:4] == 'edge':
             coll = db[item]
@@ -227,17 +231,17 @@ def merge_nodes(data):
     # handle null values
 
     # merge proc
-    if source_type == target_type:
-        # remove target in node collection
-        db[target_type].remove({'id': target_id})
-        # replace target in edge collections
-        collections = db.list_collection_names()
-        for item in collections:
-            if item[:4] == 'edge':
-                coll = db[item]
-                my_source_query = {"source": target_id}
-                new_source_values = {"$set": {"source": source_id}}
-                my_target_query = {"target": target_id}
-                new_target_values = {"$set": {"target": source_id}}
-                coll.update_many(my_source_query, new_source_values)
-                coll.update_many(my_target_query, new_target_values)
+    # if source_type == target_type:
+    # remove target in node collection
+    db[target_type].remove({'id': target_id})
+    # replace target in edge collections
+    collections = db.list_collection_names()
+    for item in collections:
+        if item[:4] == 'edge':
+            coll = db[item]
+            my_source_query = {"source": target_id}
+            new_source_values = {"$set": {"source": source_id}}
+            my_target_query = {"target": target_id}
+            new_target_values = {"$set": {"target": source_id}}
+            coll.update_many(my_source_query, new_source_values)
+            coll.update_many(my_target_query, new_target_values)

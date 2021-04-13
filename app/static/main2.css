@@ -1,6 +1,7 @@
 body {
     /*background-color: green;*/
-    background-image: url("../static/winter.jpg");
+    background-image: url("../static/2020-04-27 12.32.14-1.jpg");
+    /*background-image: url("../static/winter.jpg");*/
     background-size: 100%, 100%;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -15,22 +16,27 @@ div.top {
     height: 70px;
     margin-left: 20px;
     margin-top: 20px;
-    color: white;
+    color: black;
     font-weight: bold;
 }
 
-div.left {
-    float: left;
-    width: 600px;
+div.middle {
+    background-color: lightblue !important;
+    /*float: left;*/
+    /*width: 600px;*/
 }
 
-div.right {
-    float: left;
-    border: black;
+div.bottom {
+    width: 90%;
+    margin-left: 20px;
+    margin-top: 50px;
+    /*float: left;*/
+    /*border: black;*/
 }
 
 div.menu {
     margin-left: 20px;
+    background-color: lightblue !important;
 }
 div.menu_row {
     height: 35px;
@@ -117,7 +123,7 @@ input.add {
 
 a.menu {
     text-decoration: none;
-    color: white;
+    color: black;
 }
 
 /*autocomplete css*/
