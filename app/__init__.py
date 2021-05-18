@@ -2,6 +2,9 @@ from flask import Flask
 from config import config
 import pymongo
 
+# todo: add default 'geldigheid' to edges
+# todo: add edge properties
+# todo: add warning when id is not unique
 # todo: rebase to objectID
 # todo: fix input error
 # todo: put db conn in config
@@ -10,12 +13,12 @@ import pymongo
 # todo: backup database
 # todo: add function to merge tables
 # todo: add function to rename table name
-# todo: add default 'geldigheid' to edges
 # todo: auto 'close' relations when a node is 'closed' (with dates).
-# todo: add possibility to remove an edge
-# todo: add selection to graph (show what has been selected)
-# todo: add trim function when adding new collecion (names)
+# todo: add possibility to remove or modify an edge
+# todo: add trim function when adding new collection (names)
 # todo: drop collection when empty
+# todo: add full dependencies as visual
+# done: add selection to graph (show what has been selected)
 # done: add warning before removal and merge
 # done: add option to merge 2 nodes into 1.
 # done: add function to change a node id (also in all edges)
@@ -27,8 +30,8 @@ import pymongo
 # done: add view on a single node (view all nodes relations)
 
 conn = pymongo.MongoClient("mongodb://localhost:27017/")
-# db = conn['paul_db']
-db = conn['testdb']
+db = conn['paul_db']
+# db = conn['testdb']
 # db = conn['blank']
 # db = conn['familytree']
 

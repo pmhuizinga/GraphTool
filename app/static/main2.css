@@ -2,7 +2,7 @@ body {
     /*background-color: green;*/
     background-image: url("../static/2020-04-27 12.32.14-1.jpg");
     /*background-image: url("../static/winter.jpg");*/
-    background-size: 100%, 100%;
+    background-size: 100%;
     background-attachment: fixed;
     background-repeat: no-repeat;
     font-size: 9pt;

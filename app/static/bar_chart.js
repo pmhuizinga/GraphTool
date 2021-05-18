@@ -1,4 +1,4 @@
-function create_graph(base, id) {
+function create_barchart(base, id) {
 
     d3.select('svg').selectAll("*").remove();
 
@@ -6,16 +6,16 @@ function create_graph(base, id) {
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
+    console.log(width, height)
+
     var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    // var node_type = d3.scaleOrdinal();
-
-    var simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(function (d) {
-            return d.id;
-        }))
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
+    // var simulation = d3.forceSimulation()
+    //     .force("link", d3.forceLink().id(function (d) {
+    //         return d.id;
+    //     }))
+    //     .force("charge", d3.forceManyBody())
+    //     .force("center", d3.forceCenter(width / 2, height / 2));
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
@@ -68,7 +68,7 @@ function create_graph(base, id) {
                 .enter().append("g")
 
             var circles = node.append("circle")
-                .attr("r", 9)
+                .attr("r", 7)
                 .attr("fill", function (d) {
                     return color(d.type);
                 })
@@ -81,7 +81,7 @@ function create_graph(base, id) {
                 .text(function (d) {
                     return d.id;
                 })
-                .attr('x', 10)
+                .attr('x', 6)
                 .attr('y', 3);
 
             node.append("title")

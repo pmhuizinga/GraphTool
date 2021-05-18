@@ -141,6 +141,7 @@ def upsert_node_data(data, source_target_id):
 
 
 def upsert_edge_data(data):
+    print(data)
     source_id = get_node_id(data, 'source')
     target_id = get_node_id(data, 'target')
 
