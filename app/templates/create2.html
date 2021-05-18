@@ -12,8 +12,7 @@
                             <input type="text" class="menu_node_item_name" name="source_collection_name" id="source_collection_name" placeholder="node type"/>
                         </div>
                         <div class="menu_item">
-                            <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id"
-                               placeholder="unique node id"/>
+                            <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id" placeholder="unique node id"/>
                         </div>
                         <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="remove" class="remove" onclick="return confirm('Are you sure you want to remove this item?')"/>&nbsp;&nbsp;
                     </div>
@@ -51,7 +50,24 @@
                 </div>
                 <div class="edge_collapse"><span>Expand</span></div>
                 <div class="collapse">
-                    todo
+                    <div id="edge_fields">
+                        <!-- dynamic content for edge properties -->
+                    </div>
+
+
+                    <div id="new_edge_property" style="float: left;">
+                        <div class="menu_row">
+                            <div class="menu_item">
+                                <input type="text" name="edge_property_name" class="menu_node_item_name" id="edge_name" placeholder="property type"/>
+                            </div>
+                            <div class="menu_item">
+                                <input type="text" name="edge_property_value" class="menu_node_item_value" id="edge_value" placeholder="property value"/>
+                            </div>
+                            <input type="button" value="add" class="add" onclick="addNewPropRow('edge')"/>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 
@@ -66,7 +82,7 @@
                             <input type=open"text" class="menu_node_item_value" name="target_collection_id" id="target_collection_id"
                                placeholder="unique node id"/>
                         </div>
-                        <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="merge" class="merge" onclick="return confirm('Are you sure you want to merge these items?')"/>
+                        <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="merge" class="merge" onclick="return confirm('Are you sure you want to merge these items? Source node will remain')"/>
                     </div>
                 </div>
                 <div class="source_node_collapse"><span>Expand</span></div>
@@ -96,7 +112,7 @@
     <svg width="1600" height="700"></svg>
 </div>
 
-<script src="{{ url_for('static', filename='graph.js', id=41) }}"></script>
+<script src="{{ url_for('static', filename='graph.js', id=1) }}"></script>
 <script src="{{ url_for('static', filename='create_functions.js', id=1) }}"></script>
     <script>create_graph('node', 'all')</script>
 

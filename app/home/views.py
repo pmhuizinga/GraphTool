@@ -29,6 +29,7 @@ logger.handlers = []
 def get_graph_nodes(base, id):
     return jsonify(af.get_all_nodes_list(base=base, id=id))
 
+
 #
 # @home.route('/graph_edges/<node>')
 # def get_graph_edges(node):
@@ -109,13 +110,18 @@ def get_collection_record(type, collection, id):
     """
     collection = type + "_" + collection
     available_fields = dbf.getCollectionKeys(collection)
+
     result = db[collection].find_one({'id': id})
 
+    print('result :{}'.format(result))
+
     if '' in available_fields: available_fields.remove('')
+    print('available_fields')
+    print(available_fields)
     for x in available_fields:
+        # if result is not None:
         if x not in result:
             result[x] = ''
-
 
     try:
         # remove '_id'
@@ -131,6 +137,11 @@ def get_collection_record(type, collection, id):
 @home.route('/index')
 def index():
     return render_template('index.html')
+
+
+@home.route('/barcharts')
+def barcharts():
+    return render_template('barcharts.html')
 
 
 @home.route('/create', methods=['GET', 'POST'])
@@ -189,3 +200,17 @@ def analytics():
     data = [degrees, pagerank, betweennes_centrality]
 
     return render_template('analytics.html', data=data)
+
+
+@home.route('/pagerank')
+def pagerank():
+    return jsonify(dict(af.get_graph_pagerank()))
+
+
+@home.route('/betweenness')
+def betweennes ():
+    return jsonify(dict(af.get_graph_betweennes_centrality()))
+
+@home.route('/degrees')
+def degrees ():
+    return jsonify(dict(af.get_graph_degrees()))
