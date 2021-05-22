@@ -105,7 +105,6 @@ def upsert_node_data(data, source_target_id):
     :param source_target_id: 'source' or 'target
     :return:
     """
-    # todo: when changing an id a new node is created...should be fixed
     props = {}
     for k, v in data.items():
         # filter by source or target node

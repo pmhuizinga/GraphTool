@@ -9,12 +9,14 @@
                 <div class="autocomplete" style="width:100%; float: left;">
                     <div class="menu_row">
                         <div class="menu_item">
-                            <input type="text" class="menu_node_item_name" name="source_collection_name" id="source_collection_name" placeholder="node type"/>
+                            <input type="text" class="menu_node_item_name" name="source_collection_name" id="source_collection_name" {% if sticky_source[0] == 1 %} value="{{ sticky_source[1] }}" {% else %}placeholder="node type" {% endif %}/>
                         </div>
                         <div class="menu_item">
-                            <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id" placeholder="unique node id"/>
+                            <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id" {% if sticky_source[0] == 1 %} value="{{ sticky_source[2] }}" {% else %} placeholder="unique node id" {% endif %}/>
                         </div>
-                        <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="remove" class="remove" onclick="return confirm('Are you sure you want to remove this item?')"/>&nbsp;&nbsp;
+                        <input type="submit" name="submitbutton" value="enter" class="submit"/>
+                        <input type="submit" name="submitbutton" value="remove" class="remove" onclick="return confirm('Are you sure you want to remove this item?')"/>
+                        <input type="checkbox" name="sticky_source" id="sticky_source" {% if sticky_source[0]==1  %} checked {% endif %}/>
                     </div>
                 </div>
 
@@ -147,7 +149,7 @@
 
 <script src="{{ url_for('static', filename='graph.js', id=1) }}"></script>
 <script src="{{ url_for('static', filename='create_functions.js', id=1) }}"></script>
-    <script>create_graph('node', 'all')</script>
+<script>create_graph('node', 'all')</script>
 
 
 {% endblock %}

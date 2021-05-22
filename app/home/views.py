@@ -147,12 +147,21 @@ def barcharts():
 @home.route('/create', methods=['GET', 'POST'])
 def create():
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
+    sticky_source = [0]
 
     if request.method == 'GET':
-        return render_template('create2.html', types=nodes)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source)
 
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
+
+            if request.form.get('sticky_source'):
+                sticky_source = [1, request.form['source_collection_name'], request.form['source_collection_id']]
+                print('sticky source is on')
+                print(sticky_source)
+            else:
+                print('sticky source is off')
+
             logger.debug('upserting source node')
             dbf.upsert_node_data(request.form, 'source')
 
@@ -168,7 +177,7 @@ def create():
         elif request.form['submitbutton'] == 'merge':
             dbf.merge_nodes(request.form)
 
-        return render_template('create2.html', types=nodes)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source)
 
 
 @home.route('/read', methods=['GET'])
