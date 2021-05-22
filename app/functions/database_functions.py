@@ -93,6 +93,7 @@ def get_node_id(data, source_target_id):
                 update_node_id(data[source_target_id + "_collection_name"].lower(), data[source_target_id + '_collection_id'].lower(), data[source_target_id + '_id'].lower())
     else:
         id = data[source_target_id + '_collection_id'].lower()
+        id = id.strip()
 
     return id
 
@@ -113,12 +114,13 @@ def upsert_node_data(data, source_target_id):
             if (source_target_id + '_property_value' not in k) and (source_target_id + '_id' not in k):
                 # get node type
                 if k == source_target_id + '_collection_name':
-                    node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
+                    node_type = 'node_' + data[source_target_id + "_collection_name"].lower().strip()
 
                 # get id stuff
                 elif k == source_target_id + '_collection_id':
                     props['id'] = get_node_id(data, source_target_id)
                     node_id = props['id'].lower()
+                    print(node_id)
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -151,15 +153,28 @@ def upsert_edge_data(data):
     props = {'source': source_id, 'target': target_id}
 
     # todo: handle null values in nodes
-    # todo: add edge properties
     for k, v in data.items():
         if 'edge' in k:
+            print(k)
             if k == 'edge_value':
                 value = data[k]
-                if value != '':
-                    db['edge_' + v].update_one(props, {"$set": props}, upsert=True)
-                    print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
-                                                                                                   target_id, v))
+            elif k == 'edge_property_from_value':
+                value2 = data["edge_property_from_value"]
+                if value2 != '':
+                    props['from'] = value2
+            elif k == 'edge_property_to_value':
+                value2 = data["edge_property_to_value"]
+                if value2 != '':
+                    props['to'] = value2
+            elif 'edge_property_name' in k:
+                value2 = data["edge_property_value" + k[19:]]
+                if value2 != '':
+                    props[v] = value2
+
+    if value != '':
+        db['edge_' + value].update_one(props, {"$set": props}, upsert=True)
+        print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
+                                                                                           target_id, v))
 
 
 def remove_node(data, source_target_id):

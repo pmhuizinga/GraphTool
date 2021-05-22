@@ -45,7 +45,7 @@
                         <div class="menu_edge_item">
                             <input type="text" name="edge_value" id="edge_value" class="menu_edge_item_value" placeholder="edge type"/>
                         </div>
-                        <input type="button" value="add" class="add"/>&nbsp;&nbsp;
+                        <input type="hidden" value="add" class="add"/>&nbsp;&nbsp;
                     </div>
                 </div>
                 <div class="edge_collapse"><span>Expand</span></div>
@@ -54,8 +54,38 @@
                         <!-- dynamic content for edge properties -->
                     </div>
 
-
                     <div id="new_edge_property" style="float: left;">
+
+                       <div class="menu_row">
+                            <div class="menu_item">
+                                <input type="text" name="edge_property_from" class="menu_node_item_name" id="edge_from" placeholder="from date" disabled/>
+                            </div>
+                            <div class="menu_item">
+                                <input type="text" name="edge_property_from_value" class="menu_node_item_value" id="edge_from_value" placeholder="MM/DD/YYYY" onfocus="(this.type='date')"/>
+{#                           <script>#}
+{#                           var bookdate = document.getElementById('edge_from_value'),#}
+{#                            currentdate = addCurrentDate();#}
+{#                            bookdate.placeholder = currentdate;#}
+{#                            </script>#}
+                            </div>
+                            <input type="hidden" value="add" class="add" onclick="addNewPropRow('edge')"/>
+                        </div>
+
+                       <div class="menu_row">
+                            <div class="menu_item">
+                                <input type="text" name="edge_property_to" class="menu_node_item_name" id="edge_to" placeholder="to date" disabled/>
+                            </div>
+                            <div class="menu_item">
+                                <input type="text" name="edge_property_to_value" class="menu_node_item_value" id="edge_to_value" placeholder="MM/DD/YYYY" onfocus="(this.type='date')"/>
+                            </div>
+{#                           <script>#}
+{#                           var bookdate = document.getElementById('edge_to_value'),#}
+{#                            currentdate = addCurrentDate();#}
+{#                            bookdate.placeholder = currentdate;#}
+{#                            </script>#}
+                            <input type="hidden" value="add" class="add" onclick="addNewPropRow('edge')"/>
+                        </div>
+
                         <div class="menu_row">
                             <div class="menu_item">
                                 <input type="text" name="edge_property_name" class="menu_node_item_name" id="edge_name" placeholder="property type"/>
@@ -65,6 +95,9 @@
                             </div>
                             <input type="button" value="add" class="add" onclick="addNewPropRow('edge')"/>
                         </div>
+
+
+
                     </div>
 
 

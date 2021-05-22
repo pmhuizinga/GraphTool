@@ -113,11 +113,11 @@ def get_collection_record(type, collection, id):
 
     result = db[collection].find_one({'id': id})
 
-    print('result :{}'.format(result))
+    # fetch non existing records
+    if result is None:
+        result = {}
 
     if '' in available_fields: available_fields.remove('')
-    print('available_fields')
-    print(available_fields)
     for x in available_fields:
         # if result is not None:
         if x not in result:
@@ -163,11 +163,9 @@ def create():
             dbf.upsert_edge_data(request.form)
 
         elif request.form['submitbutton'] == 'remove':
-            print('remove')
             dbf.remove_node(request.form, 'source')
 
         elif request.form['submitbutton'] == 'merge':
-            print('merge')
             dbf.merge_nodes(request.form)
 
         return render_template('create2.html', types=nodes)
@@ -177,7 +175,6 @@ def create():
 def read_all():
     data = {}
     for col in db.list_collection_names():
-        print(col)
         content = []
         for record in db[col].find():
             content.append(record)

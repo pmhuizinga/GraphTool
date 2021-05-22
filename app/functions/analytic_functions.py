@@ -47,6 +47,12 @@ def get_all_nodes_list(base, id="all"):
 
 
 def get_all_edge_list(base, id="all"):
+    """
+
+    :param base:
+    :param id:
+    :return:
+    """
     collections = db.list_collection_names()
     edge_list = []
 
@@ -55,10 +61,15 @@ def get_all_edge_list(base, id="all"):
             for item in collections:
                 if item[:4] == 'edge':
                     coll = db[item].find()
+                    type = item[5:]
                     for record in coll:
+                        record.pop('_id')
+                        record['type'] = type
                         if id == "all":
-                            edge_list.append(
-                                {"source": str(record['source']), "target": str(record['target']), "value": 1})
+                            edge_list.append(record)
+                            # edge_list.append(
+                            #     {"source": str(record['source']), "target": str(record['target']), "value": 1, "type": type})
+
         else:
             coll = db['edge_' + id].find()
             for record in coll:
@@ -66,14 +77,20 @@ def get_all_edge_list(base, id="all"):
     elif base == 'node':
         for item in collections:
             if item[:4] == 'edge':
+                type = item[5:]
                 coll = db[item].find()
                 for record in coll:
+                    record.pop('_id')
+                    record['type'] = type
                     if id == "all":
-                        edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+                        edge_list.append(record)
+                        # edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1, "type": ""})
                     elif record['source'] == id:
-                        edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+                        edge_list.append(record)
+                        # edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1, "type": ""})
                     elif record['target'] == id:
-                        edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+                        edge_list.append(record)
+                        # edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1, "type": ""})
 
     return edge_list
 

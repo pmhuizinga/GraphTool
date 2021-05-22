@@ -6,3 +6,13 @@ function addNewPropRow(source_target) {
         '<div class="menu_item"><input type="text" name="' + source_target + '_property_value' + newRowId + '" placeholder="property value"/></div>' +
         '</div>');
 }
+
+function addCurrentDate(){
+    n =  new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    datestring = y + "-" + m + "-" + d;
+
+    return datestring
+}
