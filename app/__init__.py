@@ -10,9 +10,12 @@
 # todo: add possibility to remove or modify an edge
 # todo: drop collection when empty
 # todo: add full dependencies as visual
-# todo: make nodes stick so it's easier to add multiple relations to the same node
 # todo: switch graph view to community view (and back)
+# todo: remove main.css / create.html
+# todo: remove duplicate edges (or do not allow to be stored)
 
+
+# done: make nodes stick so it's easier to add multiple relations to the same node
 # rejected: rebase to objectID (not possible, you do not want to look for characteristics but for id's. It has to be unique)
 # done: add trim function when adding new collection (names)
 # done: add default 'geldigheid' to edges
@@ -33,8 +36,8 @@ from flask import Flask
 import pymongo
 
 conn = pymongo.MongoClient("mongodb://localhost:27017/")
-# db = conn['paul_db']
-db = conn['testdb']
+db = conn['paul_db']
+# db = conn['testdb']
 # db = conn['blank']
 # db = conn['familytree']
 

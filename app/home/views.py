@@ -148,19 +148,24 @@ def barcharts():
 def create():
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
     sticky_source = [0]
+    sticky_edge= [0]
+    sticky_target = [0]
 
     if request.method == 'GET':
-        return render_template('create2.html', types=nodes, sticky_source=sticky_source)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge, sticky_target=sticky_target)
 
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
 
+            # hand sticky inputs
             if request.form.get('sticky_source'):
                 sticky_source = [1, request.form['source_collection_name'], request.form['source_collection_id']]
-                print('sticky source is on')
-                print(sticky_source)
-            else:
-                print('sticky source is off')
+
+            if request.form.get('sticky_edge'):
+                sticky_edge = [1, request.form['edge_value']]
+
+            if request.form.get('sticky_target'):
+                sticky_target = [1, request.form['target_collection_name'], request.form['target_collection_id']]
 
             logger.debug('upserting source node')
             dbf.upsert_node_data(request.form, 'source')
@@ -177,7 +182,7 @@ def create():
         elif request.form['submitbutton'] == 'merge':
             dbf.merge_nodes(request.form)
 
-        return render_template('create2.html', types=nodes, sticky_source=sticky_source)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge, sticky_target=sticky_target)
 
 
 @home.route('/read', methods=['GET'])

@@ -14,9 +14,7 @@
                         <div class="menu_item">
                             <input type="text" class="menu_node_item_value" name="source_collection_id" id="source_collection_id" {% if sticky_source[0] == 1 %} value="{{ sticky_source[2] }}" {% else %} placeholder="unique node id" {% endif %}/>
                         </div>
-                        <input type="submit" name="submitbutton" value="enter" class="submit"/>
-                        <input type="submit" name="submitbutton" value="remove" class="remove" onclick="return confirm('Are you sure you want to remove this item?')"/>
-                        <input type="checkbox" name="sticky_source" id="sticky_source" {% if sticky_source[0]==1  %} checked {% endif %}/>
+                        <input type="checkbox" name="sticky_source" class="check" id="sticky_source" {% if sticky_source[0]==1  %} checked {% endif %}/><input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="remove" class="remove" onclick="return confirm('Are you sure you want to remove this item?')"/>
                     </div>
                 </div>
 
@@ -45,8 +43,9 @@
                 <div>
                     <div class="autocomplete" style="width:100%;">
                         <div class="menu_edge_item">
-                            <input type="text" name="edge_value" id="edge_value" class="menu_edge_item_value" placeholder="edge type"/>
+                            <input type="text" name="edge_value" id="edge_value" class="menu_edge_item_value" {% if sticky_edge[0] == 1 %} value="{{ sticky_edge[1] }}" {% else %}placeholder="edge type" {% endif %}/>
                         </div>
+                        <input type="checkbox" name="sticky_edge" class="check" id="sticky_edge" {% if sticky_edge[0]==1  %} checked {% endif %}/>
                         <input type="hidden" value="add" class="add"/>&nbsp;&nbsp;
                     </div>
                 </div>
@@ -64,11 +63,6 @@
                             </div>
                             <div class="menu_item">
                                 <input type="text" name="edge_property_from_value" class="menu_node_item_value" id="edge_from_value" placeholder="MM/DD/YYYY" onfocus="(this.type='date')"/>
-{#                           <script>#}
-{#                           var bookdate = document.getElementById('edge_from_value'),#}
-{#                            currentdate = addCurrentDate();#}
-{#                            bookdate.placeholder = currentdate;#}
-{#                            </script>#}
                             </div>
                             <input type="hidden" value="add" class="add" onclick="addNewPropRow('edge')"/>
                         </div>
@@ -80,11 +74,6 @@
                             <div class="menu_item">
                                 <input type="text" name="edge_property_to_value" class="menu_node_item_value" id="edge_to_value" placeholder="MM/DD/YYYY" onfocus="(this.type='date')"/>
                             </div>
-{#                           <script>#}
-{#                           var bookdate = document.getElementById('edge_to_value'),#}
-{#                            currentdate = addCurrentDate();#}
-{#                            bookdate.placeholder = currentdate;#}
-{#                            </script>#}
                             <input type="hidden" value="add" class="add" onclick="addNewPropRow('edge')"/>
                         </div>
 
@@ -97,12 +86,7 @@
                             </div>
                             <input type="button" value="add" class="add" onclick="addNewPropRow('edge')"/>
                         </div>
-
-
-
                     </div>
-
-
                 </div>
             </div>
 
@@ -111,13 +95,12 @@
                 <div class="autocomplete" style="width:100%; float: left;">
                     <div class="menu_row">
                         <div class="menu_item">
-                            <input type="text" class="menu_node_item_name" name="target_collection_name" id="target_collection_name" placeholder="target node type"/>
+                            <input type="text" class="menu_node_item_name" name="target_collection_name" id="target_collection_name" {% if sticky_target[0] == 1 %} value="{{ sticky_target[1] }}" {% else %}placeholder="target node type" {% endif %}/>
                         </div>
                         <div class="menu_item">
-                            <input type=open"text" class="menu_node_item_value" name="target_collection_id" id="target_collection_id"
-                               placeholder="unique node id"/>
+                            <input type=open"text" class="menu_node_item_value" name="target_collection_id" id="target_collection_id" {% if sticky_target[0] == 1 %} value="{{ sticky_target[2] }}" {% else %} placeholder="unique node id" {% endif %}/>
                         </div>
-                        <input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="merge" class="merge" onclick="return confirm('Are you sure you want to merge these items? Source node will remain')"/>
+                        <input type="checkbox" name="sticky_target" class="check" id="sticky_target" {% if sticky_target[0]==1  %} checked {% endif %}/><input type="submit" name="submitbutton" value="enter" class="submit"/><input type="submit" name="submitbutton" value="merge" class="merge" onclick="return confirm('Are you sure you want to merge these items? Source node will remain')"/>
                     </div>
                 </div>
                 <div class="source_node_collapse"><span>Expand</span></div>

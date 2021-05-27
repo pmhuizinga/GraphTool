@@ -18,7 +18,8 @@ pytest
 logging
 networkx
 pandas
-community==1.0.0b1
+pyaudio
+
 
 
 

@@ -121,6 +121,12 @@ input.add {
     width: 80px;
 }
 
+input.check {
+    vertical-align: top;
+    width: 40px;
+    top: -1px;
+}
+
 a.menu {
     text-decoration: none;
     color: black;
