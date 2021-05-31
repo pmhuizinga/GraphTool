@@ -74,6 +74,7 @@ def get_all_edge_list(base, id="all"):
             coll = db['edge_' + id].find()
             for record in coll:
                 edge_list.append({"source": str(record['source']), "target": str(record['target']), "value": 1})
+
     elif base == 'node':
         for item in collections:
             if item[:4] == 'edge':

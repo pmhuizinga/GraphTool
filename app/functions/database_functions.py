@@ -142,7 +142,12 @@ def upsert_node_data(data, source_target_id):
 
 
 def upsert_edge_data(data):
-    print(data)
+    """
+    insert or update a new edge.
+
+    :param data:
+    :return:
+    """
     source_id = get_node_id(data, 'source')
     target_id = get_node_id(data, 'target')
 
@@ -177,6 +182,14 @@ def upsert_edge_data(data):
 
 
 def remove_node(data, source_target_id):
+    """
+    Remove a record from a collection.
+    In case the collection is empty the collection will be removed
+
+    :param data:
+    :param source_target_id:
+    :return:
+    """
     node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
     id = get_node_id(data, source_target_id)
 
@@ -190,9 +203,13 @@ def remove_node(data, source_target_id):
             db[item].delete_many({'source': id})
             db[item].delete_many({'target': id})
 
-    # 2 remove node
+    # remove node
     db[node_type].remove({'id': id})
-    # todo: if node is completely empty -> remove node
+
+    # if collection is empty: remove collection
+    if db[node_type].count_documents({}) == 0:
+        db[node_type].drop()
+
 
 
 def update_node_id(type, old_id, new_id):
@@ -260,3 +277,30 @@ def merge_nodes(data):
             new_target_values = {"$set": {"target": source_id}}
             coll.update_many(my_source_query, new_source_values)
             coll.update_many(my_target_query, new_target_values)
+
+
+def remove_key_from_collection(type, coll, key):
+    """
+    removes a key from a specified collection.
+    keys {_id, id} cannot be removed from an node collection
+    keys {_id, id, source, target} cannot be removed from an edge collection
+
+    :param type: node or edge
+    :param coll: collectiun nanme
+    :param key: key name
+    :return: nothinhg
+    """
+    mycol = db[type + '_' + coll]
+    print(mycol)
+
+    node_exceptions = ['_id', 'id']
+    edge_exceptions = ['_id', 'id', 'source', 'target']
+
+    if type == 'node' and key not in node_exceptions:
+        mycol.update_many({}, {"$unset": {key: ''}})
+
+    elif type == 'edge' and key not in edge_exceptions:
+        mycol.update_many({}, {"$unset": {key: ''}})
+
+    else:
+        print('nothing removed')

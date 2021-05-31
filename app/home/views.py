@@ -19,21 +19,10 @@ logger = logging.getLogger(__name__)  # initialize logger
 logger.handlers = []
 
 
-# API's
-# @home.route('/graph_nodes/<node>')
-# def get_graph_nodes(node):
-#     return jsonify(af.get_all_nodes_list(node=node))
-
-
 @home.route('/graph_nodes/<base>/<id>')
 def get_graph_nodes(base, id):
     return jsonify(af.get_all_nodes_list(base=base, id=id))
 
-
-#
-# @home.route('/graph_edges/<node>')
-# def get_graph_edges(node):
-#     return jsonify(af.get_all_edge_list(node=node))
 
 @home.route('/graph_edges/<base>/<id>')
 def get_graph_edges(base, id):
@@ -132,6 +121,22 @@ def get_collection_record(type, collection, id):
     return dumps(result)
 
 
+@home.route('/remove_key/<type>/<collection>/<key>')
+def remove_key(type, collection, key):
+    """
+    remove a key from all records in a specified collection (node and edge).
+    keys used for processing are not allowed to be removed
+
+    :param type: node or edge
+    :param collection: collection name
+    :param key: key name
+    :return: nothing
+    """
+    dbf.remove_key_from_collection(type, collection, key)
+
+    return dumps(['removed'])
+
+
 # pages
 @home.route('/')
 @home.route('/index')
@@ -148,11 +153,12 @@ def barcharts():
 def create():
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
     sticky_source = [0]
-    sticky_edge= [0]
+    sticky_edge = [0]
     sticky_target = [0]
 
     if request.method == 'GET':
-        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge, sticky_target=sticky_target)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge,
+                               sticky_target=sticky_target)
 
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
@@ -182,7 +188,8 @@ def create():
         elif request.form['submitbutton'] == 'merge':
             dbf.merge_nodes(request.form)
 
-        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge, sticky_target=sticky_target)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge,
+                               sticky_target=sticky_target)
 
 
 @home.route('/read', methods=['GET'])
@@ -219,9 +226,10 @@ def pagerank():
 
 
 @home.route('/betweenness')
-def betweennes ():
+def betweennes():
     return jsonify(dict(af.get_graph_betweennes_centrality()))
 
+
 @home.route('/degrees')
-def degrees ():
+def degrees():
     return jsonify(dict(af.get_graph_degrees()))

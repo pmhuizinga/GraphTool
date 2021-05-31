@@ -8,14 +8,16 @@
 # todo: add function to rename table name
 # todo: auto 'close' relations when a node is 'closed' (with dates).
 # todo: add possibility to remove or modify an edge
-# todo: drop collection when empty
 # todo: add full dependencies as visual
 # todo: switch graph view to community view (and back)
-# todo: remove main.css / create.html
-# todo: remove duplicate edges (or do not allow to be stored)
+# todo: learn BERT for NLP
+# todo: add 'api/' to api string
 
-
+# done: drop collection when empty
+# done: remove main.css / create.html
+# done: make remove key function an api
 # done: make nodes stick so it's easier to add multiple relations to the same node
+# rejected: remove duplicate edges (or do not allow to be stored)
 # rejected: rebase to objectID (not possible, you do not want to look for characteristics but for id's. It has to be unique)
 # done: add trim function when adding new collection (names)
 # done: add default 'geldigheid' to edges
