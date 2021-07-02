@@ -19,6 +19,8 @@ logging
 networkx
 pandas
 pyaudio
+py2neo
+
 
 
 
