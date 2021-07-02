@@ -25,6 +25,9 @@
         returns a list of source node id's and target node id's.<br>
      | http://127.0.0.1:5000/graph_edges<br><br>
 
+    <a href="{{ url_for('home.remove_key', type='node', collection='testnode', key='testkey') }}" style="color: white">remove key from collection</a><br>
+     | http://127.0.0.1:5000/remove_key/node/testnode/testkey<br><br>
+
     </div>
 
 {% endblock %}

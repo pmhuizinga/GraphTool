@@ -9,31 +9,20 @@ from app.functions import database_functions as dbf
 from app.functions import analytic_functions as af
 
 # logging setup
-logging.basicConfig(filename='log/homelog.log',
-                    filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.NOTSET)
-
+# logging.basicConfig(filename='log/homelog.log',
+#                     filemode='a',
+#                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+#                     datefmt='%H:%M:%S',
+#                     level=logging.NOTSET)
+#
 logger = logging.getLogger(__name__)  # initialize logger
 logger.handlers = []
-
-
-# API's
-# @home.route('/graph_nodes/<node>')
-# def get_graph_nodes(node):
-#     return jsonify(af.get_all_nodes_list(node=node))
 
 
 @home.route('/graph_nodes/<base>/<id>')
 def get_graph_nodes(base, id):
     return jsonify(af.get_all_nodes_list(base=base, id=id))
 
-
-#
-# @home.route('/graph_edges/<node>')
-# def get_graph_edges(node):
-#     return jsonify(af.get_all_edge_list(node=node))
 
 @home.route('/graph_edges/<base>/<id>')
 def get_graph_edges(base, id):
@@ -113,11 +102,11 @@ def get_collection_record(type, collection, id):
 
     result = db[collection].find_one({'id': id})
 
-    print('result :{}'.format(result))
+    # fetch non existing records
+    if result is None:
+        result = {}
 
     if '' in available_fields: available_fields.remove('')
-    print('available_fields')
-    print(available_fields)
     for x in available_fields:
         # if result is not None:
         if x not in result:
@@ -130,6 +119,22 @@ def get_collection_record(type, collection, id):
         result = []
 
     return dumps(result)
+
+
+@home.route('/remove_key/<type>/<collection>/<key>')
+def remove_key(type, collection, key):
+    """
+    remove a key from all records in a specified collection (node and edge).
+    keys used for processing are not allowed to be removed
+
+    :param type: node or edge
+    :param collection: collection name
+    :param key: key name
+    :return: nothing
+    """
+    dbf.remove_key_from_collection(type, collection, key)
+
+    return dumps(['removed'])
 
 
 # pages
@@ -147,12 +152,27 @@ def barcharts():
 @home.route('/create', methods=['GET', 'POST'])
 def create():
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
+    sticky_source = [0]
+    sticky_edge = [0]
+    sticky_target = [0]
 
     if request.method == 'GET':
-        return render_template('create2.html', types=nodes)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge,
+                               sticky_target=sticky_target)
 
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
+
+            # handle sticky inputs
+            if request.form.get('sticky_source'):
+                sticky_source = [1, request.form['source_collection_name'], request.form['source_collection_id']]
+
+            if request.form.get('sticky_edge'):
+                sticky_edge = [1, request.form['edge_value']]
+
+            if request.form.get('sticky_target'):
+                sticky_target = [1, request.form['target_collection_name'], request.form['target_collection_id']]
+
             logger.debug('upserting source node')
             dbf.upsert_node_data(request.form, 'source')
 
@@ -163,21 +183,19 @@ def create():
             dbf.upsert_edge_data(request.form)
 
         elif request.form['submitbutton'] == 'remove':
-            print('remove')
             dbf.remove_node(request.form, 'source')
 
         elif request.form['submitbutton'] == 'merge':
-            print('merge')
             dbf.merge_nodes(request.form)
 
-        return render_template('create2.html', types=nodes)
+        return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge,
+                               sticky_target=sticky_target)
 
 
 @home.route('/read', methods=['GET'])
 def read_all():
     data = {}
     for col in db.list_collection_names():
-        print(col)
         content = []
         for record in db[col].find():
             content.append(record)
@@ -208,9 +226,10 @@ def pagerank():
 
 
 @home.route('/betweenness')
-def betweennes ():
+def betweennes():
     return jsonify(dict(af.get_graph_betweennes_centrality()))
 
+
 @home.route('/degrees')
-def degrees ():
+def degrees():
     return jsonify(dict(af.get_graph_degrees()))
