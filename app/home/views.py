@@ -9,12 +9,12 @@ from app.functions import database_functions as dbf
 from app.functions import analytic_functions as af
 
 # logging setup
-logging.basicConfig(filename='log/homelog.log',
-                    filemode='a',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.NOTSET)
-
+# logging.basicConfig(filename='log/homelog.log',
+#                     filemode='a',
+#                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+#                     datefmt='%H:%M:%S',
+#                     level=logging.NOTSET)
+#
 logger = logging.getLogger(__name__)  # initialize logger
 logger.handlers = []
 
@@ -163,7 +163,7 @@ def create():
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
 
-            # hand sticky inputs
+            # handle sticky inputs
             if request.form.get('sticky_source'):
                 sticky_source = [1, request.form['source_collection_name'], request.form['source_collection_id']]
 
