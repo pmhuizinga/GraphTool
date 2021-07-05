@@ -1,5 +1,14 @@
 # from app import db
 from app import graph
+import logging
+
+logger = logging.getLogger(__name__)  # initialize logger
+logger.handlers = []
+c_handler = logging.StreamHandler()  # Create handlers
+c_format = logging.Formatter('%(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
+logger.addHandler(c_handler)  # Add handlers to the logger
+logger.setLevel(logging.DEBUG)
 
 
 def add_collection_identifier(in_list, type):
@@ -7,6 +16,9 @@ def add_collection_identifier(in_list, type):
     add 'node_' or 'edge_' to callection name
     :return: list
     """
+
+    # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
+
     out_list = [type + '_' + x for x in in_list]
 
     return out_list
@@ -17,6 +29,9 @@ def drop_collection_identifier(in_list, type):
     drop 'node_' or 'edge_' from callection name
     :return: list
     """
+
+    # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
+
     out_list = [x[5:] for x in in_list if x[:4] == type]
 
     return out_list
@@ -30,6 +45,9 @@ def find_matching_collections(input):
     :param user_input:
     :return:
     """
+
+    # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
+
     collections = db.list_collection_names()
 
     for collection in collections:
@@ -40,9 +58,9 @@ def find_matching_collections(input):
         set_match = c / len(set(input))
         len_match = min(len(input), len(collection)) / max(len(input), len(collection))
         result = set_match * len_match
-        print('matching result {} for {} is {} (character match: {}, length match {})'.format(input, collection,
-                                                                                              int(result * 100),
-                                                                                              set_match, len_match))
+        # print('matching result {} for {} is {} (character match: {}, length match {})'.format(input, collection,
+        #                                                                                       int(result * 100),
+        #                                                                                       set_match, len_match))
 
 
 def getCollectionKeys(type, collection):
@@ -57,47 +75,26 @@ def getCollectionKeys(type, collection):
         query = "match(a)-[r:{}]-(b) return properties(r)".format(collection)
 
     result = graph.run(query).to_ndarray()
-    print(result)
     list = [n[0] for n in result]
     all_keys = set().union(*(d.keys() for d in list))
     keys = [k for k in all_keys]
 
-    #
-    #
-    # keys_list = []
-    # collection_list = db[collection].find()
-    #
-    # for document in collection_list:
-    #     for field in document.keys():
-    #         keys_list.append(field)
-    # keys_set = list(set(keys_list))
-
-    # return keys_set
     return keys
 
 
 def getCollectionId(collection):
     """Get full set of ids from a collection"""
 
-    id_list = []
-
     query = "match(a: {}) return a.name".format(collection)
     result = graph.run(query).to_ndarray()
     list = [n[0] for n in result]
-    # coll = db[collection].find()
-    #
-    # for record in coll:
-    #     id_list.append(record['id'])
-    #
-    # id_set = list(set(id_list))
 
-    # return id_set
     return list
+
 
 def getCollectionDetail(type, collection, name):
     """Get full set of ids from a collection"""
 
-    id_list = []
     # "match(a: {}) where a.name = '{}' return a".format(collection, name)
     query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
     a = graph.evaluate(query)
@@ -109,24 +106,41 @@ def getCollectionDetail(type, collection, name):
     for k in a.keys():
         result[k] = a[k]
 
-    # query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
-    # result = graph.run(query).to_ndarray()
-    # list = [n[0] for n in result]
-    # result = [x for x in list[0]]
-
-    # query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
-    # a = graph.evaluate(query)
-    # for k in a.keys():
-
-    # coll = db[collection].find()
-    #
-    # for record in coll:
-    #     id_list.append(record['id'])
-    #
-    # id_set = list(set(id_list))
-
-    # return id_set
     return result
+
+
+def get_node_names():
+    """
+
+    """
+    query = "CALL db.labels()"
+    query_result = graph.run(query).to_ndarray()
+    result = [n[0] for n in query_result]
+
+    return result
+
+
+def get_edge_names():
+    """
+
+    """
+    query = "CALL db.relationshipTypes()"
+    query_result = graph.run(query).to_ndarray()
+    result = [n[0] for n in query_result]
+
+    return result
+
+
+def get_edge_relations(edge):
+    """
+    return a list of edges including sources and targets
+    :param edge: edge label
+    """
+    query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source,type(r), b.name as target".format(edge)
+    query_result = graph.run(query).to_ndarray().tolist()
+
+    return query_result
+
 
 def get_node_id(data, source_target_id):
     """
@@ -140,9 +154,11 @@ def get_node_id(data, source_target_id):
             id = data[source_target_id + '_collection_id'].lower()
         else:
             id = data[source_target_id + '_id'].lower()
-            # update node id change in all edges
-            if data[source_target_id + '_id'].lower() != data[source_target_id + '_collection_id'].lower():
-                update_node_id(data[source_target_id + "_collection_name"].lower(), data[source_target_id + '_collection_id'].lower(), data[source_target_id + '_id'].lower())
+            # update node id change in all edges -> not necessary for NEO4J
+            # if data[source_target_id + '_id'].lower() != data[source_target_id + '_collection_id'].lower():
+            #     update_node_id(data[source_target_id + "_collection_name"].lower(),
+            #                    data[source_target_id + '_collection_id'].lower(),
+            #                    data[source_target_id + '_id'].lower())
     else:
         id = data[source_target_id + '_collection_id'].lower()
         id = id.strip()
@@ -153,7 +169,7 @@ def get_node_id(data, source_target_id):
 def upsert_node_data(data, source_target_id):
     """
     Update or insert new node data
-    :param data: dictionoiry with form request data
+    :param data: dictionairy with form request data
     :param source_target_id: 'source' or 'target
     :return:
     """
@@ -166,12 +182,14 @@ def upsert_node_data(data, source_target_id):
                 # get node type
                 if k == source_target_id + '_collection_name':
                     node_type = 'node_' + data[source_target_id + "_collection_name"].lower().strip()
+                    node_type = data[source_target_id + "_collection_name"].lower().strip()
 
                 # get id stuff
                 elif k == source_target_id + '_collection_id':
                     props['id'] = get_node_id(data, source_target_id)
                     node_id = props['id'].lower()
-                    print(node_id)
+
+                    # print('node_id {}').format(node_id)
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -184,13 +202,23 @@ def upsert_node_data(data, source_target_id):
                 else:
                     newkey = k[len(source_target_id) + 1:]
                     props[newkey] = v
-    # update database
+
+    logger.debug(props)
+
+    # # update database
     try:
         if not node_id == '':
-            db[node_type].update_one({'id': node_id}, {"$set": props}, upsert=True)
-            print("upserting {} node {} in collection {}".format(source_target_id, node_id, node_type))
+            query = "merge(s:{} {{name:'{}'}}) on create set s = {{name: '{}'}} on match set s += {{name: '{}', type: 'testtype'}}".format(node_type, node_id, node_id, node_id)
+            # print(query)
+            graph.run(query)
+
+            # db[node_type].update_one({'id': node_id}, {"$set": props}, upsert=True)
+
+            # print("upserting {} node {} in collection {}".format(source_target_id, node_id, node_type))
     except:
-        print('input error')
+        pass
+    # except:
+    #     print('input error')
 
 
 def upsert_edge_data(data):
@@ -211,7 +239,7 @@ def upsert_edge_data(data):
     # todo: handle null values in nodes
     for k, v in data.items():
         if 'edge' in k:
-            print(k)
+            # print(k)
             if k == 'edge_value':
                 value = data[k]
             elif k == 'edge_property_from_value':
@@ -229,8 +257,8 @@ def upsert_edge_data(data):
 
     if value != '':
         db['edge_' + value].update_one(props, {"$set": props}, upsert=True)
-        print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
-                                                                                           target_id, v))
+        # print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
+        #                                                                                target_id, v))
 
 
 def remove_node(data, source_target_id):
@@ -245,7 +273,7 @@ def remove_node(data, source_target_id):
     node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
     id = get_node_id(data, source_target_id)
 
-    print(node_type, id)
+    # print(node_type, id)
     # 1 remove from edges
     collections = db.list_collection_names()
 
@@ -261,7 +289,6 @@ def remove_node(data, source_target_id):
     # if collection is empty: remove collection
     if db[node_type].count_documents({}) == 0:
         db[node_type].drop()
-
 
 
 def update_node_id(type, old_id, new_id):
@@ -343,7 +370,7 @@ def remove_key_from_collection(type, coll, key):
     :return: nothinhg
     """
     mycol = db[type + '_' + coll]
-    print(mycol)
+    # print(mycol)
 
     node_exceptions = ['_id', 'id']
     edge_exceptions = ['_id', 'id', 'source', 'target']
@@ -354,5 +381,5 @@ def remove_key_from_collection(type, coll, key):
     elif type == 'edge' and key not in edge_exceptions:
         mycol.update_many({}, {"$unset": {key: ''}})
 
-    else:
-        print('nothing removed')
+    # else:
+    #     print('nothing removed')

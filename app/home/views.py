@@ -1,13 +1,16 @@
 from flask import request, render_template, redirect, url_for, jsonify
-from app import db
+from app import graph
 from . import home
-from bson.json_util import dumps
-from bson.objectid import ObjectId
+# from bson.json_util import dumps
+# from bson.objectid import ObjectId
 import logging
 import requests
-from app.functions import database_functions as dbf
-from app.functions import analytic_functions as af
+from app.functions import neo4j_database_functions as dbf
+from app.functions import neo4j_analytic_functions as af
+from py2neo import Graph, Node, Relationship
+import pandas as pd
 
+# graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
 # logging setup
 # logging.basicConfig(filename='log/homelog.log',
 #                     filemode='a',
@@ -17,7 +20,11 @@ from app.functions import analytic_functions as af
 #
 logger = logging.getLogger(__name__)  # initialize logger
 logger.handlers = []
-
+c_handler = logging.StreamHandler()  # Create handlers
+c_format = logging.Formatter('%(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
+logger.addHandler(c_handler)  # Add handlers to the logger
+logger.setLevel(logging.DEBUG)
 
 @home.route('/graph_nodes/<base>/<id>')
 def get_graph_nodes(base, id):
@@ -31,25 +38,20 @@ def get_graph_edges(base, id):
 
 @home.route('/get_collections/<type>')
 def get_collections(type):
+    # todo: rename collections to nodes (use graph terminology)
     """
-    get collectino names depending on type node or type edge
+    get collection names depending on type node or type edge
     :param type: collection type, can be node or edge
     :return: list of collections names
     """
-    collections = db.list_collection_names()
-    # colls = dbf.drop_collection_identifier(collections)
 
-    try:
-        if type == 'node':
-            colls = [x[5:] for x in collections if x[:5] == 'node_']
+    if type == 'node':
+        result = dbf.get_node_names()
+        # query = "CALL db.labels()"
+    elif type == 'edge':
+        result = dbf.get_edge_names()
 
-        elif type == 'edge':
-            colls = [x[5:] for x in collections if x[:5] == 'edge_']
-
-    except:
-        colls = []
-
-    return jsonify(colls)
+    return jsonify(result)
 
 
 @home.route('/get_collection_fieldnames/<type>/<collection>')
@@ -60,10 +62,15 @@ def get_collection_fieldnames2(type, collection):
     :param collection: collection name
     :return: list of fieldnames
     """
-    collection = type + "_" + collection
+    # print('get collection fieldnames')
+    # print(type)
+    # print(collection)
+
+    # collection = type + "_" + collection
     try:
-        field_list = dbf.getCollectionKeys(collection)
-        field_list.remove('_id')
+        field_list = dbf.getCollectionKeys(type, collection)
+
+        # field_list.remove('_id')
     except:
 
         field_list = []
@@ -79,7 +86,7 @@ def get_collection_ids(type, collection):
     :param collection: collection name
     :return: list of record is's
     """
-    collection = type + "_" + collection
+    # collection = type + "_" + collection
     id_list = dbf.getCollectionId(collection)
 
     return jsonify(id_list)
@@ -97,10 +104,15 @@ def get_collection_record(type, collection, id):
     :param id:
     :return:
     """
-    collection = type + "_" + collection
-    available_fields = dbf.getCollectionKeys(collection)
-
-    result = db[collection].find_one({'id': id})
+    # collection = type + "_" + collection
+    available_fields = dbf.getCollectionKeys(type, collection)
+    # print('available fields')
+    # print(available_fields)
+    # get node data
+    result = dbf.getCollectionDetail(type, collection, id)
+    # print('node data')
+    # print(result)
+    # result = db[collection].find_one({'id': id})
 
     # fetch non existing records
     if result is None:
@@ -112,13 +124,15 @@ def get_collection_record(type, collection, id):
         if x not in result:
             result[x] = ''
 
-    try:
-        # remove '_id'
-        result.pop('_id')
-    except:
-        result = []
+    # try:
+    #     # remove '_id'
+    #     result.pop('_id')
+    # except:
+    #     result = []
 
-    return dumps(result)
+    # return dumps(result)
+    # todo: remove dumps method (change to dict)
+    return jsonify(result)
 
 
 @home.route('/remove_key/<type>/<collection>/<key>')
