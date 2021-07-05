@@ -37,6 +37,7 @@
 
 from flask import Flask
 from py2neo import Graph
+
 graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
 # import pymongo
 

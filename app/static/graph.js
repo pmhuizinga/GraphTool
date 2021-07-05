@@ -24,7 +24,7 @@ function create_graph(base, id) {
             // get unique list of nodes
             node_names = d3.set(nodes.map(d => d.type)).values()
 
-            // console.log(node_names)
+            console.log(node_names)
             const legend = svg.append("g")
                 .attr("transform", `translate(${50}, ${10})`)
 
@@ -49,7 +49,9 @@ function create_graph(base, id) {
 
             // END LEGEND
             if (error) throw error;
+            console.log('nodes')
             console.log(nodes)
+            console.log('links')
             console.log(links)
 
             // Add lines for every link in the dataset
