@@ -17,13 +17,16 @@
         all values for a specific node's ID</a><br>
      | http://127.0.0.1:5000/get_collection_record/[type]/[collection]/[id]<br><br>
 
-    <a href="{{ url_for('home.get_graph_nodes', node='all') }}" style="color: white">extract node ID's</a><br>
+    <a href="{{ url_for('home.get_graph_nodes', base='node', id='all') }}" style="color: white">extract node ID's</a><br>
         returns list of node id's (used for d3.js)<br>
      | http://127.0.0.1:5000/graph_nodes<br><br>
 
-    <a href="{{ url_for('home.get_graph_edges', node='all') }}" style="color: white">extract all edges</a><br>
+    <a href="{{ url_for('home.get_graph_edges', base='node', id='all') }}" style="color: white">extract all edges</a><br>
         returns a list of source node id's and target node id's.<br>
      | http://127.0.0.1:5000/graph_edges<br><br>
+
+    <a href="{{ url_for('home.remove_key', type='node', collection='testnode', key='testkey') }}" style="color: white">remove key from collection</a><br>
+     | http://127.0.0.1:5000/remove_key/node/testnode/testkey<br><br>
 
     </div>
 

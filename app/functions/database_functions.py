@@ -88,8 +88,12 @@ def get_node_id(data, source_target_id):
             id = data[source_target_id + '_collection_id'].lower()
         else:
             id = data[source_target_id + '_id'].lower()
+            # update node id change in all edges
+            if data[source_target_id + '_id'].lower() != data[source_target_id + '_collection_id'].lower():
+                update_node_id(data[source_target_id + "_collection_name"].lower(), data[source_target_id + '_collection_id'].lower(), data[source_target_id + '_id'].lower())
     else:
         id = data[source_target_id + '_collection_id'].lower()
+        id = id.strip()
 
     return id
 
@@ -101,7 +105,6 @@ def upsert_node_data(data, source_target_id):
     :param source_target_id: 'source' or 'target
     :return:
     """
-    # todo: when changing an id a new node is created...should be fixed
     props = {}
     for k, v in data.items():
         # filter by source or target node
@@ -110,12 +113,13 @@ def upsert_node_data(data, source_target_id):
             if (source_target_id + '_property_value' not in k) and (source_target_id + '_id' not in k):
                 # get node type
                 if k == source_target_id + '_collection_name':
-                    node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
+                    node_type = 'node_' + data[source_target_id + "_collection_name"].lower().strip()
 
                 # get id stuff
                 elif k == source_target_id + '_collection_id':
                     props['id'] = get_node_id(data, source_target_id)
                     node_id = props['id'].lower()
+                    print(node_id)
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -138,6 +142,12 @@ def upsert_node_data(data, source_target_id):
 
 
 def upsert_edge_data(data):
+    """
+    insert or update a new edge.
+
+    :param data:
+    :return:
+    """
     source_id = get_node_id(data, 'source')
     target_id = get_node_id(data, 'target')
 
@@ -147,18 +157,39 @@ def upsert_edge_data(data):
     props = {'source': source_id, 'target': target_id}
 
     # todo: handle null values in nodes
-    # todo: add edge properties
     for k, v in data.items():
         if 'edge' in k:
+            print(k)
             if k == 'edge_value':
                 value = data[k]
-                if value != '':
-                    db['edge_' + v].update_one(props, {"$set": props}, upsert=True)
-                    print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
-                                                                                                   target_id, v))
+            elif k == 'edge_property_from_value':
+                value2 = data["edge_property_from_value"]
+                if value2 != '':
+                    props['from'] = value2
+            elif k == 'edge_property_to_value':
+                value2 = data["edge_property_to_value"]
+                if value2 != '':
+                    props['to'] = value2
+            elif 'edge_property_name' in k:
+                value2 = data["edge_property_value" + k[19:]]
+                if value2 != '':
+                    props[v] = value2
+
+    if value != '':
+        db['edge_' + value].update_one(props, {"$set": props}, upsert=True)
+        print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
+                                                                                           target_id, v))
 
 
 def remove_node(data, source_target_id):
+    """
+    Remove a record from a collection.
+    In case the collection is empty the collection will be removed
+
+    :param data:
+    :param source_target_id:
+    :return:
+    """
     node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
     id = get_node_id(data, source_target_id)
 
@@ -172,7 +203,104 @@ def remove_node(data, source_target_id):
             db[item].delete_many({'source': id})
             db[item].delete_many({'target': id})
 
-    # 2 remove node
+    # remove node
     db[node_type].remove({'id': id})
-    # todo: if node is completely empty -> remove node
 
+    # if collection is empty: remove collection
+    if db[node_type].count_documents({}) == 0:
+        db[node_type].drop()
+
+
+
+def update_node_id(type, old_id, new_id):
+    """
+    update a node id and also update al instances in the edge collections
+    :param type: node name
+    :param old_id: old id
+    :param new_id: new id
+    :return: nothing
+    """
+    mycol = db["node_" + type]
+
+    myquery = {"id": old_id}
+    newvalues = {"$set": {"id": new_id}}
+
+    # update node
+    mycol.update_one(myquery, newvalues)
+
+    # update edges
+    collections = db.list_collection_names()
+    for item in collections:
+        if item[:4] == 'edge':
+            coll = db[item]
+            my_source_query = {"source": old_id}
+            new_source_values = {"$set": {"source": new_id}}
+            my_target_query = {"target": old_id}
+            new_target_values = {"$set": {"target": new_id}}
+            coll.update_many(my_source_query, new_source_values)
+            coll.update_many(my_target_query, new_target_values)
+
+
+def merge_nodes(data):
+    """
+    merge target node into source node. The source node properties will be leading.
+
+    :param sourcetype:
+    :param sourceid:
+    :param targettype:
+    :param targetid:
+    :return: nothing
+    """
+
+    source_type = "node_" + data['source_collection_name']
+    source_id = data['source_collection_id']
+    target_type = "node_" + data['target_collection_name']
+    target_id = data['target_collection_id']
+
+    # handle non existing source node
+    upsert_node_data(data, 'source')
+
+    # handle null values
+
+    # merge proc
+    # if source_type == target_type:
+    # remove target in node collection
+    db[target_type].remove({'id': target_id})
+    # replace target in edge collections
+    collections = db.list_collection_names()
+    for item in collections:
+        if item[:4] == 'edge':
+            coll = db[item]
+            my_source_query = {"source": target_id}
+            new_source_values = {"$set": {"source": source_id}}
+            my_target_query = {"target": target_id}
+            new_target_values = {"$set": {"target": source_id}}
+            coll.update_many(my_source_query, new_source_values)
+            coll.update_many(my_target_query, new_target_values)
+
+
+def remove_key_from_collection(type, coll, key):
+    """
+    removes a key from a specified collection.
+    keys {_id, id} cannot be removed from an node collection
+    keys {_id, id, source, target} cannot be removed from an edge collection
+
+    :param type: node or edge
+    :param coll: collectiun nanme
+    :param key: key name
+    :return: nothinhg
+    """
+    mycol = db[type + '_' + coll]
+    print(mycol)
+
+    node_exceptions = ['_id', 'id']
+    edge_exceptions = ['_id', 'id', 'source', 'target']
+
+    if type == 'node' and key not in node_exceptions:
+        mycol.update_many({}, {"$unset": {key: ''}})
+
+    elif type == 'edge' and key not in edge_exceptions:
+        mycol.update_many({}, {"$unset": {key: ''}})
+
+    else:
+        print('nothing removed')

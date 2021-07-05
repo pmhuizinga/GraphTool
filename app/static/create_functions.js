@@ -1,20 +1,18 @@
 // asynchronic jquery function for retrieving inputbox data dynamically
 
-
-
 $(document).ready(
     function () {
         var collection;
         $('#source_collection_name').change(function () {
                 collection = $('#source_collection_name').val();
-                console.log(collection)
+                // console.log(collection)
                 // Make Ajax Request and expect JSON-encoded data
                 // get node id's
                 $.getJSON(
                     '/get_collection_ids/node/' + collection,
                     function (id_data) {
                         var node_id = (id_data);
-                        console.log(node_id)
+                        // console.log(node_id)
                         autocomplete(document.getElementById("source_collection_id"), node_id);
                     });
                 // get node fields
@@ -22,7 +20,7 @@ $(document).ready(
                     '/get_collection_fieldnames/node/' + collection,
                     function (field_data) {
                         var field_name = (field_data);
-                        console.log(field_name)
+                        // console.log(field_name)
                         document.getElementById("source_fields").innerHTML = "";
                         $.each(field_data, function (k, v) {
                             document.getElementById('source_fields').innerHTML += '<div class="menu_row">' +
@@ -42,6 +40,7 @@ $(document).ready(
         $('#source_collection_id').change(function () {
                 collection = $('#source_collection_name').val();
                 record_id = $('#source_collection_id').val();
+                console.log('source collection id')
                 console.log(collection)
                 console.log(record_id)
                 // Make Ajax Request and expect JSON-encoded data
@@ -51,7 +50,7 @@ $(document).ready(
                     '/get_collection_record/node/' + collection + '/' + record_id,
                     function (field_data) {
                         var field_name = (field_data);
-                        console.log(field_name)
+                        // console.log(field_name)
                         document.getElementById("source_fields").innerHTML = "";
                         $.each(field_data, function (k, v) {
                             document.getElementById('source_fields').innerHTML += '<div class="menu_row">' +
@@ -62,10 +61,38 @@ $(document).ready(
                                 '</div>';
                         });
                     });
-                create_graph(record_id)
+                create_graph('node', record_id)
             }
         )
     });
+
+$(document).ready(
+    function () {
+        var collection;
+        $('#edge_value').change(function () {
+                // collection = $('#source_collection_name').val();
+                record_id = $('#edge_value').val();
+                create_graph('edge', record_id)
+
+            // $.getJSON(
+            //         '/get_collection_fieldnames/edge/' + collection,
+            //         function (field_data) {
+            //             var field_name = (field_data);
+            //             console.log(field_name)
+            //             document.getElementById("edge_fields").innerHTML = "";
+            //             $.each(field_data, function (k, v) {
+            //                 document.getElementById('edge_fields').innerHTML += '<div class="menu_row">' +
+            //                     '<div class="menu_item">' + v + '</div>' +
+            //                     '<div class="menu_item"><input type="text" name="edge' + v + '"></div>' +
+            //                     '</div>';
+            //                 console.log('finish adding node types')
+            //             });
+            //         });
+
+            }
+        )
+    });
+
 
 $(document).ready(
     function () {
