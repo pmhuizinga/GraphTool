@@ -30,22 +30,18 @@ def get_all_nodes_list(base, id="all"):
         elif base == 'edge':
             edge_list = get_all_edge_list(base='edge', id=id)
 
-        print('edge list')
-        print(edge_list)
         lst = []
         # create (set) list of nodes
         for record in edge_list:
             lst.append(record['source'])
             lst.append(record['target'])
         lst = list(set(lst))
-        # print(lst)
         # add node characteristics to node list
         for item in collections:
             for record in dbf.getCollectionId(item):
                 if record in lst:
                     node_list.append({"id": record, "type": item})
 
-    print(node_list)
     return node_list
 
 
@@ -61,13 +57,10 @@ def get_all_edge_list(base, id="all"):
     edge_list = []
 
     if base == 'edge':
-        print('base is edge')
         if id == 'all':
-            print('id is all')
             for item in collections:
                 # if item[:4] == 'edge':
                 coll = dbf.get_edge_relations(item)
-                print('hallo')
                 # coll = db[item].find()
                 type = item
                 for record in coll:
@@ -78,10 +71,8 @@ def get_all_edge_list(base, id="all"):
                             {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
 
         else:
-            print('id is not all')
             coll = dbf.get_edge_relations(id)
             for record in coll:
-                print(record)
                 edge_list.append(
                     # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
                     {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
@@ -91,7 +82,6 @@ def get_all_edge_list(base, id="all"):
         for item in collections:
                 coll = dbf.get_edge_relations(item)
                 for record in coll:
-                    # print(record)
                     if id == "all":
                         # edge_list.append(record)
                         edge_list.append(
@@ -104,8 +94,6 @@ def get_all_edge_list(base, id="all"):
                         # edge_list.append(record)
                         edge_list.append(
                             {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-
-    print(edge_list)
 
     return edge_list
 

@@ -174,22 +174,24 @@ def upsert_node_data(data, source_target_id):
     :return:
     """
     props = {}
+    logger.debug(data)
     for k, v in data.items():
         # filter by source or target node
         if source_target_id in k:
             # exclude property value and the *_id field. These are being handled within the procedure.
             if (source_target_id + '_property_value' not in k) and (source_target_id + '_id' not in k):
+
                 # get node type
                 if k == source_target_id + '_collection_name':
-                    node_type = 'node_' + data[source_target_id + "_collection_name"].lower().strip()
                     node_type = data[source_target_id + "_collection_name"].lower().strip()
+                    # logger.debug('collection name')
+                    # logger.debug(node_type)
 
-                # get id stuff
+                # get name stuff
                 elif k == source_target_id + '_collection_id':
-                    props['id'] = get_node_id(data, source_target_id)
-                    node_id = props['id'].lower()
-
-                    # print('node_id {}').format(node_id)
+                    node_id = data[k]
+                    props['name'] = node_id
+                    # logger.debug('node_id {}'.format(node_id))
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -197,28 +199,41 @@ def upsert_node_data(data, source_target_id):
                     value2 = data[value]
                     if value2 != '':
                         props[v] = value2
+                        # logger.debug('new property')
+                        # logger.debug(v + " : " + value2)
 
                 # all other properties
                 else:
                     newkey = k[len(source_target_id) + 1:]
-                    props[newkey] = v
-
-    logger.debug(props)
+                    if not(newkey == 'name' and v == ''):
+                        props[newkey] = v
+                    # logger.debug('other property')
+                    # logger.debug(newkey + " : " + v)
 
     # # update database
     try:
         if not node_id == '':
-            query = "merge(s:{} {{name:'{}'}}) on create set s = {{name: '{}'}} on match set s += {{name: '{}', type: 'testtype'}}".format(node_type, node_id, node_id, node_id)
-            # print(query)
-            graph.run(query)
+            # create cypher string
+            neoprops = ''
+            for k, v in props.items():
+                if type(v) == 'str':
+                    neoprops = neoprops + f"{k}:'{v}',"
+                elif type(v) == int:
+                    neoprops = neoprops + f"{k}:{v},"
+                else:
+                    neoprops = neoprops + f"{k}:'{v}',"
+            neoprops = neoprops[:-1]
 
-            # db[node_type].update_one({'id': node_id}, {"$set": props}, upsert=True)
+        query = "merge(s:{} {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
+                                                                                                       node_id,
+                                                                                                       neoprops,
+                                                                                                       neoprops)
+        # logger.debug(query)
+        graph.run(query)
+        logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
-            # print("upserting {} node {} in collection {}".format(source_target_id, node_id, node_type))
     except:
-        pass
-    # except:
-    #     print('input error')
+        print('input error')
 
 
 def upsert_edge_data(data):
@@ -228,37 +243,67 @@ def upsert_edge_data(data):
     :param data:
     :return:
     """
-    source_id = get_node_id(data, 'source')
-    target_id = get_node_id(data, 'target')
+    logger.debug(data)
 
-    if source_id == '' or target_id == '':
+    try:
+        source_type = data['source_collection_name']
+        source_id = data['source_collection_id']
+
+        target_type = data['target_collection_name']
+        target_id = data['target_collection_id']
+
+        edge_type = data['edge_value']
+
+        query = """
+            MATCH(NodeName1:{} {{name: '{}'}}), (NodeName2:{} {{name: '{}'}})
+            MERGE(NodeName1) - [r:{}]->(NodeName2)
+            """.format(source_type, source_id, target_type, target_id, edge_type)
+
+        logger.debug(query)
+        graph.run(query)
+
+    except:
+        print('input error')
         return
 
-    props = {'source': source_id, 'target': target_id}
+    # todo: add properties to edge
 
-    # todo: handle null values in nodes
-    for k, v in data.items():
-        if 'edge' in k:
-            # print(k)
-            if k == 'edge_value':
-                value = data[k]
-            elif k == 'edge_property_from_value':
-                value2 = data["edge_property_from_value"]
-                if value2 != '':
-                    props['from'] = value2
-            elif k == 'edge_property_to_value':
-                value2 = data["edge_property_to_value"]
-                if value2 != '':
-                    props['to'] = value2
-            elif 'edge_property_name' in k:
-                value2 = data["edge_property_value" + k[19:]]
-                if value2 != '':
-                    props[v] = value2
 
-    if value != '':
-        db['edge_' + value].update_one(props, {"$set": props}, upsert=True)
-        # print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
-        #                                                                                target_id, v))
+    # MATCH(NodeName1: Person {name: 'NodeName1'}), (NodeName2:Person {name: 'NodeName2'})
+    # MERGE(NodeName1) - [r: knows]->(NodeName2)
+
+
+    # source_id = get_node_id(data, 'source')
+    # target_id = get_node_id(data, 'target')
+    #
+    # if source_id == '' or target_id == '':
+    #     return
+    #
+    # props = {'source': source_id, 'target': target_id}
+    #
+    # # todo: handle null values in nodes
+    # for k, v in data.items():
+    #     if 'edge' in k:
+    #         # print(k)
+    #         if k == 'edge_value':
+    #             value = data[k]
+    #         elif k == 'edge_property_from_value':
+    #             value2 = data["edge_property_from_value"]
+    #             if value2 != '':
+    #                 props['from'] = value2
+    #         elif k == 'edge_property_to_value':
+    #             value2 = data["edge_property_to_value"]
+    #             if value2 != '':
+    #                 props['to'] = value2
+    #         elif 'edge_property_name' in k:
+    #             value2 = data["edge_property_value" + k[19:]]
+    #             if value2 != '':
+    #                 props[v] = value2
+    #
+    # if value != '':
+    #     db['edge_' + value].update_one(props, {"$set": props}, upsert=True)
+    #     # print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
+    #     #                                                                                target_id, v))
 
 
 def remove_node(data, source_target_id):
@@ -270,54 +315,41 @@ def remove_node(data, source_target_id):
     :param source_target_id:
     :return:
     """
-    node_type = 'node_' + data[source_target_id + "_collection_name"].lower()
-    id = get_node_id(data, source_target_id)
 
-    # print(node_type, id)
-    # 1 remove from edges
-    collections = db.list_collection_names()
+    source_type = data['source_collection_name']
+    source_id = data['source_collection_id']
 
-    edge_list = []
-    for item in collections:
-        if item[:4] == 'edge':
-            db[item].delete_many({'source': id})
-            db[item].delete_many({'target': id})
-
-    # remove node
-    db[node_type].remove({'id': id})
-
-    # if collection is empty: remove collection
-    if db[node_type].count_documents({}) == 0:
-        db[node_type].drop()
+    query = "match(n:{} {{name:'{}'}}) detach delete n".format(source_type, source_id)
+    graph.run(query)
 
 
-def update_node_id(type, old_id, new_id):
-    """
-    update a node id and also update al instances in the edge collections
-    :param type: node name
-    :param old_id: old id
-    :param new_id: new id
-    :return: nothing
-    """
-    mycol = db["node_" + type]
-
-    myquery = {"id": old_id}
-    newvalues = {"$set": {"id": new_id}}
-
-    # update node
-    mycol.update_one(myquery, newvalues)
-
-    # update edges
-    collections = db.list_collection_names()
-    for item in collections:
-        if item[:4] == 'edge':
-            coll = db[item]
-            my_source_query = {"source": old_id}
-            new_source_values = {"$set": {"source": new_id}}
-            my_target_query = {"target": old_id}
-            new_target_values = {"$set": {"target": new_id}}
-            coll.update_many(my_source_query, new_source_values)
-            coll.update_many(my_target_query, new_target_values)
+# def update_node_id(type, old_id, new_id):
+#     """
+#     update a node id and also update al instances in the edge collections
+#     :param type: node name
+#     :param old_id: old id
+#     :param new_id: new id
+#     :return: nothing
+#     """
+#     mycol = db["node_" + type]
+#
+#     myquery = {"id": old_id}
+#     newvalues = {"$set": {"id": new_id}}
+#
+#     # update node
+#     mycol.update_one(myquery, newvalues)
+#
+#     # update edges
+#     collections = db.list_collection_names()
+#     for item in collections:
+#         if item[:4] == 'edge':
+#             coll = db[item]
+#             my_source_query = {"source": old_id}
+#             new_source_values = {"$set": {"source": new_id}}
+#             my_target_query = {"target": old_id}
+#             new_target_values = {"$set": {"target": new_id}}
+#             coll.update_many(my_source_query, new_source_values)
+#             coll.update_many(my_target_query, new_target_values)
 
 
 def merge_nodes(data):
