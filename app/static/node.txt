@@ -1,0 +1,734 @@
+[
+  {
+    "id": "regulatory reporting", 
+    "type": "topic"
+  }, 
+  {
+    "id": "clearwater to aladdin", 
+    "type": "topic"
+  }, 
+  {
+    "id": "decommisioning", 
+    "type": "topic"
+  }, 
+  {
+    "id": "performance fee", 
+    "type": "topic"
+  }, 
+  {
+    "id": "storage", 
+    "type": "topic"
+  }, 
+  {
+    "id": "odbc", 
+    "type": "topic"
+  }, 
+  {
+    "id": "planning", 
+    "type": "topic"
+  }, 
+  {
+    "id": "performance", 
+    "type": "topic"
+  }, 
+  {
+    "id": "etl", 
+    "type": "topic"
+  }, 
+  {
+    "id": "feature refinement", 
+    "type": "topic"
+  }, 
+  {
+    "id": "single sign on", 
+    "type": "topic"
+  }, 
+  {
+    "id": "accounting", 
+    "type": "topic"
+  }, 
+  {
+    "id": "esg", 
+    "type": "topic"
+  }, 
+  {
+    "id": "dms", 
+    "type": "topic"
+  }, 
+  {
+    "id": "xml", 
+    "type": "topic"
+  }, 
+  {
+    "id": " book value", 
+    "type": "topic"
+  }, 
+  {
+    "id": "use cases", 
+    "type": "topic"
+  }, 
+  {
+    "id": "aladdin data status", 
+    "type": "topic"
+  }, 
+  {
+    "id": "aws developers", 
+    "type": "topic"
+  }, 
+  {
+    "id": "master data", 
+    "type": "topic"
+  }, 
+  {
+    "id": "aladdin interfaces", 
+    "type": "topic"
+  }, 
+  {
+    "id": "api", 
+    "type": "topic"
+  }, 
+  {
+    "id": "reporting", 
+    "type": "topic"
+  }, 
+  {
+    "id": "solution intent", 
+    "type": "topic"
+  }, 
+  {
+    "id": "data integration", 
+    "type": "topic"
+  }, 
+  {
+    "id": "2021-5-25 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-18 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-25 sfdr portfolio findings", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-28 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-17 catch-up with reltio", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-19 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-26 call paul-viradj", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-18 architecture bi-weekly", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-25 regulatory reporting architecture", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-21 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-25 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-20 call on master data", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-21 bi-weekly architecture", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-19 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-26 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-18 epic 774 planning", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-26 raft 774 epic meeting", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-20 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-19 master data", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-26 aam internal & adw reporting", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-31 performance fee", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-17 catch-up use case master data personell", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-6-3 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-25 architecture bi-weekly", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-27 architecture team meeting", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-21 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-27 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-6-2 model support", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-6-4 daily aladdin call", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-26 idea group vendor presentation", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-20 performance fee database", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-6-4 internal and adw meeting", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-18 architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-27 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-6-4 daily architecture huddle", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-6-5 one on one", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "2021-5-26 aladdin interface catchup", 
+    "type": "meeting"
+  }, 
+  {
+    "id": "vendor management", 
+    "type": "department"
+  }, 
+  {
+    "id": "global derivatives", 
+    "type": "department"
+  }, 
+  {
+    "id": "product", 
+    "type": "department"
+  }, 
+  {
+    "id": "architecture", 
+    "type": "department"
+  }, 
+  {
+    "id": "compliance", 
+    "type": "department"
+  }, 
+  {
+    "id": "portfolio management", 
+    "type": "department"
+  }, 
+  {
+    "id": "client services", 
+    "type": "department"
+  }, 
+  {
+    "id": "information security", 
+    "type": "department"
+  }, 
+  {
+    "id": "global insights", 
+    "type": "department"
+  }, 
+  {
+    "id": "data", 
+    "type": "department"
+  }, 
+  {
+    "id": "766 us aladdin accounting and performance", 
+    "type": "epic"
+  }, 
+  {
+    "id": "771 aam us clearwater implementation", 
+    "type": "epic"
+  }, 
+  {
+    "id": "758 global insights group analytics", 
+    "type": "epic"
+  }, 
+  {
+    "id": "773 eu aladdin accounting and performance", 
+    "type": "epic"
+  }, 
+  {
+    "id": "774 eu data warehousing - data storage and outputs", 
+    "type": "epic"
+  }, 
+  {
+    "id": "776 eu clearwater implementation", 
+    "type": "epic"
+  }, 
+  {
+    "id": "775 eu aladdin client reporting", 
+    "type": "epic"
+  }, 
+  {
+    "id": "772 eu aladding enterprise impementation", 
+    "type": "epic"
+  }, 
+  {
+    "id": "770 us front office standardization", 
+    "type": "epic"
+  }, 
+  {
+    "id": "721 sustainable finance disclosure regulation", 
+    "type": "epic"
+  }, 
+  {
+    "id": "768 us data warehousing - data storage and outputs", 
+    "type": "epic"
+  }, 
+  {
+    "id": "769 us aladdin client reporting", 
+    "type": "epic"
+  }, 
+  {
+    "id": "bridge analytics", 
+    "type": "party"
+  }, 
+  {
+    "id": "idea group", 
+    "type": "party"
+  }, 
+  {
+    "id": "devlin mambo", 
+    "type": "party"
+  }, 
+  {
+    "id": "fundipedia", 
+    "type": "party"
+  }, 
+  {
+    "id": "blackrock", 
+    "type": "party"
+  }, 
+  {
+    "id": "ubs", 
+    "type": "party"
+  }, 
+  {
+    "id": "aegon nv", 
+    "type": "party"
+  }, 
+  {
+    "id": "reltio ltd", 
+    "type": "party"
+  }, 
+  {
+    "id": "ey", 
+    "type": "party"
+  }, 
+  {
+    "id": "global insights data", 
+    "type": "project"
+  }, 
+  {
+    "id": "quant model to aws", 
+    "type": "project"
+  }, 
+  {
+    "id": "client master", 
+    "type": "project"
+  }, 
+  {
+    "id": "fund master", 
+    "type": "project"
+  }, 
+  {
+    "id": "aws", 
+    "type": "application"
+  }, 
+  {
+    "id": "precisionlm", 
+    "type": "application"
+  }, 
+  {
+    "id": "vikare", 
+    "type": "application"
+  }, 
+  {
+    "id": "evestments", 
+    "type": "application"
+  }, 
+  {
+    "id": "alps", 
+    "type": "application"
+  }, 
+  {
+    "id": "slapp", 
+    "type": "application"
+  }, 
+  {
+    "id": "reltio", 
+    "type": "application"
+  }, 
+  {
+    "id": "simcorp dimension", 
+    "type": "application"
+  }, 
+  {
+    "id": "tableau", 
+    "type": "application"
+  }, 
+  {
+    "id": "salesforce", 
+    "type": "application"
+  }, 
+  {
+    "id": "powerbi", 
+    "type": "application"
+  }, 
+  {
+    "id": "snowflake", 
+    "type": "application"
+  }, 
+  {
+    "id": "prodigy", 
+    "type": "application"
+  }, 
+  {
+    "id": "morningstar", 
+    "type": "application"
+  }, 
+  {
+    "id": "tagetik", 
+    "type": "application"
+  }, 
+  {
+    "id": "harker, steve", 
+    "type": "person"
+  }, 
+  {
+    "id": "nagra, gurpreet", 
+    "type": "person"
+  }, 
+  {
+    "id": "cadger, grant", 
+    "type": "person"
+  }, 
+  {
+    "id": "zwikker, leonard", 
+    "type": "person"
+  }, 
+  {
+    "id": "frank, amie", 
+    "type": "person"
+  }, 
+  {
+    "id": "oudenhoven, daan", 
+    "type": "person"
+  }, 
+  {
+    "id": "hauwert, edwin", 
+    "type": "person"
+  }, 
+  {
+    "id": "wierstra, alexander", 
+    "type": "person"
+  }, 
+  {
+    "id": "lydell, jen", 
+    "type": "person"
+  }, 
+  {
+    "id": "richie, natalie", 
+    "type": "person"
+  }, 
+  {
+    "id": "dekuijf, jamie", 
+    "type": "person"
+  }, 
+  {
+    "id": "hazeldine, david", 
+    "type": "person"
+  }, 
+  {
+    "id": "mickelson, lisa", 
+    "type": "person"
+  }, 
+  {
+    "id": "gubbala, gangadhera", 
+    "type": "person"
+  }, 
+  {
+    "id": "wise, steven", 
+    "type": "person"
+  }, 
+  {
+    "id": "scott, alasdair", 
+    "type": "person"
+  }, 
+  {
+    "id": "oedjaghir, viradj", 
+    "type": "person"
+  }, 
+  {
+    "id": "peyton-hale, stephen", 
+    "type": "person"
+  }, 
+  {
+    "id": "jensen, scott", 
+    "type": "person"
+  }, 
+  {
+    "id": "tjaden, sarah", 
+    "type": "person"
+  }, 
+  {
+    "id": "kargin, ayfer", 
+    "type": "person"
+  }, 
+  {
+    "id": "bird, steve", 
+    "type": "person"
+  }, 
+  {
+    "id": "srivastava, anil", 
+    "type": "person"
+  }, 
+  {
+    "id": "connolly, stephen", 
+    "type": "person"
+  }, 
+  {
+    "id": "ilse", 
+    "type": "person"
+  }, 
+  {
+    "id": "bedi, ashia", 
+    "type": "person"
+  }, 
+  {
+    "id": "devlin, graeme", 
+    "type": "person"
+  }, 
+  {
+    "id": "vunderink, annette", 
+    "type": "person"
+  }, 
+  {
+    "id": "shaw, maureen", 
+    "type": "person"
+  }, 
+  {
+    "id": "johnson-logan, jennifer", 
+    "type": "person"
+  }, 
+  {
+    "id": "jardine, brian", 
+    "type": "person"
+  }, 
+  {
+    "id": "graaf, de kees", 
+    "type": "person"
+  }, 
+  {
+    "id": "smith, solomon", 
+    "type": "person"
+  }, 
+  {
+    "id": "lyall, ian", 
+    "type": "person"
+  }, 
+  {
+    "id": "pomprey, nicola", 
+    "type": "person"
+  }, 
+  {
+    "id": "olmstead, carolyn", 
+    "type": "person"
+  }, 
+  {
+    "id": "sarshar kameai, jordi", 
+    "type": "person"
+  }, 
+  {
+    "id": "newlin, christine", 
+    "type": "person"
+  }, 
+  {
+    "id": "devine, mark", 
+    "type": "person"
+  }, 
+  {
+    "id": "donaldson, derek", 
+    "type": "person"
+  }, 
+  {
+    "id": "hendriksen, dennis", 
+    "type": "person"
+  }, 
+  {
+    "id": "hopper, graham", 
+    "type": "person"
+  }, 
+  {
+    "id": "hol, robert", 
+    "type": "person"
+  }, 
+  {
+    "id": "lieb, brandon", 
+    "type": "person"
+  }, 
+  {
+    "id": "vdovenko, artem", 
+    "type": "person"
+  }, 
+  {
+    "id": "bailor, jani", 
+    "type": "person"
+  }, 
+  {
+    "id": "miggelbrink, jordy", 
+    "type": "person"
+  }, 
+  {
+    "id": "smith, michael", 
+    "type": "person"
+  }, 
+  {
+    "id": "nijensteen, richard", 
+    "type": "person"
+  }, 
+  {
+    "id": "righolt, andre", 
+    "type": "person"
+  }, 
+  {
+    "id": "donald, stuart", 
+    "type": "person"
+  }, 
+  {
+    "id": "wood, angela", 
+    "type": "person"
+  }, 
+  {
+    "id": "murray, michael", 
+    "type": "person"
+  }, 
+  {
+    "id": "batra, ravi", 
+    "type": "person"
+  }, 
+  {
+    "id": "visser, arjen", 
+    "type": "person"
+  }, 
+  {
+    "id": "fettkether, lorri", 
+    "type": "person"
+  }, 
+  {
+    "id": "nims, pamela", 
+    "type": "person"
+  }, 
+  {
+    "id": "bamber, samuel", 
+    "type": "person"
+  }, 
+  {
+    "id": "lawson, amy", 
+    "type": "person"
+  }, 
+  {
+    "id": "jackson, grant", 
+    "type": "person"
+  }, 
+  {
+    "id": "eisenhart, jennifer", 
+    "type": "person"
+  }, 
+  {
+    "id": "crum, nicole", 
+    "type": "person"
+  }, 
+  {
+    "id": "schurgers, monique", 
+    "type": "person"
+  }, 
+  {
+    "id": "hamminga, willem", 
+    "type": "person"
+  }, 
+  {
+    "id": "martinez, kim", 
+    "type": "person"
+  }, 
+  {
+    "id": "colle, serge", 
+    "type": "person"
+  }, 
+  {
+    "id": "mamboininga, simba", 
+    "type": "person"
+  }, 
+  {
+    "id": "huizinga, paul", 
+    "type": "person"
+  }, 
+  {
+    "id": "slager, klaas", 
+    "type": "person"
+  }, 
+  {
+    "id": "marriot, michael", 
+    "type": "person"
+  }
+]
