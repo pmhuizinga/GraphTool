@@ -1,0 +1,2102 @@
+[
+  {
+    "source": "morningstar", 
+    "target": "aws", 
+    "type": "feeds"
+  }, 
+  {
+    "source": "salesforce", 
+    "target": "aws", 
+    "type": "feeds"
+  }, 
+  {
+    "source": "tagetik", 
+    "target": "aws", 
+    "type": "feeds"
+  }, 
+  {
+    "source": "evestments", 
+    "target": "aws", 
+    "type": "feeds"
+  }, 
+  {
+    "source": "aws", 
+    "target": "tableau", 
+    "type": "feeds"
+  }, 
+  {
+    "source": "ilse", 
+    "target": "huizinga, paul", 
+    "type": "daughter_iof"
+  }, 
+  {
+    "source": "tagetik", 
+    "target": "758 global insights group analytics", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "evestments", 
+    "target": "758 global insights group analytics", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "salesforce", 
+    "target": "758 global insights group analytics", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "morningstar", 
+    "target": "758 global insights group analytics", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "tableau", 
+    "target": "758 global insights group analytics", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "client master", 
+    "target": "global insights data", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "fund master", 
+    "target": "global insights data", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "global insights data", 
+    "target": "758 global insights group analytics", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "slapp", 
+    "target": "766 us aladdin accounting and performance", 
+    "type": "is_part_of"
+  }, 
+  {
+    "source": "reltio ltd", 
+    "target": "reltio", 
+    "type": "owns"
+  }, 
+  {
+    "source": "idea group", 
+    "target": "prodigy", 
+    "type": "owns"
+  }, 
+  {
+    "source": "bridge analytics", 
+    "target": "bridge analytics", 
+    "type": "owns"
+  }, 
+  {
+    "source": "bridge analytics", 
+    "target": "vikare", 
+    "type": "owns"
+  }, 
+  {
+    "source": "bamber, samuel", 
+    "target": "reltio ltd", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "aegon nv", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "gubbala, gangadhera", 
+    "target": "ey", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "lydell, jen", 
+    "target": "aegon nv", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "connolly, stephen", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "bedi, ashia", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "devlin, graeme", 
+    "target": "idea group", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "lyall, ian", 
+    "target": "idea group", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "mamboininga, simba", 
+    "target": "idea group", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "bird, steve", 
+    "target": "idea group", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "wise, steven", 
+    "target": "idea group", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "miggelbrink, jordy", 
+    "target": "bridge analytics", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "colle, serge", 
+    "target": "bridge analytics", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "donaldson, derek", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "jackson, grant", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "smith, michael", 
+    "target": "blackrock", 
+    "type": "works_for"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "global insights", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "lieb, brandon", 
+    "target": "global insights", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "jardine, brian", 
+    "target": "vendor management", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "scott, alasdair", 
+    "target": "global insights", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "donald, stuart", 
+    "target": "global insights", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "dekuijf, jamie", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "oudenhoven, daan", 
+    "target": "product", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "hendriksen, dennis", 
+    "target": "client services", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "peyton-hale, stephen", 
+    "target": "architecture", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "olmstead, carolyn", 
+    "target": "data", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "jensen, scott", 
+    "target": "data", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "smith, solomon", 
+    "target": "information security", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "hamminga, willem", 
+    "target": "data", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "nims, pamela", 
+    "target": "data", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "hol, robert", 
+    "target": "data", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "hazeldine, david", 
+    "target": "compliance", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "zwikker, leonard", 
+    "target": "global derivatives", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "graaf, de kees", 
+    "target": "global derivatives", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "vdovenko, artem", 
+    "target": "global derivatives", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "lydell, jen", 
+    "target": "data", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "bailor, jani", 
+    "target": "portfolio management", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "murray, michael", 
+    "target": "portfolio management", 
+    "type": "works_at"
+  }, 
+  {
+    "source": "bridge analytics", 
+    "target": "fund master", 
+    "type": "is_involved_in"
+  }, 
+  {
+    "source": "idea group", 
+    "target": "fund master", 
+    "type": "is_involved_in"
+  }, 
+  {
+    "source": "fundipedia", 
+    "target": "fund master", 
+    "type": "is_involved_in"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-17 catch-up with reltio", 
+    "type": "attended"
+  }, 
+  {
+    "source": "bamber, samuel", 
+    "target": "2021-5-17 catch-up with reltio", 
+    "type": "attended"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "2021-5-17 catch-up use case master data personell", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-17 catch-up use case master data personell", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "attended"
+  }, 
+  {
+    "source": "crum, nicole", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "attended"
+  }, 
+  {
+    "source": "wood, angela", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-18 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-18 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-18 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-18 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-18 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-18 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-18 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-18 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-18 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-18 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "dekuijf, jamie", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "gubbala, gangadhera", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "attended"
+  }, 
+  {
+    "source": "martinez, kim", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "attended"
+  }, 
+  {
+    "source": "devine, mark", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-19 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-19 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-19 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-19 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-19 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "kargin, ayfer", 
+    "target": "2021-5-19 master data", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-19 master data", 
+    "type": "attended"
+  }, 
+  {
+    "source": "lydell, jen", 
+    "target": "2021-5-20 call on master data", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-20 call on master data", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-20 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-20 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-20 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-20 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-20 performance fee database", 
+    "type": "attended"
+  }, 
+  {
+    "source": "slager, klaas", 
+    "target": "2021-5-20 performance fee database", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nijensteen, richard", 
+    "target": "2021-5-20 performance fee database", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-21 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-21 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-21 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-21 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-21 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "attended"
+  }, 
+  {
+    "source": "richie, natalie", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hauwert, edwin", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hol, robert", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hamminga, willem", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "attended"
+  }, 
+  {
+    "source": "wierstra, alexander", 
+    "target": "2021-5-25 regulatory reporting architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "lawson, amy", 
+    "target": "2021-5-25 regulatory reporting architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-25 regulatory reporting architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-5-25 regulatory reporting architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "dekuijf, jamie", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-21 bi-weekly architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-21 bi-weekly architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-5-21 bi-weekly architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-21 bi-weekly architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "dekuijf, jamie", 
+    "target": "2021-5-21 bi-weekly architecture", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-26 call paul-viradj", 
+    "type": "attended"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "2021-5-26 call paul-viradj", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-26 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-26 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-26 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-26 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-26 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "bedi, ashia", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "connolly, stephen", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "martinez, kim", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "devine, mark", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "frank, amie", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "gubbala, gangadhera", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "bailor, jani", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "jensen, scott", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "murray, michael", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "righolt, andre", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "devlin, graeme", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "lyall, ian", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "scott, alasdair", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "shaw, maureen", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "mamboininga, simba", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "bird, steve", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "wise, steven", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "wood, angela", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "gubbala, gangadhera", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "devine, mark", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "martinez, kim", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "dekuijf, jamie", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "srivastava, anil", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "peyton-hale, stephen", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hendriksen, dennis", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "oudenhoven, daan", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "miggelbrink, jordy", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "colle, serge", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "attended"
+  }, 
+  {
+    "source": "donaldson, derek", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-5-31 performance fee", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nijensteen, richard", 
+    "target": "2021-5-31 performance fee", 
+    "type": "attended"
+  }, 
+  {
+    "source": "slager, klaas", 
+    "target": "2021-5-31 performance fee", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-6-4 daily architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-6-4 daily architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-6-4 daily architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-6-4 daily architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-6-5 one on one", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-6-5 one on one", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-6-2 model support", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-6-2 model support", 
+    "type": "attended"
+  }, 
+  {
+    "source": "sarshar kameai, jordi", 
+    "target": "2021-6-2 model support", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-6-3 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-6-3 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-6-3 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "2021-6-3 architecture huddle", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "martinez, kim", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "devine, mark", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "bedi, ashia", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "frank, amie", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "murray, michael", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "jensen, scott", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "jackson, grant", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "attended"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "sarshar kameai, jordi", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "hopper, graham", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "nagra, gurpreet", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "batra, ravi", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "attended"
+  }, 
+  {
+    "source": "master data", 
+    "target": "2021-5-17 catch-up use case master data personell", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "master data", 
+    "target": "2021-5-17 catch-up with reltio", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "planning", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws", 
+    "target": "2021-5-18 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "clearwater to aladdin", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aladdin data status", 
+    "target": "2021-5-18 architecture bi-weekly", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "feature refinement", 
+    "target": "2021-5-18 epic 774 planning", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "data integration", 
+    "target": "2021-5-19 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "master data", 
+    "target": "2021-5-19 master data", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "master data", 
+    "target": "2021-5-20 call on master data", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws", 
+    "target": "2021-5-20 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "performance fee", 
+    "target": "2021-5-20 performance fee database", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "single sign on", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "api", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "simcorp dimension", 
+    "target": "2021-5-21 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "etl", 
+    "target": "2021-5-21 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aladdin interfaces", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws developers", 
+    "target": "2021-5-25 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "odbc", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "powerbi", 
+    "target": "2021-5-25 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "esg", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "regulatory reporting", 
+    "target": "2021-5-25 regulatory reporting architecture", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "2021-5-25 regulatory reporting architecture", 
+    "target": "2021-5-25 regulatory reporting architecture", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "regulatory reporting", 
+    "target": "2021-5-25 architecture bi-weekly", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws developers", 
+    "target": "2021-5-21 bi-weekly architecture", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "regulatory reporting", 
+    "target": "2021-5-25 sfdr portfolio findings", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "master data", 
+    "target": "2021-5-26 call paul-viradj", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "fund master", 
+    "target": "2021-5-26 call paul-viradj", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "global insights data", 
+    "target": "2021-5-26 call paul-viradj", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "fund master", 
+    "target": "2021-5-26 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "decommisioning", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "odbc", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "powerbi", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "single sign on", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "storage", 
+    "target": "2021-5-26 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "planning", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "774 eu data warehousing - data storage and outputs", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "768 us data warehousing - data storage and outputs", 
+    "target": "2021-5-26 aam internal & adw reporting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "idea group", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "prodigy", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "devlin mambo", 
+    "target": "2021-5-26 idea group vendor presentation", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "planning", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "feature refinement", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws developers", 
+    "target": "2021-5-26 raft 774 epic meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "use cases", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "master data", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "solution intent", 
+    "target": "2021-5-27 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "odbc", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "powerbi", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "snowflake", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "etl", 
+    "target": "2021-5-27 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "766 us aladdin accounting and performance", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "snowflake", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "precisionlm", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "vikare", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "bridge analytics", 
+    "target": "2021-5-27 bridge analytics vendor presentation", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "alps", 
+    "target": "2021-5-27 architecture team meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "odbc", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "single sign on", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "powerbi", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "snowflake", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "xml", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "accounting", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "performance", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "reporting", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": " book value", 
+    "target": "2021-5-28 aladdin interface catchup", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "performance fee", 
+    "target": "2021-5-31 performance fee", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "snowflake", 
+    "target": "2021-6-4 daily architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws", 
+    "target": "2021-6-4 daily architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "planning", 
+    "target": "2021-6-5 one on one", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "global derivatives", 
+    "target": "2021-6-2 model support", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws", 
+    "target": "2021-6-2 model support", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws developers", 
+    "target": "2021-6-2 model support", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "aws developers", 
+    "target": "2021-6-3 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "global derivatives", 
+    "target": "2021-6-3 architecture huddle", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "planning", 
+    "target": "2021-6-4 internal and adw meeting", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "dms", 
+    "target": "2021-6-4 daily aladdin call", 
+    "type": "was_discussed_in"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "lieb, brandon", 
+    "type": "works_with"
+  }, 
+  {
+    "source": "peyton-hale, stephen", 
+    "target": "harker, steve", 
+    "type": "works_with"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "harker, steve", 
+    "type": "works_with"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "hazeldine, david", 
+    "type": "works_with"
+  }, 
+  {
+    "source": "scott, alasdair", 
+    "target": "fund master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "oudenhoven, daan", 
+    "target": "fund master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "jardine, brian", 
+    "target": "fund master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "fund master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "fund master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "donald, stuart", 
+    "target": "fund master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "global insights data", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "global insights data", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "hendriksen, dennis", 
+    "target": "global insights data", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "scott, alasdair", 
+    "target": "global insights data", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "donald, stuart", 
+    "target": "global insights data", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "peyton-hale, stephen", 
+    "target": "766 us aladdin accounting and performance", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "peyton-hale, stephen", 
+    "target": "773 eu aladdin accounting and performance", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "schurgers, monique", 
+    "target": "776 eu clearwater implementation", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "768 us data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "775 eu aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "wood, angela", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "773 eu aladdin accounting and performance", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "772 eu aladding enterprise impementation", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "wood, angela", 
+    "target": "771 aam us clearwater implementation", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "770 us front office standardization", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "mickelson, lisa", 
+    "target": "766 us aladdin accounting and performance", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "wood, angela", 
+    "target": "768 us data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "775 eu aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "fettkether, lorri", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "dekuijf, jamie", 
+    "target": "aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "sarshar kameai, jordi", 
+    "target": "aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "sarshar kameai, jordi", 
+    "target": "758 global insights group analytics", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "lieb, brandon", 
+    "target": "758 global insights group analytics", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "758 global insights group analytics", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "758 global insights group analytics", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "vunderink, annette", 
+    "target": "758 global insights group analytics", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "visser, arjen", 
+    "target": "tableau", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "visser, arjen", 
+    "target": "758 global insights group analytics", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "marriot, michael", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "marriot, michael", 
+    "target": "775 eu aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "marriot, michael", 
+    "target": "768 us data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "marriot, michael", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "newlin, christine", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "oedjaghir, viradj", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "nims, pamela", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "eisenhart, jennifer", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "olmstead, carolyn", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "hol, robert", 
+    "target": "client master", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "sarshar kameai, jordi", 
+    "target": "global insights data", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "eisenhart, jennifer", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "tjaden, sarah", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "johnson-logan, jennifer", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "nims, pamela", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "jensen, scott", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "hamminga, willem", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "smith, solomon", 
+    "target": "769 us aladdin client reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "graaf, de kees", 
+    "target": "quant model to aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "zwikker, leonard", 
+    "target": "quant model to aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "vdovenko, artem", 
+    "target": "quant model to aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "cadger, grant", 
+    "target": "quant model to aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "huizinga, paul", 
+    "target": "quant model to aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "hazeldine, david", 
+    "target": "quant model to aws", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "richie, natalie", 
+    "target": "721 sustainable finance disclosure regulation", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "hauwert, edwin", 
+    "target": "721 sustainable finance disclosure regulation", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "harker, steve", 
+    "target": "721 sustainable finance disclosure regulation", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "martinez, kim", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "gubbala, gangadhera", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "devine, mark", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "righolt, andre", 
+    "target": "774 eu data warehousing - data storage and outputs", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "pomprey, nicola", 
+    "target": "regulatory reporting", 
+    "type": "works_on"
+  }, 
+  {
+    "source": "global insights", 
+    "target": "morningstar", 
+    "type": "uses"
+  }, 
+  {
+    "source": "global insights", 
+    "target": "evestments", 
+    "type": "uses"
+  }, 
+  {
+    "source": "global insights", 
+    "target": "salesforce", 
+    "type": "uses"
+  }, 
+  {
+    "source": "global insights", 
+    "target": "tagetik", 
+    "type": "uses"
+  }, 
+  {
+    "source": "global insights", 
+    "target": "ubs", 
+    "type": "uses"
+  }
+]
