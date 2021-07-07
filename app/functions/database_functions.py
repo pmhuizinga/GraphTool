@@ -1,4 +1,5 @@
-from app import db
+# from app import db
+from app import graph
 
 
 def add_collection_identifier(in_list, type):
@@ -44,37 +45,88 @@ def find_matching_collections(input):
                                                                                               set_match, len_match))
 
 
-def getCollectionKeys(collection):
+def getCollectionKeys(type, collection):
     """
     Get full set of keys from a collection
     :param collection: collection name
     :return: all keys for the collection as a list
     """
+    if type == 'node':
+        query = "match (n:{}) return properties(n)".format(collection)
+    elif type == 'edge':
+        query = "match(a)-[r:{}]-(b) return properties(r)".format(collection)
 
-    keys_list = []
-    collection_list = db[collection].find()
+    result = graph.run(query).to_ndarray()
+    print(result)
+    list = [n[0] for n in result]
+    all_keys = set().union(*(d.keys() for d in list))
+    keys = [k for k in all_keys]
 
-    for document in collection_list:
-        for field in document.keys():
-            keys_list.append(field)
-    keys_set = list(set(keys_list))
+    #
+    #
+    # keys_list = []
+    # collection_list = db[collection].find()
+    #
+    # for document in collection_list:
+    #     for field in document.keys():
+    #         keys_list.append(field)
+    # keys_set = list(set(keys_list))
 
-    return keys_set
+    # return keys_set
+    return keys
 
 
 def getCollectionId(collection):
     """Get full set of ids from a collection"""
 
     id_list = []
-    coll = db[collection].find()
 
-    for record in coll:
-        id_list.append(record['id'])
+    query = "match(a: {}) return a.name".format(collection)
+    result = graph.run(query).to_ndarray()
+    list = [n[0] for n in result]
+    # coll = db[collection].find()
+    #
+    # for record in coll:
+    #     id_list.append(record['id'])
+    #
+    # id_set = list(set(id_list))
 
-    id_set = list(set(id_list))
+    # return id_set
+    return list
 
-    return id_set
+def getCollectionDetail(type, collection, name):
+    """Get full set of ids from a collection"""
 
+    id_list = []
+    # "match(a: {}) where a.name = '{}' return a".format(collection, name)
+    query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
+    a = graph.evaluate(query)
+
+    result = {}
+    if a is None:
+        return result
+
+    for k in a.keys():
+        result[k] = a[k]
+
+    # query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
+    # result = graph.run(query).to_ndarray()
+    # list = [n[0] for n in result]
+    # result = [x for x in list[0]]
+
+    # query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
+    # a = graph.evaluate(query)
+    # for k in a.keys():
+
+    # coll = db[collection].find()
+    #
+    # for record in coll:
+    #     id_list.append(record['id'])
+    #
+    # id_set = list(set(id_list))
+
+    # return id_set
+    return result
 
 def get_node_id(data, source_target_id):
     """

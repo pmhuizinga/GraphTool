@@ -12,6 +12,7 @@
 # todo: switch graph view to community view (and back)
 # todo: learn BERT for NLP
 # todo: add 'api/' to api string
+# todo: move all database actions to database_functions.py (not in views.py)
 
 # done: drop collection when empty
 # done: remove main.css / create.html
@@ -35,12 +36,15 @@
 # done: add view on a single node (view all nodes relations)
 
 from flask import Flask
-import pymongo
+from py2neo import Graph
 
-conn = pymongo.MongoClient("mongodb://localhost:27017/")
+graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
+# import pymongo
+
+# conn = pymongo.MongoClient("mongodb://localhost:27017/")
 # db = conn['paul_db']
 # db = conn['testdb']
-db = conn['blank']
+# db = conn['blank']
 # db = conn['familytree']
 
 def create_app(config_name='default'):
