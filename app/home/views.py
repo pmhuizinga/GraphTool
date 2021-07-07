@@ -68,7 +68,7 @@ def get_collection_fieldnames2(type, collection):
 
     # collection = type + "_" + collection
     try:
-        field_list = dbf.getCollectionKeys(type, collection)
+        field_list = dbf.get_collection_keys(type, collection)
 
         # field_list.remove('_id')
     except:
@@ -87,7 +87,7 @@ def get_collection_ids(type, collection):
     :return: list of record is's
     """
     # collection = type + "_" + collection
-    id_list = dbf.getCollectionId(collection)
+    id_list = dbf.get_collection_id(collection)
 
     return jsonify(id_list)
 
@@ -105,11 +105,11 @@ def get_collection_record(type, collection, id):
     :return:
     """
     # collection = type + "_" + collection
-    available_fields = dbf.getCollectionKeys(type, collection)
+    available_fields = dbf.get_collection_keys(type, collection)
     # print('available fields')
     # print(available_fields)
     # get node data
-    result = dbf.getCollectionDetail(type, collection, id)
+    result = dbf.get_collection_detail(type, collection, id)
     # print('node data')
     # print(result)
     # result = db[collection].find_one({'id': id})
@@ -247,3 +247,5 @@ def betweennes():
 @home.route('/degrees')
 def degrees():
     return jsonify(dict(af.get_graph_degrees()))
+
+

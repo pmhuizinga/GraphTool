@@ -20,7 +20,7 @@ def get_all_nodes_list(base, id="all"):
     if id == 'all':
         for item in collections:
             if base == 'node':
-                for identifier in dbf.getCollectionId(item):
+                for identifier in dbf.get_collection_id(item):
                     node_list.append({"id": str(identifier), "type": item})
 
     else:
@@ -38,7 +38,7 @@ def get_all_nodes_list(base, id="all"):
         lst = list(set(lst))
         # add node characteristics to node list
         for item in collections:
-            for record in dbf.getCollectionId(item):
+            for record in dbf.get_collection_id(item):
                 if record in lst:
                     node_list.append({"id": record, "type": item})
 
@@ -146,3 +146,4 @@ def get_graph_betweennes_centrality():
 
 def get_direct_node_relations():
     pass
+

@@ -10,31 +10,31 @@ c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
 logger.addHandler(c_handler)  # Add handlers to the logger
 logger.setLevel(logging.DEBUG)
 
+#
+# def add_collection_identifier(in_list, type):
+#     """
+#     add 'node_' or 'edge_' to callection name
+#     :return: list
+#     """
+#
+#     # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
+#
+#     out_list = [type + '_' + x for x in in_list]
+#
+#     return out_list
 
-def add_collection_identifier(in_list, type):
-    """
-    add 'node_' or 'edge_' to callection name
-    :return: list
-    """
 
-    # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
-
-    out_list = [type + '_' + x for x in in_list]
-
-    return out_list
-
-
-def drop_collection_identifier(in_list, type):
-    """
-    drop 'node_' or 'edge_' from callection name
-    :return: list
-    """
-
-    # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
-
-    out_list = [x[5:] for x in in_list if x[:4] == type]
-
-    return out_list
+# def drop_collection_identifier(in_list, type):
+#     """
+#     drop 'node_' or 'edge_' from callection name
+#     :return: list
+#     """
+#
+#     # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
+#
+#     out_list = [x[5:] for x in in_list if x[:4] == type]
+#
+#     return out_list
 
 
 def find_matching_collections(input):
@@ -63,7 +63,7 @@ def find_matching_collections(input):
         #                                                                                       set_match, len_match))
 
 
-def getCollectionKeys(type, collection):
+def get_collection_keys(type, collection):
     """
     Get full set of keys from a collection
     :param collection: collection name
@@ -82,7 +82,7 @@ def getCollectionKeys(type, collection):
     return keys
 
 
-def getCollectionId(collection):
+def get_collection_id(collection):
     """Get full set of ids from a collection"""
 
     query = "match(a: {}) return a.name".format(collection)
@@ -92,7 +92,7 @@ def getCollectionId(collection):
     return list
 
 
-def getCollectionDetail(type, collection, name):
+def get_collection_detail(type, collection, name):
     """Get full set of ids from a collection"""
 
     # "match(a: {}) where a.name = '{}' return a".format(collection, name)
@@ -165,6 +165,23 @@ def get_node_id(data, source_target_id):
 
     return id
 
+def create_neo_dict(d):
+        """
+        returns a dictionairy in neo4j format, so a key without string characters ('')
+        :param d: dictionairy
+        :return: neo dictionairy
+        """
+        neodict = ''
+        for k, v in d.items():
+            if type(v) == 'str':
+                neodict = neodict + f"{k}:'{v}',"
+            elif type(v) == int:
+                neodict = neodict + f"{k}:{v},"
+            else:
+                neodict = neodict + f"{k}:'{v}',"
+        neodict = neodict[:-1]
+
+        return neodict
 
 def upsert_node_data(data, source_target_id):
     """
@@ -214,23 +231,15 @@ def upsert_node_data(data, source_target_id):
     try:
         if not node_id == '':
             # create cypher string
-            neoprops = ''
-            for k, v in props.items():
-                if type(v) == 'str':
-                    neoprops = neoprops + f"{k}:'{v}',"
-                elif type(v) == int:
-                    neoprops = neoprops + f"{k}:{v},"
-                else:
-                    neoprops = neoprops + f"{k}:'{v}',"
-            neoprops = neoprops[:-1]
+            neoprops = create_neo_dict(props)
 
-        query = "merge(s:{} {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
-                                                                                                       node_id,
-                                                                                                       neoprops,
-                                                                                                       neoprops)
-        # logger.debug(query)
-        graph.run(query)
-        logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
+            query = "merge(s:{} {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
+                                                                                                           node_id,
+                                                                                                           neoprops,
+                                                                                                           neoprops)
+            # logger.debug(query)
+            graph.run(query)
+            logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
     except:
         print('input error')
@@ -254,10 +263,28 @@ def upsert_edge_data(data):
 
         edge_type = data['edge_value']
 
+        props = {}
+        for k, v in data.items():
+            if 'edge' in k:
+                if k == 'edge_property_from_value':
+                    value2 = data["edge_property_from_value"]
+                    if value2 != '':
+                        props['from'] = value2
+                elif k == 'edge_property_to_value':
+                    value2 = data["edge_property_to_value"]
+                    if value2 != '':
+                        props['to'] = value2
+                elif 'edge_property_name' in k:
+                    value2 = data["edge_property_value" + k[19:]]
+                    if value2 != '':
+                        props[v] = value2
+
+        neoprops = create_neo_dict(props)
+
         query = """
             MATCH(NodeName1:{} {{name: '{}'}}), (NodeName2:{} {{name: '{}'}})
-            MERGE(NodeName1) - [r:{}]->(NodeName2)
-            """.format(source_type, source_id, target_type, target_id, edge_type)
+            MERGE(NodeName1) - [r:{} {{{}}}]->(NodeName2)
+            """.format(source_type, source_id, target_type, target_id, edge_type, neoprops)
 
         logger.debug(query)
         graph.run(query)
@@ -265,45 +292,6 @@ def upsert_edge_data(data):
     except:
         print('input error')
         return
-
-    # todo: add properties to edge
-
-
-    # MATCH(NodeName1: Person {name: 'NodeName1'}), (NodeName2:Person {name: 'NodeName2'})
-    # MERGE(NodeName1) - [r: knows]->(NodeName2)
-
-
-    # source_id = get_node_id(data, 'source')
-    # target_id = get_node_id(data, 'target')
-    #
-    # if source_id == '' or target_id == '':
-    #     return
-    #
-    # props = {'source': source_id, 'target': target_id}
-    #
-    # # todo: handle null values in nodes
-    # for k, v in data.items():
-    #     if 'edge' in k:
-    #         # print(k)
-    #         if k == 'edge_value':
-    #             value = data[k]
-    #         elif k == 'edge_property_from_value':
-    #             value2 = data["edge_property_from_value"]
-    #             if value2 != '':
-    #                 props['from'] = value2
-    #         elif k == 'edge_property_to_value':
-    #             value2 = data["edge_property_to_value"]
-    #             if value2 != '':
-    #                 props['to'] = value2
-    #         elif 'edge_property_name' in k:
-    #             value2 = data["edge_property_value" + k[19:]]
-    #             if value2 != '':
-    #                 props[v] = value2
-    #
-    # if value != '':
-    #     db['edge_' + value].update_one(props, {"$set": props}, upsert=True)
-    #     # print("upserting edge {} with source {} and target {} in collection {}".format(v, source_id,
-    #     #                                                                                target_id, v))
 
 
 def remove_node(data, source_target_id):
@@ -415,3 +403,5 @@ def remove_key_from_collection(type, coll, key):
 
     # else:
     #     print('nothing removed')
+
+
