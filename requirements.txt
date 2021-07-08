@@ -17,8 +17,6 @@ logging
 pandas
 py2neo
 networkx
-pyaudio
-py2neo
 
 
 

@@ -148,7 +148,7 @@ def remove_key(type, collection, key):
     """
     dbf.remove_key_from_collection(type, collection, key)
 
-    return dumps(['removed'])
+    return jsonify(['removed'])
 
 
 # pages
