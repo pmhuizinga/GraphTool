@@ -381,27 +381,26 @@ def merge_nodes(data):
 def remove_key_from_collection(type, coll, key):
     """
     removes a key from a specified collection.
-    keys {_id, id} cannot be removed from an node collection
-    keys {_id, id, source, target} cannot be removed from an edge collection
+    keys {name} cannot be removed from an node
+    keys {from, to} cannot be removed from an edge
 
     :param type: node or edge
     :param coll: collectiun nanme
     :param key: key name
     :return: nothinhg
     """
-    mycol = db[type + '_' + coll]
-    # print(mycol)
 
-    node_exceptions = ['_id', 'id']
-    edge_exceptions = ['_id', 'id', 'source', 'target']
+    node_query = "MATCH (m:{}) REMOVE m.{} RETURN m".format(coll, key)
+    edge_query = ""
+
+    node_exceptions = ['name']
+    edge_exceptions = ['from', 'to']
 
     if type == 'node' and key not in node_exceptions:
-        mycol.update_many({}, {"$unset": {key: ''}})
-
+        graph.run(node_query)
     elif type == 'edge' and key not in edge_exceptions:
-        mycol.update_many({}, {"$unset": {key: ''}})
+        graph.run(edge_query)
 
-    # else:
-    #     print('nothing removed')
+
 
 
