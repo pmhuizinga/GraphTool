@@ -17,6 +17,15 @@ logging
 pandas
 py2neo
 networkx
+spacy
+nltk
+
+
+
+
+
+
+
 
 
 

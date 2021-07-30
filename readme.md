@@ -1,5 +1,18 @@
 # GraphTool
 
+## Description
+Make inventory of all entities  
+can be used as master data set?  
+Easy to use to tool for small scale or ad-hoc graph analytics. Users should be able to add new nodes and edges fast and easy.
+read data from several sources and transform into graph  
+sources can be: emails, jira, confluence, word documents, etc.
+
+## Database
+main db is neo4j  
+there is also need for storage of node aliases (paul, paul huizinga, mr. p huizinga, pmhuizinga, etc.)  
+(or should the aliases be added to neo4j as a unique node?)
+
+############################################# OLD #################################################
 ## Requirements
 Easy to use to tool for small scale or ad-hoc graph analytics. Users should be able to add new nodes and edges fast and easy.
 The tool should supply several analytical options, like
@@ -51,7 +64,7 @@ Furthermore, the user should be able to add supplementary properties to the node
 - selection per edge type
 
 ## Analytics
-Show basic network analytics: degrees, pagerank, betweenness 
+Show basic network analytics: degrees, pagerank, betweennes
 
 
 
