@@ -1,15 +1,18 @@
 # pip install -U spacy
 # python -m spacy download en_core_web_sm
 # python -m spacy download nl_core_news_sm
-import neuralcoref
+# import neuralcoref
+# https://github.com/huggingface/neuralcoref
 # %%
 # function to handle co-reference (replace 'he', 'it', etc)
 # also remove unused words
 # also combine pronouns and nouns (if applicable)
 import spacy
+import neuralcoref
 
 # Load English tokenizer, tagger, parser and NER
 nlp = spacy.load("en_core_web_sm")
+neuralcoref.add_to_pipe(nlp)
 
 text = (
     """Why You Should Care about Graph Databases
@@ -53,7 +56,36 @@ text = (
 
 doc = nlp(text)
 
+#%%
+# Neuralcoref options
+doc = nlp(u'My sister has a dog. She loves him.')
 
+# All the clusters of corefering mentions in the doc
+print('All the clusters of corefering mentions in the doc')
+print(doc._.coref_clusters)
+print(doc._.coref_clusters[1].mentions)
+print(doc._.coref_clusters[1].mentions[-1]._.coref_cluster.main)
+
+# Unicode representation of the doc where each corefering mention is replaced by the main mention in the associated cluster.
+print('Unicode representation of the doc where each corefering mention is replaced by the main mention in the associated cluster.')
+print(doc._.coref_resolved)
+
+# Scores of the coreference resolution between mentions.
+print('Scores of the coreference resolution between mentions.')
+print(doc._.coref_scores)
+
+span = doc[-1:]
+# 	Whether the span has at least one corefering mention
+print('	Whether the span has at least one corefering mention')
+print(span._.is_coref)
+# print(span._.coref_cluster.main)
+# print(span._.coref_cluster.main._.coref_cluster)
+
+token = doc[-1]
+print(token._.in_coref)
+print(token._.coref_clusters)
+
+#%%
 # all tokens in dict
 def create_dict_of_text(doc):
     """
@@ -172,8 +204,14 @@ def get_relations(text):
             if ent in str(sent):
                 print(ent, sent)
 
+def get_neuralcoref_entities(in_text):
+    doc = nlp(in_text)
+    out_text = doc._.coref_resolved
+    # neuralcoref.add_to_pipe(nlp)
 
+    return out_text
 
+#%%
 
 a = create_dict_of_text(doc)
 b = merge_propn_and_noun(a)
