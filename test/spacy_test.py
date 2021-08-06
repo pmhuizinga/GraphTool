@@ -7,6 +7,7 @@ from spacy.matcher import Matcher
 nlp = spacy.load("en_core_web_sm")
 neuralcoref.add_to_pipe(nlp)
 
+
 text = (
     "ACR will use ADW as a source. It is a reporting tool and it uses Aladdin Enterprise as a source. Paul Huizinga works with it. He is a data architect for Aegon Asset Management")
 
