@@ -1,25 +1,23 @@
 # todo: add "ID already exists" warning
 # todo: merge epic and project to project, include type 'epic'
 # todo: put db conn in config
-# todo: create blank db as an option
-# todo: select db as an option
-# todo: backup database
 # todo: add function to merge tables
 # todo: add function to rename table name
-# todo: auto 'close' relations when a node is 'closed' (with dates).
 # todo: add possibility to remove or modify an edge
 # todo: add full dependencies as visual
 # todo: switch graph view to community view (and back)
 # todo: learn BERT for NLP
 # todo: add 'api/' to api string
 # todo: move all database actions to database_functions.py (not in views.py)
+# todo: make new api for all nodes/edges including properties
 
+# done: create blank db as an option
+# done: select db as an option
+# done: backup database
 # done: drop collection when empty
 # done: remove main.css / create.html
 # done: make remove key function an api
 # done: make nodes stick so it's easier to add multiple relations to the same node
-# rejected: remove duplicate edges (or do not allow to be stored)
-# rejected: rebase to objectID (not possible, you do not want to look for characteristics but for id's. It has to be unique)
 # done: add trim function when adding new collection (names)
 # done: add default 'geldigheid' to edges
 # done: add edge properties
@@ -34,6 +32,9 @@
 # done: add color code to nodes in graph
 # done: avoid adding duplicate edges
 # done: add view on a single node (view all nodes relations)
+# rejected: auto 'close' relations when a node is 'closed' (with dates). (no longer needed: neo4j does automatically)
+# rejected: remove duplicate edges (or do not allow to be stored)
+# rejected: rebase to objectID (not possible, you do not want to look for characteristics but for id's. It has to be unique)
 
 from flask import Flask
 from py2neo import Graph
