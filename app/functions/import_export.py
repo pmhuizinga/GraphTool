@@ -2,6 +2,7 @@ import json
 from py2neo import Graph, Node, NodeMatcher, Relationship
 import requests
 import os
+
 # from app.home import home
 # from flask import url_for
 
@@ -9,11 +10,9 @@ graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
 matcher = NodeMatcher(graph)
 
 # f = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Python\\GraphTool\\documentation\\'
-f = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Python\\GraphTool\\databases\\'
+f = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\GraphToolNeo4j\\databases\\'
 nodes_url = 'http://127.0.0.1:5000/graph_nodes/node/all'
-# nodes_url = url_for('home.get_graph_nodes', base='node', id='all')
 edges_url = 'http://127.0.0.1:5000/graph_edges/node/all'
-# edges_url = url_for('home.get_graph_edges', base='node', id='all')
 
 
 def database_clear():
@@ -58,9 +57,16 @@ def read_from_file(folderpath, nodes_file_name='nodes.json', edges_file_name='ed
 
 
 def create_nodes_in_neo4j(nodes):
-    # create nodes in Neo
+    """
+    Creates nodes in neo4j based on a list of dictionairies.
+    Requires key 'type' to be in each dict.
+    """
     for item in nodes:
-        a = Node(item['type'], name=item['id'])
+        # a = Node(item['type'], name=item['id'])
+        # graph.create(a)
+        node_type = item['type']
+        item.pop('type', None)
+        a = Node(node_type, **item)
         graph.create(a)
 
 
@@ -84,16 +90,19 @@ def database_open(folderpath, db_delete=True):
     create_nodes_in_neo4j(nodes)
     create_edges_in_neo4j(edges)
 
+
 def read_current_db_name():
     with open(f + 'current_db.txt', 'r') as myfile:
         db_name = myfile.read()
 
     return db_name
 
+
 def write_db_name(db_name):
     with open(f + 'current_db.txt', 'w') as myfile:
         myfile.write(db_name)
         print('current_db was changed to {}'.format(db_name))
+
 
 def database_create(new_db_name, save_current_db=True):
     """
@@ -101,8 +110,7 @@ def database_create(new_db_name, save_current_db=True):
     """
     # save current database
     if save_current_db == True:
-
-        db = read_current_db_name(f)
+        db = read_current_db_name()
         save_folder = f + db + '\\'
         database_save(save_folder)
         print('Database {} was saved to {}'.format(db, save_folder))
@@ -121,11 +129,10 @@ def database_create(new_db_name, save_current_db=True):
     # change current_db.txt
     write_db_name(new_db_name)
 
-def database_switch(db_name, save_current_db=True):
 
+def database_switch(db_name, save_current_db=True):
     # save current database
     if save_current_db == True:
-
         db = read_current_db_name()
         save_folder = f + db + '\\'
         database_save(save_folder)
@@ -141,7 +148,3 @@ def database_switch(db_name, save_current_db=True):
 
     # change current_db.txt
     write_db_name(db_name)
-
-
-
-

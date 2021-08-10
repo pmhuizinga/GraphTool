@@ -3,6 +3,11 @@ from app import graph
 from app.functions import neo4j_database_functions as dbf
 import networkx as nx
 
+def get_nodes_per_type(type):
+    query = "MATCH(a:{}) return a".format(type)
+    query_result = graph.run(query).to_ndarray()
+    result = [n[0] for n in query_result]
+    return result
 
 def get_all_nodes_list(base, id="all"):
     """
@@ -20,8 +25,13 @@ def get_all_nodes_list(base, id="all"):
     if id == 'all':
         for item in collections:
             if base == 'node':
-                for identifier in dbf.get_collection_id(item):
-                    node_list.append({"id": str(identifier), "type": item})
+                for node in get_nodes_per_type(item):
+                    node_val = dict(node)
+                    node_val['id'] = node_val['name']
+                    node_val['type'] = item
+                    node_list.append(node_val)
+                # for identifier in dbf.get_collection_id(item):
+                #     node_list.append({"id": str(identifier), "type": item})
 
     else:
         # get all edges that include the specified node

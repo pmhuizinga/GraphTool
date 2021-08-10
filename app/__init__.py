@@ -10,6 +10,7 @@
 # todo: add 'api/' to api string
 # todo: move all database actions to database_functions.py (not in views.py)
 # todo: make new api for all nodes/edges including properties
+# todo: property 'type' is used for d3.js. This should be changed to node_type
 
 # done: create blank db as an option
 # done: select db as an option
