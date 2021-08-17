@@ -233,7 +233,7 @@ def upsert_node_data(data, source_target_id):
             # create cypher string
             neoprops = create_neo_dict(props)
 
-            query = "merge(s:{} {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
+            query = "merge(s:`{}` {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
                                                                                                            node_id,
                                                                                                            neoprops,
                                                                                                            neoprops)

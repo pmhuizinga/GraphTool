@@ -2,6 +2,10 @@ import json
 from py2neo import Graph, Node, NodeMatcher, Relationship
 import requests
 import os
+import shutil
+import glob
+from time import sleep
+
 
 # from app.home import home
 # from flask import url_for
@@ -9,16 +13,23 @@ import os
 graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
 matcher = NodeMatcher(graph)
 
-# f = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Python\\GraphTool\\documentation\\'
-f = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\GraphToolNeo4j\\databases\\'
+f = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Python\\GraphTool\\databases\\'
+external_data_folder = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Python\\GraphTool\\external_data\\'
+# f = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\GraphToolNeo4j\\databases\\'
 nodes_url = 'http://127.0.0.1:5000/graph_nodes/node/all'
 edges_url = 'http://127.0.0.1:5000/graph_edges/node/all'
 
+def clear_external_data_folder():
+    files = glob.glob(external_data_folder+"*")
+    print(files)
+    for f in files:
+        os.remove(f)
 
 def database_clear():
+
     delete_query = "MATCH(n) DETACH DELETE n"
     graph.run(delete_query)
-
+    sleep(3)
 
 def read_from_api(url):
     """
@@ -33,11 +44,12 @@ def database_save(folderpath, nodes_file_name='nodes.json', edges_file_name='edg
     """
     Write node file and edge file from api to a specified location
     """
+    print('folderpath {}'.format(folderpath))
     with open(folderpath + nodes_file_name, 'w') as f:
         json.dump(read_from_api(nodes_url), f)
 
-    with open(folderpath + edges_file_name, 'w') as f:
-        json.dump(read_from_api(edges_url), f)
+    # with open(folderpath + edges_file_name, 'w') as f:
+    #     json.dump(read_from_api(edges_url), f)
 
 
 def read_from_file(folderpath, nodes_file_name='nodes.json', edges_file_name='edges.json'):
@@ -60,8 +72,13 @@ def create_nodes_in_neo4j(nodes):
     """
     Creates nodes in neo4j based on a list of dictionairies.
     Requires key 'type' to be in each dict.
+    Requires key 'name' to be in each dict
     """
     for item in nodes:
+        if "name" not in item:
+            print('no name found in:')
+            print(item)
+            item['name'] = item['id']
         # a = Node(item['type'], name=item['id'])
         # graph.create(a)
         node_type = item['type']
@@ -73,6 +90,7 @@ def create_nodes_in_neo4j(nodes):
 def create_edges_in_neo4j(edges):
     # create edges in Neo
     for item in edges:
+        print(item)
         NodeSource = matcher.match(name=item['source']).first()
         NodeTarget = matcher.match(name=item['target']).first()
         a = Relationship(NodeSource, item['type'], NodeTarget)
@@ -86,8 +104,14 @@ def database_open(folderpath, db_delete=True):
     if db_delete == True:
         database_clear()
 
+    print('folderpath: {}'.format(folderpath))
+
+    print('reading nodes and edges')
     nodes, edges = read_from_file(folderpath)
+
+    print('creating nodes')
     create_nodes_in_neo4j(nodes)
+    print('creating edges')
     create_edges_in_neo4j(edges)
 
 
@@ -131,10 +155,13 @@ def database_create(new_db_name, save_current_db=True):
 
 
 def database_switch(db_name, save_current_db=True):
+
+    print(db_name)
     # save current database
     if save_current_db == True:
         db = read_current_db_name()
         save_folder = f + db + '\\'
+        print(save_folder)
         database_save(save_folder)
         print('Database {} was saved to {}'.format(db, save_folder))
 
@@ -143,8 +170,23 @@ def database_switch(db_name, save_current_db=True):
     print('Current Neo4j database is truncated')
 
     # open new database
-    database_open(f + db_name + '\\')
+    if not os.path.exists(f + db_name):
+        database_create(db_name)
+    else:
+        database_open(f + db_name + '\\')
     print('Database {} is loaded'.format(db_name))
 
     # change current_db.txt
     write_db_name(db_name)
+
+def database_drop(db_name):
+    # clear current database
+    database_clear()
+    print('Current Neo4j database is truncated')
+
+    folder = f + db_name
+    try:
+        shutil.rmtree(folder)
+    except:
+        print('Error: database {} could not removed from folder')
+    print('Database {} removed from folder'.format(db_name))

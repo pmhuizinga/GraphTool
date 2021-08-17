@@ -27,7 +27,10 @@ def get_all_nodes_list(base, id="all"):
             if base == 'node':
                 for node in get_nodes_per_type(item):
                     node_val = dict(node)
-                    node_val['id'] = node_val['name']
+                    if 'id' in node_val:
+                        node_val['name'] = node_val['id']
+                    if 'name' in node_val:
+                        node_val['id'] = node_val['name']
                     node_val['type'] = item
                     node_list.append(node_val)
                 # for identifier in dbf.get_collection_id(item):

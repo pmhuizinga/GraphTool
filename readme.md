@@ -13,6 +13,10 @@ The tool should supply several analytical options, like:
 - shortest path to node y
 - basic graph analytics: degree, centrality, betweenness
 - proces analytics based on edge types
+- show semantical problems caused by using different namings for the same entity
+
+## Samples
+https://www.amundsen.io/
 
 ## Database
 main db is neo4j  
@@ -38,6 +42,22 @@ Sample:
 7. if node exists all know properties of the node will be displayed below the 2 source node fields.
 
 Furthermore, the user should be able to add supplementary properties to the nodes and/or edges
+
+## Data mastering/matching
+Every node can have one or more 'aliasses'. These are names that the specific enity is also referred to in the organization but that are not defined as the official name.  
+The alias is used in the update proces. If in a new dataset (excel, word, jira, etc) the entities that are found in the document are matched against the exisiting nodes and their aliasses.
+
+The alias offers the opportunity the show possible semantical problems, for instance when an alias is used for more than one entity.
+Once properly populated, the aliasses can help in training machine learning models.
+
+### proces for new nodes:  
+- define node type  
+- find matching nodes of the same type in neo4j  
+  - if match: no action. Node already exists
+   - if not match: find matching names in alias nodes in neo4j
+      - if match: check if more than one node are related to the alias
+         - if > 1: use algo to decide
+         - if 1: rebase the new node to the node related to the alias. + add sourcename to alias
 
 ## Visualization
 - show full graph
