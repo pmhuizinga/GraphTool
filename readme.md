@@ -1,9 +1,10 @@
 # GraphTool
 
 ## Description
+There seems to be more and more need for information that is 'hidden' within an organization. Excel sheets, word documents, Confluence pages, etc.
+
 Easy to use to tool for small scale or ad-hoc graph analytics. Users should be able to add new nodes and edges fast and easy.  
-Make inventory of entities and their relations    
-Could be a knowledge graph  
+Make inventory of entities and their relations     
 Could be used as master data set  
 Read data from multiple sources and transform into graph, sources can be: emails, jira, confluence, word documents, etc.
 Graphical interface using d3.js  
@@ -14,6 +15,24 @@ The tool should supply several analytical options, like:
 - basic graph analytics: degree, centrality, betweenness
 - proces analytics based on edge types
 - show semantical problems caused by using different namings for the same entity
+
+## Goal
+- easy to use tool for adding and maintaining entities and relations
+- create the organisations ontology
+- extract entities and relations from documents and create the organization's ontology based on that  
+- be the master data repository
+- ability to recognize an ontology 'item' using machine learning from documents
+- avoid time consuming maintanance
+
+## Hierarchy
+1. Alternative labels: substitute words with identical meaning (cto -> chief tech officer)  
+2. synonyms list:provides substitute words that can be used to represent the same of very similar things (human - home sapiens)
+3. taxonomy: classifies things into categories (john is human, human is mammal)
+4. ontology: defines relationships between types of things (animals eat food, human is animal)
+5. knowledge graph: instantiation of an ontology (contains the things that are related) (johnn is human, john eats food)
+
+![Alt text](images/knowledgegraphhierarchy.png ")
+
 
 ## Samples
 https://www.amundsen.io/

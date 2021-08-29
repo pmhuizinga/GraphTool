@@ -81,14 +81,16 @@ def get_all_edge_list(base, id="all"):
                     # record['type'] = item
                     if id == "all":
                         edge_list.append(
-                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]), "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
 
         else:
             coll = dbf.get_edge_relations(id)
             for record in coll:
                 edge_list.append(
                     # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-                    {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                    # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                    {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+                     "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
 
     elif base == 'node':
         # get only nodes of the specific relation
@@ -98,15 +100,21 @@ def get_all_edge_list(base, id="all"):
                     if id == "all":
                         # edge_list.append(record)
                         edge_list.append(
-                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                            # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                        {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+                         "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
                     elif record[0] == id:
                         # edge_list.append(record)
                         edge_list.append(
-                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                            # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+                             "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
                     elif record[2] == id:
                         # edge_list.append(record)
                         edge_list.append(
-                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                            # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+                            {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+                             "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
 
     return edge_list
 
