@@ -1,6 +1,17 @@
 # GraphTool
 
-## Description
+## Contents
+[Description](#description)  
+[Goal](#goal)  
+[Hierarchy](#hierarchy)  
+[Samples](#samples)  
+[Database](#database)  
+[User interface](#userinterface)  
+[Mastering](#mastering)  
+[Analytics](#analytics)  
+
+
+## <a id="description"></a>Description
 There seems to be more and more need for information that is 'hidden' within an organization. Excel sheets, word documents, Confluence pages, etc.
 
 Easy to use to tool for small scale or ad-hoc graph analytics. Users should be able to add new nodes and edges fast and easy.  
@@ -16,7 +27,7 @@ The tool should supply several analytical options, like:
 - proces analytics based on edge types
 - show semantical problems caused by using different namings for the same entity
 
-## Goal
+## <a id="goal"></a>Goal
 - easy to use tool for adding and maintaining entities and relations
 - create the organisations ontology
 - extract entities and relations from documents and create the organization's ontology based on that  
@@ -24,25 +35,19 @@ The tool should supply several analytical options, like:
 - ability to recognize an ontology 'item' using machine learning from documents
 - avoid time consuming maintanance
 
-## Hierarchy
-1. Alternative labels: substitute words with identical meaning (cto -> chief tech officer)  
-2. synonyms list:provides substitute words that can be used to represent the same of very similar things (human - home sapiens)
-3. taxonomy: classifies things into categories (john is human, human is mammal)
-4. ontology: defines relationships between types of things (animals eat food, human is animal)
-5. knowledge graph: instantiation of an ontology (contains the things that are related) (johnn is human, john eats food)
-
-![Alt text](images/knowledgegraphhierarchy.png ")
+## <a id="hierarchy"></a>Hierarchy
+![Alt text](images/knowledgegraphhierarchy.PNG)
 
 
-## Samples
+## <a id="samples"></a>Samples
 https://www.amundsen.io/
 
-## Database
+## <a id="database"></a>Database
 main db is neo4j  
 there is also need for storage of node aliases (paul, paul huizinga, mr. p huizinga, pmhuizinga, etc.)  
 (or should the aliases be added to neo4j as a unique node?)
 
-## User interface
+## <a id="userinterface"></a>User interface
 Basic HTML setup: 
   - source node type
   - source node id (example: person name, city name, etc)
@@ -62,14 +67,14 @@ Sample:
 
 Furthermore, the user should be able to add supplementary properties to the nodes and/or edges
 
-## Data mastering/matching
+## <a id="mastering"></a>Data mastering/matching
 Every node can have one or more 'aliasses'. These are names that the specific enity is also referred to in the organization but that are not defined as the official name.  
 The alias is used in the update proces. If in a new dataset (excel, word, jira, etc) the entities that are found in the document are matched against the exisiting nodes and their aliasses.
 
 The alias offers the opportunity the show possible semantical problems, for instance when an alias is used for more than one entity.
 Once properly populated, the aliasses can help in training machine learning models.
 
-### proces for new nodes:  
+### <a id="new node process"></a>proces for new nodes:  
 - define node type  
 - find matching nodes of the same type in neo4j  
   - if match: no action. Node already exists
@@ -78,12 +83,12 @@ Once properly populated, the aliasses can help in training machine learning mode
          - if > 1: use algo to decide
          - if 1: rebase the new node to the node related to the alias. + add sourcename to alias
 
-## Visualization
+## <a id="visualization"></a>Visualization
 - show full graph
 - selection per node, show all direct relations
 - selection per edge type
 
-## Analytics
+## <a id="analytics"></a>Analytics
 Show basic network analytics: degrees, pagerank, betweennes
 
 # Knowledge graph
