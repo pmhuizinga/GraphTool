@@ -1,6 +1,7 @@
 # folders
 venv/
 documentation/
+databases/
 
 # files
 config.py
@@ -11,5 +12,7 @@ sample_database.py
 pymongo_test.py
 possible_inputs.txt
 demo.txt
+edges.json
+nodes.json
 
 *.log

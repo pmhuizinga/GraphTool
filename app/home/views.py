@@ -7,6 +7,7 @@ import logging
 import requests
 from app.functions import neo4j_database_functions as dbf
 from app.functions import neo4j_analytic_functions as af
+from app.functions import import_export as db_functions
 from py2neo import Graph, Node, Relationship
 import pandas as pd
 
@@ -149,6 +150,17 @@ def remove_key(type, collection, key):
     dbf.remove_key_from_collection(type, collection, key)
 
     return jsonify(['removed'])
+
+@home.route('/database/<action>/<dbname>')
+def database_action(action,dbname):
+
+    if action == 'switch':
+        db_functions.database_switch(dbname)
+        return jsonify(['Database changed to: {}'.format(dbname)])
+
+    if action == 'create':
+        db_functions.database_create(dbname)
+        return jsonify(['Database {} created'.format(dbname)])
 
 
 # pages

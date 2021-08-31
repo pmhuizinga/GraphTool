@@ -25,9 +25,14 @@
         returns a list of source node id's and target node id's.<br>
      | http://127.0.0.1:5000/graph_edges<br><br>
 
-    <a href="{{ url_for('home.remove_key', type='node', collection='testnode', key='testkey') }}" style="color: white">remove key from collection (!!! this will remove the key for all relevant nodes !!!)</a><br>
+    remove key from collection<br>
      | http://127.0.0.1:5000/remove_key/node/testnode/testkey<br><br>
 
+    create database<br>
+     | http://127.0.0.1:5000/database/create/[database name]<br><br>
+
+    switch database<br>
+     | http://127.0.0.1:5000/database/switch/[database name]<br><br>
     </div>
 
 {% endblock %}

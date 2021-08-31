@@ -17,6 +17,16 @@ logging
 pandas
 py2neo
 networkx
+spacy
+neuralcoref
+nltk
+
+
+
+
+
+
+
 
 
 

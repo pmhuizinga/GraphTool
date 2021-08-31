@@ -136,10 +136,17 @@ def get_edge_relations(edge):
     return a list of edges including sources and targets
     :param edge: edge label
     """
-    query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source,type(r), b.name as target".format(edge)
-    query_result = graph.run(query).to_ndarray().tolist()
+    # query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source,type(r), b.name as target".format(edge)
+    query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source, type(r), b.name as target, labels(a) as source_type, labels(b) as target_type".format(edge)
+    query_result = graph.run(query).to_ndarray(dtype=object).tolist()
+    result = [[i[0] if isinstance(i, list) else i for i in x] for x in query_result]
+    # query_result = graph.run(query).to_ndarray(dtype=object)
+    # for idx, item in enumerate(query_result):
+    #     if isinstance(item, list):
+    #         query_result[idx] = item[0]
+    #  [i[0] if isinstance(i, list) else i for i in t for i in i]
 
-    return query_result
+    return result
 
 
 def get_node_id(data, source_target_id):
@@ -233,7 +240,7 @@ def upsert_node_data(data, source_target_id):
             # create cypher string
             neoprops = create_neo_dict(props)
 
-            query = "merge(s:{} {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
+            query = "merge(s:`{}` {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
                                                                                                            node_id,
                                                                                                            neoprops,
                                                                                                            neoprops)
