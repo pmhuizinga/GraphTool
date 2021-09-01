@@ -118,6 +118,12 @@ There are multiple approaches to perform information extraction automatically. L
 4. Link to Knowledgebase
 5. Ingest into target Knowledge Graph
 
+# graph tech samples  
+
+### sample 1  
+Party 'aegon nl' has alias 'general account'. client type 'general account' also has aliasses 'general account' and 'ga'. Could party 'aegon nl' also have alias 'ga'??  
+![Alt text](images/sample1.PNG)
+
 
 ## Neuralcoref library
 ### Install
