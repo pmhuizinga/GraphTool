@@ -6,7 +6,6 @@ import shutil
 import glob
 from time import sleep
 
-
 # from app.home import home
 # from flask import url_for
 

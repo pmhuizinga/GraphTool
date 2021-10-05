@@ -12,20 +12,9 @@
 
 
 ## <a id="description"></a>Description
-There seems to be more and more need for information that is 'hidden' within an organization. Excel sheets, word documents, Confluence pages, etc.
+There seems to be more and more need for information that is 'hidden' within an organization. 
+Excel sheets, word documents, Confluence pages, etc.
 
-Easy to use to tool for small scale or ad-hoc graph analytics. Users should be able to add new nodes and edges fast and easy.  
-Make inventory of entities and their relations     
-Could be used as master data set  
-Read data from multiple sources and transform into graph, sources can be: emails, jira, confluence, word documents, etc.
-Graphical interface using d3.js  
-Containerized  
-Deployable in AWS  
-The tool should supply several analytical options, like:
-- shortest path to node y
-- basic graph analytics: degree, centrality, betweenness
-- proces analytics based on edge types
-- show semantical problems caused by using different namings for the same entity
 
 ## <a id="goal"></a>Goal
 - easy to use tool for adding and maintaining entities and relations
@@ -34,6 +23,15 @@ The tool should supply several analytical options, like:
 - be the master data repository
 - ability to recognize an ontology 'item' using machine learning from documents
 - avoid time consuming maintanance
+- Containerized  
+- Deployable in AWS  
+
+Graphical interface using d3.js  
+The tool should supply several analytical options, like:
+- shortest path to node y
+- basic graph analytics: degree, centrality, betweenness
+- proces analytics based on edge types
+- show semantical problems caused by using different namings for the same entity
 
 ## <a id="hierarchy"></a>Hierarchy
 ![Alt text](images/knowledgegraphhierarchy.PNG)
@@ -43,9 +41,7 @@ The tool should supply several analytical options, like:
 https://www.amundsen.io/
 
 ## <a id="database"></a>Database
-main db is neo4j  
-there is also need for storage of node aliases (paul, paul huizinga, mr. p huizinga, pmhuizinga, etc.)  
-(or should the aliases be added to neo4j as a unique node?)
+Current db is Neo4j but it should be easy to switch to AWS Neptune or any other graph db. 
 
 ## <a id="userinterface"></a>User interface
 Basic HTML setup: 
