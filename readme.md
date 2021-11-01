@@ -9,6 +9,7 @@
 [User interface](#userinterface)  
 [Mastering](#mastering)  
 [Analytics](#analytics)  
+[Reading documents](#readingdocuments)
 
 
 ## <a id="description"></a>Description
@@ -20,8 +21,9 @@ Excel sheets, word documents, Confluence pages, etc.
 - easy to use tool for adding and maintaining entities and relations
 - create the organisations ontology
 - extract entities and relations from documents and create the organization's ontology based on that  
-- be the master data repository
+- be the master data repository (?)
 - ability to recognize an ontology 'item' using machine learning from documents
+- train a nlp model using the initial classified dataset
 - avoid time consuming maintanance
 - Containerized  
 - Deployable in AWS  
@@ -32,6 +34,7 @@ The tool should supply several analytical options, like:
 - basic graph analytics: degree, centrality, betweenness
 - proces analytics based on edge types
 - show semantical problems caused by using different namings for the same entity
+- show all direct relations to a specific node
 
 ## <a id="hierarchy"></a>Hierarchy
 ![Alt text](images/knowledgegraphhierarchy.PNG)
@@ -64,7 +67,7 @@ Sample:
 Furthermore, the user should be able to add supplementary properties to the nodes and/or edges
 
 ## <a id="mastering"></a>Data mastering/matching
-Every node can have one or more 'aliasses'. These are names that the specific enity is also referred to in the organization but that are not defined as the official name.  
+Every node can have one or more 'aliasses' (or synonyms). These are names that the specific enity is also referred to in the organization but that are not defined as the official name.  
 The alias is used in the update proces. If in a new dataset (excel, word, jira, etc) the entities that are found in the document are matched against the exisiting nodes and their aliasses.
 
 The alias offers the opportunity the show possible semantical problems, for instance when an alias is used for more than one entity.
@@ -85,11 +88,18 @@ Once properly populated, the aliasses can help in training machine learning mode
 - selection per edge type
 
 ## <a id="analytics"></a>Analytics
-Show basic network analytics: degrees, pagerank, betweennes
+Show basic network analytics: degrees, pagerank, betweennes  
+
+## <a id="readingdocuments"></a>Reading documents  
+- read all nodes from neo, including aliasses
+- populate spacy matcher with neo nodes and types
+- get entities from text
+- bring entities back to proper ontology (use just one term for an entity)
+
 
 # Knowledge graph
 ## Information Extraction (IE)  
-There are multiple approaches to perform information extraction automatically. Let’s understand them one-by-one:
+There are multiple approaches to perform information extraction automatically:
 
 - Rule-based Approach: We define a set of rules for the syntax and other grammatical properties of a natural language and then use these rules to extract information from text  
 - Supervised: Let’s say we have a sentence S. It has two entities E1 and E2. Now, the supervised machine learning model has to detect whether there is any relation (R) between E1 and E2. So, in a supervised approach, the task of relation extraction turns into the task of relation detection. The only drawback of this approach is that it needs a lot of labeled data to train a model  

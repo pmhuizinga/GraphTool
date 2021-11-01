@@ -1,5 +1,5 @@
 function create_graph(base, id) {
-    console.log('base: ' + base)
+    // console.log('base: ' + base)
     d3.select('svg').selectAll("*").remove();
 
     var svg = d3.select("svg"),
@@ -19,8 +19,8 @@ function create_graph(base, id) {
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
-            // LEGEND
 
+            // LEGEND
             // get unique list of nodes
             node_names = d3.set(nodes.map(d => d.type)).values()
 
@@ -61,6 +61,7 @@ function create_graph(base, id) {
                 .data(links)
                 .enter().append("line")
                 // .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+                .filter(function(d) {return d.type != 'has_alias'})
                 .attr("stroke-width", 2);
 
             var node = svg.append("g")
@@ -68,6 +69,7 @@ function create_graph(base, id) {
                 .selectAll("g")
                 .data(nodes)
                 .enter().append("g")
+                // .filter(function(d) {return d.type != 'alias'})
 
             var circles = node.append("circle")
                 .attr("r", 9)
