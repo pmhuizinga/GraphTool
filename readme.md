@@ -1,6 +1,7 @@
 # GraphTool
 
 ## Contents
+[todo](#todo)  
 [Description](#description)  
 [Goal](#goal)  
 [Hierarchy](#hierarchy)  
@@ -11,6 +12,9 @@
 [Analytics](#analytics)  
 [Reading documents](#readingdocuments)
 
+## <a id="todo"></a>To do  
+- define goal. How is this going to help us?
+- make demo on one use case
 
 ## <a id="description"></a>Description
 There seems to be more and more need for information that is 'hidden' within an organization. 
@@ -19,7 +23,7 @@ Excel sheets, word documents, Confluence pages, etc.
 
 ## <a id="goal"></a>Goal
 - easy to use tool for adding and maintaining entities and relations
-- create the organisations ontology
+- create the organisations taxonomy/ontology
 - extract entities and relations from documents and create the organization's ontology based on that  
 - be the master data repository (?)
 - ability to recognize an ontology 'item' using machine learning from documents
