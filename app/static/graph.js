@@ -18,13 +18,18 @@ function create_graph(base, id) {
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
+        // remove alias nodes
+        nodes = nodes.filter(function(d) { return d.type != 'alias'})
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
+            // remove alias links
+            links = links.filter(function(d) { return d.type != 'has_alias'})
 
             // LEGEND
             // get unique list of nodes
             node_names = d3.set(nodes.map(d => d.type)).values()
 
             console.log(node_names)
+
             const legend = svg.append("g")
                 .attr("transform", `translate(${50}, ${10})`)
 
