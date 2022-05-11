@@ -14,5 +14,6 @@ possible_inputs.txt
 demo.txt
 edges.json
 nodes.json
+db.sqlite
 
 *.log

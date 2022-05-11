@@ -1,6 +1,8 @@
 import networkx as nx
+from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
+
 # import operator
 # import warnings
 
@@ -24,15 +26,28 @@ for index, row in df.iterrows():
 G.add_edges_from(edges)
 
 # draw graph
-# plt.figure(3, figsize=(12, 12))
-# nx.draw(G)
-# plt.show()
+plt.figure(3, figsize=(12, 12))
+nx.draw(G)
+plt.show()
 
 # set attribute
-attrs={'A': {'prop1': 1, 'prop2': 2}}
+attrs = {'A': {'prop1': 1, 'prop2': 2}}
 nx.set_node_attributes(G, attrs)
 G.nodes()
 
 # get node attributes
 G.nodes['A']
+#%%
+# Sqlalchemy
+G = nx.Graph()
+cnx = create_engine('sqlite:///db.sqlite').connect()
+result = cnx.execute('SELECT * FROM nodes')
+
+for row in result:
+    print(row['node_properties'])
+    # G.add_node(row['node_id'], row['node_properties'])
+    G.add_node('test', type='test', prop1='1')
+
+print(G.nodes())
+
 

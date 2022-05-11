@@ -122,7 +122,7 @@ def get_node_names():
 
 def get_edge_names():
     """
-
+    get all edge names
     """
     query = "CALL db.relationshipTypes()"
     query_result = graph.run(query).to_ndarray()

@@ -40,6 +40,7 @@ def get_all_nodes_list(base, id="all"):
         # get all edges that include the specified node
         if base == 'node':
             edge_list = get_all_edge_list(base='node', id=id)
+            print(edge_list)
         elif base == 'edge':
             edge_list = get_all_edge_list(base='edge', id=id)
 

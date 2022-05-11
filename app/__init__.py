@@ -14,42 +14,23 @@
 # todo: add ability to use space in node type (by adding `` in the create and select statements)
 # todo: update merge function to neo4j
 
-# done: create blank db as an option
-# done: select db as an option
-# done: backup database
-# done: drop collection when empty
-# done: remove main.css / create.html
-# done: make remove key function an api
-# done: make nodes stick so it's easier to add multiple relations to the same node
-# done: add trim function when adding new collection (names)
-# done: add default 'geldigheid' to edges
-# done: add edge properties
-# done: fix input error
-# done: add selection to graph (show what has been selected)
-# done: add warning before removal and merge
-# done: add option to merge 2 nodes into 1.
-# done: add function to change a node id (also in all edges)
-# done: add legend to graph viz
-# done: visualize per edge type (show all datafeeds)
-# done: enlarge graphics on graph
-# done: add color code to nodes in graph
-# done: avoid adding duplicate edges
-# done: add view on a single node (view all nodes relations)
-# rejected: auto 'close' relations when a node is 'closed' (with dates). (no longer needed: neo4j does automatically)
-# rejected: remove duplicate edges (or do not allow to be stored)
-# rejected: rebase to objectID (not possible, you do not want to look for characteristics but for id's. It has to be unique)
-
 from flask import Flask
-from py2neo import Graph
-# todo: change graph to open file and load into networkx graph
-graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
+from flask_sqlalchemy import SQLAlchemy
+from config import config
 
+db = SQLAlchemy()
+# todo: change graph to open file and load into networkx graph
 
 def create_app(config_name='default'):
     app = Flask(__name__)
+
+    app.config.from_object(config[config_name])
+
+    db.init_app(app)
 
     from .home import home as home_blueprint
 
     app.register_blueprint(home_blueprint, url_prefix="/")
 
     return app
+
