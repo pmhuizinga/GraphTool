@@ -167,13 +167,12 @@ def database_action(action,dbname):
 @home.route('/')
 @home.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('create2.html')
 
 
 @home.route('/barcharts')
 def barcharts():
     return render_template('barcharts.html')
-
 
 @home.route('/create', methods=['GET', 'POST'])
 def create():

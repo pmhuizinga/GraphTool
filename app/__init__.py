@@ -41,16 +41,9 @@
 
 from flask import Flask
 from py2neo import Graph
-
+# todo: change graph to open file and load into networkx graph
 graph = Graph(host="localhost", port=7687, auth=('neo4j', 'admin'))
-# graph = Graph()
-# import pymongo
 
-# conn = pymongo.MongoClient("mongodb://localhost:27017/")
-# db = conn['paul_db']
-# db = conn['testdb']
-# db = conn['blank']
-# db = conn['familytree']
 
 def create_app(config_name='default'):
     app = Flask(__name__)
