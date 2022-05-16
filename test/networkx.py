@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# %%
 # import operator
 # import warnings
 
@@ -37,17 +38,32 @@ G.nodes()
 
 # get node attributes
 G.nodes['A']
-#%%
+# %%
 # Sqlalchemy
+import json
+
 G = nx.Graph()
 cnx = create_engine('sqlite:///db.sqlite').connect()
-result = cnx.execute('SELECT * FROM nodes')
+# select nodes from database
 
-for row in result:
-    print(row['node_properties'])
-    # G.add_node(row['node_id'], row['node_properties'])
-    G.add_node('test', type='test', prop1='1')
+def get_nodes_from_db():
+    '''
+    get nodes from database
+    add nodes to networkx graph
+    '''
+    result = cnx.execute('SELECT * FROM nodes')
 
-print(G.nodes())
+    # move nodes from database in networkx graph
+    for row in result:
+        G.add_nodes_from([([row['node_id'], json.loads(row['node_properties'])])])
 
-
+    print('{} nodes add to graph'.format(len(G.nodes)))
+#%%
+node_id = 'marjan'
+node_properties = {'firstname': 'marjan', 'lastname':'willemse'}
+sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id, str(node_properties))
+print(sql)
+cnx.execute(sql)
+# add node to database
+#
+# print(G.nodes())
