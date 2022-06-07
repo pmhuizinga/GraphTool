@@ -2,9 +2,11 @@ import networkx as nx
 from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import os
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import *
 # %%
-
 # create sample data
 node_list = ['A', 'B', 'C', 'D']
 source = ['A', 'B', 'C', 'D']
@@ -59,28 +61,18 @@ plt.figure(3, figsize=(12, 12))
 nx.draw(G)
 plt.show()
 
-# %%
-node_id = 'marjan'
-node_properties = {'firstname': 'marjan', 'lastname': 'willemse'}
-sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id,
-                                                                                                 str(node_properties))
-print(sql)
-cnx.execute(sql)
-# add node to database
-#
-# print(G.nodes())
-# %%
-import os
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import *
+# write graph
+# nx.write_adjlist(G, "test.adjlist")
 
+# read graph
+
+# %%
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # create flask app
 app = Flask(__name__)
-# set sqllite db connection
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'graph.sqlite')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
 # sqlite init to app
@@ -100,15 +92,15 @@ for table in tables:
         base.metadata.drop_all(engine, [table], checkfirst=True)
 # %%
 # define meta data for table
-
-Nodetable = Table('nodes', meta, Column('id', Integer, primary_key=True, autoincrement=True),
-                  Column('node_type', String, unique=False),
-                  Column('node_name', String, unique=False),
+Nodetable = Table('nodes', meta, Column('id', Integer, autoincrement=True),
+                  Column('node_type', String, unique=False, primary_key=True),
+                  Column('node_name', String, unique=False, primary_key=True),
                   Column('node_attr', String))
 
 Edgetable = Table('edges', meta, Column('id', Integer, primary_key=True, autoincrement=True),
                   Column('source_edge', Integer, unique=False),
                   Column('target_edge', Integer, unique=False),
+                  Column('edge_type', String),
                   Column('edge_attr', String))
 
 # create table to sqlite
@@ -119,13 +111,12 @@ class Node(db.Model):
     __tablename__ = "nodes"
 
     # user columns
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    node_type = db.Column(db.String(64))
-    node_name = db.Column(db.String(64))
+    id = db.Column(db.Integer(), autoincrement=True)
+    node_type = db.Column(db.String(64), primary_key=True)
+    node_name = db.Column(db.String(64), primary_key=True)
     node_attr = db.Column(db.String(256))
 
     def __init__(self, node_type, node_name, node_attr):
-        # self.id=id
         self.node_type = node_type
         self.node_name = node_name
         self.node_attr = node_attr
@@ -139,61 +130,94 @@ class Edge(db.Model):
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     source_edge = db.Column(db.Integer(), unique=False)
     target_edge = db.Column(db.Integer(), unique=False)
+    edge_type = db.Column(db.String(128))
     edge_attr = db.Column(db.String(128))
 
-    def __init__(self, source_edge, target_edge, edge_attr):
+    def __init__(self, source_edge, target_edge, edge_type, edge_attr):
         # self.id=id
         self.source_edge = source_edge
         self.target_edge = target_edge
+        self.edge_type = edge_type
         self.edge_attr = edge_attr
 
 
-# %%
-# create node  object
-node = Node('person', 'huizinga,paul','{"firstname":"paul", "lastname":"huizinga","function":"data architect"}')
-# insert user object to sqlite
-db.session.add(node)
-# commit transaction
-db.session.commit()
-
-# todo: update node object
-
-node_type = 'person'
-node_name = 'willemse,marjan'
-node_attributes = {'firstname': 'marjan', 'lastname': 'willemse'}
-node = Node(node_type, node_name, node_attributes)
-db.session.add(node)
-db.session.commit()
 #%%
-def create_node(node_type, node_name, node_attributes):
-    '''
-    Function for adding a new node to a networkx graph and a sqlite database
-    '''
-    create_node_nx(node_type, node_name, node_attributes)
-    # add to sqlite
-    create_node_sl(node_type, node_name, node_attributes)
+# class node():
+#     def __init__(self, node_type, node_name, node_attributes):
+#         self.node_type = node_type
+#         self.node_name = node_name
+#         self.node_attributes = node_attributes
 
+def initiate_from_db():
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT * FROM nodes"))
+        for row in result:
+            print(row)
 
-def create_node_nx(node_type, node_name, node_attributes=null):
-    # add to networkx graph
-    G.add_node(node_name, type=node_type)
-    if node_attributes is not null:
-        attrs = {node_name: node_attributes}
-        nx.set_node_attributes(G, attrs)
+class create_node():
+    def __init__(self,node_type, node_name, node_attributes):
+        self.node_type = node_type
+        self.node_name = node_name
+        self.node_attributes = node_attributes
 
-def create_node_sl(node_type, node_name, node_attributes=null):
-    try:
-        db.session.add(Node(node_type, node_name, str(node_attributes)))
-    except:  # * see comment below
-        db.session.rollback()
-        raise
-    else:
-        db.session.commit()
+    def create_node(self):
+        '''
+        Function for adding a new node to a networkx graph and a sqlite database
+        '''
+        self.create_node_nx()
+        self.create_node_sl()
 
+    def create_node_nx(self):
+        # add to networkx graph
+        G.add_node(self.node_name, type=self.node_type)
+        if self.node_attributes is not null:
+            attrs = {self.node_name: self.node_attributes}
+            nx.set_node_attributes(G, attrs)
 
+    # def create_node_sl(self, node_type, node_name, node_attributes=null):
+    def create_node_sl(self):
+        try:
+            db.session.add(Node(self.node_type, self.node_name, str(self.node_attributes)))
+        except:
+            db.session.rollback()
+            print('error in commit')
+            raise
+        else:
+            db.session.commit()
+
+# class update_node():
+#     def __init__(self,node_type, node_name, node_attributes):
+#         self.node_type = node_type
+#         self.node_name = node_name
+#         self.node_attributes = node_attributes
+#
+#         def update_node(self):
+#             '''
+#             Function for adding a new node to a networkx graph and a sqlite database
+#             '''
+#             self.update_node_nx()
+#             self.update_node_sl()
+#
+#         def update_node_nx(self):
+#             # add to networkx graph
+#             G.add_node(self.node_name, type=self.node_type)
+#             if self.node_attributes is not null:
+#                 attrs = {self.node_name: self.node_attributes}
+#                 nx.set_node_attributes(G, attrs)
+#
+#             # def create_node_sl(self, node_type, node_name, node_attributes=null):
+#
+#         def update_node_sl(self):
+#             try:
+#                 db.session.add(Node(self.node_type, self.node_name, str(self.node_attributes)))
+#             except:
+#                 db.session.rollback()
+#                 raise
+#             else:
+#                 db.session.commit()
 #%%
-create_node_nx('person', 'willemse,marjan', {'firstname': 'marjan', 'lastname': 'willemse'})
-create_node_sl('person', 'willemse,marjan', str({'firstname': 'marjan', 'lastname': 'willemse'}))
+create_node('person', 'willemse,marjan', {'firstname': 'marjan', 'lastname': 'willemse'})
+create_node('person', 'huizinga,paul',{'firstname': 'paul', 'lastname': 'huizinga'})
 create_node('place', 'groningen','')
 # %%
 # sqlalchemy
@@ -202,10 +226,7 @@ import json
 # G = nx.Graph()
 # Create database
 cnx = create_engine('sqlite:///db.sqlite').connect()
-
-
 # create tables (if they do not exist already)
-
 
 # select nodes from database
 def get_nodes_from_db():
@@ -221,3 +242,30 @@ def get_nodes_from_db():
 
     print('{} nodes add to graph'.format(len(G.nodes)))
 
+# %%
+# node_id = 'marjan'
+# node_properties = {'firstname': 'marjan', 'lastname': 'willemse'}
+# sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id,
+#                                                                                                  str(node_properties))
+# print(sql)
+# cnx.execute(sql)
+# add node to database
+#
+# print(G.nodes())
+
+# # %%
+# # create node  object
+# node = Node('person', 'huizinga,paul','{"firstname":"paul", "lastname":"huizinga","function":"data architect"}')
+# # insert user object to sqlite
+# db.session.add(node)
+# # commit transaction
+# db.session.commit()
+#
+# # todo: update node object
+#
+# node_type = 'person'
+# node_name = 'willemse,marjan'
+# node_attributes = {'firstname': 'marjan', 'lastname': 'willemse'}
+# node = Node(node_type, node_name, node_attributes)
+# db.session.add(node)
+# db.session.commit()
