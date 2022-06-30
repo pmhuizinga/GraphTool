@@ -23,7 +23,7 @@ class DevelopmentConfig(Config):
 
     if db_type == 'sqlite':
         SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-                                  'sqlite:///' + os.path.join(basedir, 'app.db')
+                                  'sqlite:///' + os.path.join(basedir, 'graph.sqlite')
 
 
 class ProductionConfig(Config):
@@ -37,7 +37,7 @@ class ProductionConfig(Config):
 
     # sqlite
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-                              'sqlite:///' + os.path.join(basedir, 'app.db')
+                              'sqlite:///' + os.path.join(basedir, 'graph.sqlite')
 
 config = {
     'development': DevelopmentConfig,

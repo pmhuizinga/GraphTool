@@ -1,4 +1,4 @@
-import networkx as nx
+import networkx_test as nx
 from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -92,27 +92,30 @@ db = SQLAlchemy(app)
 db.drop_all()
 
 meta = MetaData()
-Nodetable = Table('nodes', meta, Column('id', Integer, autoincrement=True),
-                  Column('node_type', String, unique=False, primary_key=True),
-                  Column('node_name', String, unique=False, primary_key=True),
-                  Column('node_attr', String))
+Nodetable = Table('nodes', meta,
+                  Column('id', Integer, primary_key=True),
+                  Column('node_type', String),
+                  Column('node_name', String),
+                  Column('node_attr', String),
+                  UniqueConstraint('node_type', 'node_name', name='uix_node_type_node_name'))
 
-Edgetable = Table('edges', meta, Column('id', Integer, primary_key=True, autoincrement=True),
-                  Column('source_edge', Integer, unique=False),
-                  Column('target_edge', Integer, unique=False),
+Edgetable = Table('edges', meta,
+                  Column('id', Integer, primary_key=True),
+                  Column('source_node', Integer),
+                  Column('target_node', Integer),
                   Column('edge_type', String),
-                  Column('edge_attr', String))
+                  Column('edge_attr', String),
+                  UniqueConstraint('source_node', 'target_node','edge_type', name='uix_source_target_edge'))
 
 # create table to sqlite
 meta.create_all(engine)
-
 
 class Node(db.Model):
     __tablename__ = "nodes"
     __table_args__ = {'extend_existing': True}
 
     # columns
-    id = db.Column(db.Integer(), autoincrement= True, primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
     node_type = db.Column(db.String(64))
     node_name = db.Column(db.String(64))
     node_attr = db.Column(db.String(256))
@@ -129,18 +132,18 @@ class Edge(db.Model):
     __table_args__ = {'extend_existing': True}
 
     # columns
-    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
-    source_edge = db.Column(db.Integer(), unique=False)
-    target_edge = db.Column(db.Integer(), unique=False)
+    id = db.Column(db.Integer(), primary_key=True)
+    source_node = db.Column(db.Integer())
+    target_node = db.Column(db.Integer())
     edge_type = db.Column(db.String(128))
-    edge_attr = db.Column(db.String(128))
+    edge_attr = db.Column(db.String(256))
+    UniqueConstraint('source_node', 'target_node', 'edge_type', name='uix_source_target_edge')
 
     def __init__(self, source_edge, target_edge, edge_type, edge_attr):
         self.source_edge = source_edge
         self.target_edge = target_edge
         self.edge_type = edge_type
         self.edge_attr = edge_attr
-
 
 # %%
 
@@ -150,6 +153,12 @@ def initiate_from_db():
         for row in result:
             print(row)
 
+def get_node_types():
+    with engine.connect() as conn:
+        result = conn.execute(text("select distinct node_type from nodes"))
+        for row in result:
+            print(row)
+        # return result
 
 class create_node():
     def __init__(self, node_type, node_name, node_attributes):
@@ -165,7 +174,9 @@ class create_node():
         self.create_node_sl()
 
     def create_node_nx(self):
-        # add to networkx graph
+        '''
+        add to networkx graph
+        '''
         G.add_node(self.node_name, type=self.node_type)
         if self.node_attributes is not null:
             attrs = {self.node_name: self.node_attributes}
@@ -173,7 +184,11 @@ class create_node():
 
     # def create_node_sl(self, node_type, node_name, node_attributes=null):
     def create_node_sl(self):
+        '''
+        add node to sqlite database
+        '''
         try:
+            print('pre db session add')
             db.session.add(Node(self.node_type, self.node_name, str(self.node_attributes)))
             print('pre commit')
             db.session.commit()
@@ -183,14 +198,11 @@ class create_node():
             db.session.rollback()
             print('transaction rollback')
 
-
-
 # %%
 create_node('person', 'willemse,marjan', {'firstname': 'marjan', 'lastname': 'willemse'}).create_node()
 create_node('person', 'huizinga,paul', {'firstname': 'paul', 'lastname': 'huizinga'}).create_node()
-#%%
-create_node('place', 'groningen', '').create_node_sl()
-create_node('place', 'leek', '').create_node_sl()
+create_node('place', 'groningen', '').create_node()
+create_node('place', 'leek', '').create_node()
 # %%
 # sqlalchemy
 # import json

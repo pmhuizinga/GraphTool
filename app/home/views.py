@@ -1,10 +1,11 @@
 from flask import request, render_template, redirect, url_for, jsonify
 # from app import graph
 from . import home
+from app import models
 import logging
 import requests
-# from app.functions import neo4j_database_functions as dbf
-# from app.functions import neo4j_analytic_functions as af
+from app.functions import networkx_database_functions as dbf
+# from app.functions import networkx_analytic_functions as af
 # from app.functions import import_export as db_functions
 from py2neo import Graph, Node, Relationship
 
@@ -80,22 +81,22 @@ def create():
 #     return jsonify(af.get_all_edge_list(base=base, id=id))
 
 #
-# @home.route('/get_collections/<type>')
-# def get_collections(type):
-#     # todo: rename collections to nodes (use graph terminology)
-#     """
-#     get collection names depending on type node or type edge
-#     :param type: collection type, can be node or edge
-#     :return: list of collections names
-#     """
-#
-#     if type == 'node':
-#         result = dbf.get_node_names()
-#         # query = "CALL db.labels()"
-#     elif type == 'edge':
-#         result = dbf.get_edge_names()
-#
-#     return jsonify(result)
+@home.route('/get_collections/<type>')
+def get_collections(type):
+    # todo: rename collections to nodes (use graph terminology)
+    """
+    get collection names depending on type node or type edge
+    :param type: collection type, can be node or edge
+    :return: list of collections names
+    """
+
+    if type == 'node':
+        result = dbf.get_node_names()
+        # query = "CALL db.labels()"
+    elif type == 'edge':
+        result = dbf.get_edge_names()
+
+    return jsonify(result)
 
 
 # @home.route('/get_collection_fieldnames/<type>/<collection>')
