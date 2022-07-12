@@ -1,4 +1,5 @@
-import networkx_test as nx
+import networkx as nx
+import ast
 from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -6,6 +7,8 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
+
+db = SQLAlchemy()
 
 # %%
 # create sample data
@@ -73,20 +76,6 @@ engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
 # sqlite init to app
 db = SQLAlchemy(app)
-
-# %%
-# drop tables
-# from sqlalchemy.ext.declarative import declarative_base
-#
-# tables = ['nodes', 'edges']
-# base = declarative_base()
-# metadata = MetaData(engine, reflect=True)
-# for table in tables:
-#     table = metadata.tables.get(table)
-#     if table is not None:
-#         base.metadata.drop_all(engine, [table], checkfirst=True)
-
-
 # %%
 # define meta data for table
 db.drop_all()
@@ -95,17 +84,17 @@ meta = MetaData()
 Nodetable = Table('nodes', meta,
                   Column('id', Integer, primary_key=True),
                   Column('node_type', String),
-                  Column('node_name', String),
+                  Column('node_id', String),
                   Column('node_attr', String),
-                  UniqueConstraint('node_type', 'node_name', name='uix_node_type_node_name'))
+                  UniqueConstraint('node_type', 'node_id', name='uix_node_type_node_id'))
 
 Edgetable = Table('edges', meta,
                   Column('id', Integer, primary_key=True),
-                  Column('source_node', Integer),
-                  Column('target_node', Integer),
+                  Column('source_node_id', Integer),
+                  Column('target_node_id', Integer),
                   Column('edge_type', String),
                   Column('edge_attr', String),
-                  UniqueConstraint('source_node', 'target_node','edge_type', name='uix_source_target_edge'))
+                  UniqueConstraint('source_node_id', 'target_node_id','edge_type', name='uix_source_target_edge'))
 
 # create table to sqlite
 meta.create_all(engine)
@@ -117,13 +106,13 @@ class Node(db.Model):
     # columns
     id = db.Column(db.Integer(), primary_key=True)
     node_type = db.Column(db.String(64))
-    node_name = db.Column(db.String(64))
+    node_id = db.Column(db.String(64))
     node_attr = db.Column(db.String(256))
-    UniqueConstraint('node_type', 'node_name', name='uix_node_type_node_name')
+    UniqueConstraint('node_type', 'node_id', name='uix_node_type_node_id')
 
-    def __init__(self, node_type, node_name, node_attr):
+    def __init__(self, node_type, node_id, node_attr):
         self.node_type = node_type
-        self.node_name = node_name
+        self.node_id = node_id
         self.node_attr = node_attr
 
 
@@ -133,15 +122,15 @@ class Edge(db.Model):
 
     # columns
     id = db.Column(db.Integer(), primary_key=True)
-    source_node = db.Column(db.Integer())
-    target_node = db.Column(db.Integer())
+    source_node_id = db.Column(db.Integer())
+    target_node_id = db.Column(db.Integer())
     edge_type = db.Column(db.String(128))
     edge_attr = db.Column(db.String(256))
     UniqueConstraint('source_node', 'target_node', 'edge_type', name='uix_source_target_edge')
 
-    def __init__(self, source_edge, target_edge, edge_type, edge_attr):
-        self.source_edge = source_edge
-        self.target_edge = target_edge
+    def __init__(self, source_node_id, target_node_id, edge_type, edge_attr):
+        self.source_node_id = source_node_id
+        self.target_node_id = target_node_id
         self.edge_type = edge_type
         self.edge_attr = edge_attr
 
@@ -160,10 +149,66 @@ def get_node_types():
             print(row)
         # return result
 
+
+def get_all_attributes(node_type):
+    """
+    retrieve a set of all attributes from a specified node_type
+    """
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT node_attr FROM nodes WHERE node_type = '{}'".format(node_type)))
+        k = []
+        for row in result:
+            for ky in ast.literal_eval(row[0]).keys():
+                k.append(ky)
+
+        return set(k)
+
+def update_node_attributes(node_type):
+    """
+
+    """
+    full_attribute_list = get_all_attributes(node_type)
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT node_type, node_id, node_attr FROM nodes WHERE node_type = '{}'".format(node_type)))
+        for row in result:
+            print(row)
+            # get attributes dict
+            d = ast.literal_eval(row[2])
+            missing_attributes = [x for x in full_attribute_list if x not in d.keys()]
+            if len(missing_attributes) > 0:
+                for missing_key in missing_attributes:
+                    d[missing_key] = ''
+
+                my_node = db.session.query(Node).filter_by(node_type = row[0], node_id=row[1]).first()
+                if my_node:
+                    print('my_node found')
+                    my_node.node_attr = d
+                    db.session.add(my_node)
+                    db.session.commit()
+
+def update_node_attributes(node_type):
+    """
+    update node attribute 'key' with an empty 'value' if it does not already exist. All node_types should have the same attributes
+    """
+    #   UPDATE EXISTING NODE
+    my_node = db.session.query(Node).filter_by(node_type='place', node_id='leek').first()
+    # my_node = db.session.models.Node.query.filter_by(node_type=node_type, node_id=node_id).first()
+    print(my_node)
+    if my_node:
+        print('my_node found')
+        my_node.node_type = 'place'
+        my_node.node_id = 'leek'
+        my_node.node_attr = "{'a':'b'}"
+        # db.session.add(models.Node(node_type, node_id, str(props)))
+        db.session.add(my_node)
+        db.session.commit()
+
+    return 0
+
 class create_node():
-    def __init__(self, node_type, node_name, node_attributes):
+    def __init__(self, node_type, node_id, node_attributes):
         self.node_type = node_type
-        self.node_name = node_name
+        self.node_id = node_id
         self.node_attributes = node_attributes
 
     def create_node(self):
@@ -177,32 +222,47 @@ class create_node():
         '''
         add to networkx graph
         '''
-        G.add_node(self.node_name, type=self.node_type)
+        G.add_node(self.node_id, type=self.node_type)
         if self.node_attributes is not null:
-            attrs = {self.node_name: self.node_attributes}
+            attrs = {self.node_id: self.node_attributes}
             nx.set_node_attributes(G, attrs)
 
-    # def create_node_sl(self, node_type, node_name, node_attributes=null):
+    # def create_node_sl(self, node_type, node_id, node_attributes=null):
     def create_node_sl(self):
         '''
         add node to sqlite database
         '''
         try:
             print('pre db session add')
-            db.session.add(Node(self.node_type, self.node_name, str(self.node_attributes)))
+            db.session.add(Node(self.node_type, self.node_id, str(self.node_attributes)))
             print('pre commit')
             db.session.commit()
             print('commit')
         except:
             print('pre rollback')
+            db.session.update(Node(self.node_type, self.node_id, str(self.node_attributes)))
             db.session.rollback()
             print('transaction rollback')
 
 # %%
-create_node('person', 'willemse,marjan', {'firstname': 'marjan', 'lastname': 'willemse'}).create_node()
-create_node('person', 'huizinga,paul', {'firstname': 'paul', 'lastname': 'huizinga'}).create_node()
-create_node('place', 'groningen', '').create_node()
-create_node('place', 'leek', '').create_node()
+create_node('person', 'willemse,marjan', {'node_type':'person', 'node_id':'willemse,marjan','firstname': 'marjan', 'lastname': 'willemse'}).create_node()
+create_node('person', 'huizinga,paul', {'node_type':'person', 'node_id':'huizinga,paul','firstname': 'paul', 'lastname': 'huizinga'}).create_node()
+create_node('place', 'groningen', {'node_type':'place', 'node_id':'groningen'}).create_node()
+create_node('place', 'leek', {'node_type':'place', 'node_id':'leek'}).create_node()
+
+#%%
+#   UPDATE EXISTING NODE
+my_node = db.session.query(Node).filter_by(node_type = 'place', node_id='leek').first()
+# my_node = db.session.models.Node.query.filter_by(node_type=node_type, node_id=node_id).first()
+    print(my_node)
+    if my_node:
+        print('my_node found')
+        my_node.node_type = 'place'
+        my_node.node_id = 'leek'
+        my_node.node_attr = "{'a':'b'}"
+        # db.session.add(models.Node(node_type, node_id, str(props)))
+        db.session.add(my_node)
+        db.session.commit()
 # %%
 # sqlalchemy
 # import json
@@ -227,10 +287,10 @@ create_node('place', 'leek', '').create_node()
 #     print('{} nodes add to graph'.format(len(G.nodes)))
 
 # %%
-# node_id = 'marjan'
-# node_properties = {'firstname': 'marjan', 'lastname': 'willemse'}
-# sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id,
-#                                                                                                  str(node_properties))
-# print(sql)
-# cnx.execute(sql)
-# add node to database
+node_id = 'marjan'
+node_properties = {'firstname': 'marjan', 'lastname': 'willemse'}
+sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id,
+                                                                                                 str(node_properties))
+print(sql)
+cnx.execute(sql)
+add node to database

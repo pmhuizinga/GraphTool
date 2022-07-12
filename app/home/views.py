@@ -27,6 +27,10 @@ def index():
 
 @home.route('/create', methods=['GET', 'POST'])
 def create():
+    '''
+    docstring
+    '''
+    # get all node types
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
     sticky_source = [0]
     sticky_edge = [0]
@@ -49,9 +53,9 @@ def create():
             if request.form.get('sticky_target'):
                 sticky_target = [1, request.form['target_collection_name'], request.form['target_collection_id']]
 
-            # logger.debug('upserting source node')
-            # dbf.upsert_node_data(request.form, 'source')
-            #
+            logger.debug('upserting source node')
+            dbf.upsert_node_data(request.form, 'source')
+
             # logger.debug('upserting target node')
             # dbf.upsert_node_data(request.form, 'target')
             #
@@ -99,85 +103,85 @@ def get_collections(type):
     return jsonify(result)
 
 
-# @home.route('/get_collection_fieldnames/<type>/<collection>')
-# def get_collection_fieldnames2(type, collection):
-#     """
-#     get all field names of a specified collection
-#     :param type: collection type, can be node or edge
-#     :param collection: collection name
-#     :return: list of fieldnames
-#     """
-#     # print('get collection fieldnames')
-#     # print(type)
-#     # print(collection)
-#
-#     # collection = type + "_" + collection
-#     try:
-#         field_list = dbf.get_collection_keys(type, collection)
-#
-#         # field_list.remove('_id')
-#     except:
-#
-#         field_list = []
-#
-#     return jsonify(field_list)
+@home.route('/get_collection_fieldnames/<type>/<collection>')
+def get_collection_fieldnames2(type, collection):
+    """
+    get all field names of a specified collection
+    :param type: collection type, can be node or edge
+    :param collection: collection name
+    :return: list of fieldnames
+    """
+    # print('get collection fieldnames')
+    # print(type)
+    # print(collection)
+
+    # collection = type + "_" + collection
+    try:
+        field_list = dbf.get_collection_keys(type, collection)
+
+        # field_list.remove('_id')
+    except:
+
+        field_list = []
+
+    return jsonify(field_list)
 
 
-# @home.route('/get_collection_ids/<type>/<collection>')
-# def get_collection_ids(type, collection):
-#     """
-#     get all record id's of a specified collection
-#     :param type: collection type, can be node or edge
-#     :param collection: collection name
-#     :return: list of record is's
-#     """
-#     # collection = type + "_" + collection
-#     id_list = dbf.get_collection_id(collection)
-#
-#     return jsonify(id_list)
+@home.route('/get_collection_ids/<type>/<collection>')
+def get_collection_ids(type, collection):
+    """
+    get all record id's of a specified collection
+    :param type: collection type, can be node or edge
+    :param collection: collection name
+    :return: list of record is's
+    """
+    # collection = type + "_" + collection
+    id_list = dbf.get_collection_id(collection)
+
+    return jsonify(id_list)
 
 
-# @home.route('/get_collection_record/<type>/<collection>/<id>')
-# def get_collection_record(type, collection, id):
-#     """
-#     get all field names of a specified collection
-#     remove empty values
-#     get all fields for a specific record
-#     add missing fields to the record.
-#     :param type: collection type, can be node or edge
-#     :param collection:
-#     :param id:
-#     :return:
-#     """
-#     # collection = type + "_" + collection
-#     available_fields = dbf.get_collection_keys(type, collection)
-#     # print('available fields')
-#     # print(available_fields)
-#     # get node data
-#     result = dbf.get_collection_detail(type, collection, id)
-#     # print('node data')
-#     # print(result)
-#     # result = db[collection].find_one({'id': id})
-#
-#     # fetch non existing records
-#     if result is None:
-#         result = {}
-#
-#     if '' in available_fields: available_fields.remove('')
-#     for x in available_fields:
-#         # if result is not None:
-#         if x not in result:
-#             result[x] = ''
-#
-#     # try:
-#     #     # remove '_id'
-#     #     result.pop('_id')
-#     # except:
-#     #     result = []
-#
-#     # return dumps(result)
-#     # todo: remove dumps method (change to dict)
-#     return jsonify(result)
+@home.route('/get_collection_record/<type>/<collection>/<id>')
+def get_collection_record(type, collection, id):
+    """
+    get all field names of a specified collection
+    remove empty values
+    get all fields for a specific record
+    add missing fields to the record.
+    :param type: collection type, can be node or edge
+    :param collection:
+    :param id:
+    :return:
+    """
+    # collection = type + "_" + collection
+    available_fields = dbf.get_collection_keys(type, collection)
+    # print('available fields')
+    # print(available_fields)
+    # get node data
+    result = dbf.get_collection_detail(type, collection, id)
+    # print('node data')
+    # print(result)
+    # result = db[collection].find_one({'id': id})
+
+    # fetch non existing records
+    if result is None:
+        result = {}
+
+    if '' in available_fields: available_fields.remove('')
+    for x in available_fields:
+        # if result is not None:
+        if x not in result:
+            result[x] = ''
+
+    # try:
+    #     # remove '_id'
+    #     result.pop('_id')
+    # except:
+    #     result = []
+
+    # return dumps(result)
+    # todo: remove dumps method (change to dict)
+    return jsonify(result)
 
 
 # @home.route('/remove_key/<type>/<collection>/<key>')

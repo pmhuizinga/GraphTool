@@ -2,7 +2,7 @@ from app import db
 # from app import graph
 from app import models
 import logging
-
+from sqlalchemy import create_engine
 
 logger = logging.getLogger(__name__)  # initialize logger
 logger.handlers = []
@@ -12,6 +12,8 @@ c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
 logger.addHandler(c_handler)  # Add handlers to the logger
 logger.setLevel(logging.DEBUG)
 
+
+# engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 #
 # def add_collection_identifier(in_list, type):
 #     """
@@ -47,8 +49,6 @@ def find_matching_collections(input):
     :param user_input:
     :return:
     """
-
-    # !!! NEEDS TO BE ADJUSTED TO NEO4J !!!!
 
     collections = db.list_collection_names()
 
@@ -87,11 +87,11 @@ def get_collection_keys(type, collection):
 def get_collection_id(collection):
     """Get full set of ids from a collection"""
 
-    query = "match(a: {}) return a.name".format(collection)
-    result = graph.run(query).to_ndarray()
-    list = [n[0] for n in result]
+    lst = []
+    for value in db.session.query(models.Node.node_id).filter_by(node_type=collection):
+        lst.append(value[0])
 
-    return list
+    return lst
 
 
 def get_collection_detail(type, collection, name):
@@ -113,19 +113,13 @@ def get_collection_detail(type, collection, name):
 
 def get_node_names():
     """
-
+    retrieve a list of all node types
     """
     lst = []
     for value in db.session.query(models.Node.node_type).distinct():
         lst.append(value[0])
 
     return lst
-
-    # query = "CALL db.labels()"
-    # query_result = graph.run(query).to_ndarray()
-    # result = [n[0] for n in query_result]
-    #
-    # return result
 
 
 def get_edge_names():
@@ -138,12 +132,6 @@ def get_edge_names():
 
     return lst
 
-    # query = "CALL db.relationshipTypes()"
-    # query_result = graph.run(query).to_ndarray()
-    # result = [n[0] for n in query_result]
-    #
-    # return result
-
 
 def get_edge_relations(edge):
     """
@@ -151,7 +139,8 @@ def get_edge_relations(edge):
     :param edge: edge label
     """
     # query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source,type(r), b.name as target".format(edge)
-    query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source, type(r), b.name as target, labels(a) as source_type, labels(b) as target_type".format(edge)
+    query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source, type(r), b.name as target, labels(a) as source_type, labels(b) as target_type".format(
+        edge)
     query_result = graph.run(query).to_ndarray(dtype=object).tolist()
     result = [[i[0] if isinstance(i, list) else i for i in x] for x in query_result]
     # query_result = graph.run(query).to_ndarray(dtype=object)
@@ -186,23 +175,25 @@ def get_node_id(data, source_target_id):
 
     return id
 
-def create_neo_dict(d):
-        """
-        returns a dictionairy in neo4j format, so a key without string characters ('')
-        :param d: dictionairy
-        :return: neo dictionairy
-        """
-        neodict = ''
-        for k, v in d.items():
-            if type(v) == 'str':
-                neodict = neodict + f"{k}:'{v}',"
-            elif type(v) == int:
-                neodict = neodict + f"{k}:{v},"
-            else:
-                neodict = neodict + f"{k}:'{v}',"
-        neodict = neodict[:-1]
 
-        return neodict
+def create_neo_dict(d):
+    """
+    returns a dictionairy in neo4j format, so a key without string characters ('')
+    :param d: dictionairy
+    :return: neo dictionairy
+    """
+    neodict = ''
+    for k, v in d.items():
+        if type(v) == 'str':
+            neodict = neodict + f"{k}:'{v}',"
+        elif type(v) == int:
+            neodict = neodict + f"{k}:{v},"
+        else:
+            neodict = neodict + f"{k}:'{v}',"
+    neodict = neodict[:-1]
+
+    return neodict
+
 
 def upsert_node_data(data, source_target_id):
     """
@@ -222,14 +213,16 @@ def upsert_node_data(data, source_target_id):
                 # get node type
                 if k == source_target_id + '_collection_name':
                     node_type = data[source_target_id + "_collection_name"].lower().strip()
-                    # logger.debug('collection name')
-                    # logger.debug(node_type)
+                    props['node_type'] = node_type
+                    logger.debug('collection name')
+                    logger.debug(node_type)
 
-                # get name stuff
+                # get id
                 elif k == source_target_id + '_collection_id':
                     node_id = data[k]
+                    props['node_id'] = node_id
                     props['name'] = node_id
-                    # logger.debug('node_id {}'.format(node_id))
+                    logger.debug('node_id {}'.format(node_id))
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -237,33 +230,49 @@ def upsert_node_data(data, source_target_id):
                     value2 = data[value]
                     if value2 != '':
                         props[v] = value2
-                        # logger.debug('new property')
-                        # logger.debug(v + " : " + value2)
+                        logger.debug('new property')
+                        logger.debug(v + " : " + value2)
 
                 # all other properties
                 else:
                     newkey = k[len(source_target_id) + 1:]
-                    if not(newkey == 'name' and v == ''):
+                    if not (newkey == 'name' and v == ''):
                         props[newkey] = v
-                    # logger.debug('other property')
-                    # logger.debug(newkey + " : " + v)
+                    logger.debug('other property')
+                    logger.debug(newkey + " : " + v)
 
     # # update database
     try:
         if not node_id == '':
-            # create cypher string
-            neoprops = create_neo_dict(props)
 
-            query = "merge(s:`{}` {{name: '{}'}}) on create set s = {{{}}} on match set  s += {{{}}}".format(node_type,
-                                                                                                           node_id,
-                                                                                                           neoprops,
-                                                                                                           neoprops)
-            # logger.debug(query)
-            graph.run(query)
+            logger.debug('props')
+            logger.debug(props)
+            logger.debug('my node')
+            my_node = db.session.query(models.Node).filter_by(node_type=node_type, node_id=node_id).first()
+            logger.debug(my_node)
+
+            if my_node:
+                # if node exists
+                logger.debug('my_node found')
+                my_node.node_type = node_type
+                my_node.node_id = node_id
+                my_node.node_attr = str(props)
+                logger.debug('add existing node to db')
+                db.session.add(my_node)
+                logger.debug('commit')
+                db.session.commit()
+
+            else:
+                # new node
+                logger.debug('add new node to db')
+                db.session.add(models.Node(node_type, node_id, str(props)))
+                db.session.commit()
+
             logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
     except:
         print('input error')
+        raise
 
 
 def upsert_edge_data(data):
@@ -421,7 +430,3 @@ def remove_key_from_collection(type, coll, key):
         graph.run(node_query)
     elif type == 'edge' and key not in edge_exceptions:
         graph.run(edge_query)
-
-
-
-
