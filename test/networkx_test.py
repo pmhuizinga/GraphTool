@@ -8,8 +8,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
 
-db = SQLAlchemy()
-
 # %%
 # create sample data
 node_list = ['A', 'B', 'C', 'D']
@@ -94,10 +92,11 @@ Edgetable = Table('edges', meta,
                   Column('target_node_id', Integer),
                   Column('edge_type', String),
                   Column('edge_attr', String),
-                  UniqueConstraint('source_node_id', 'target_node_id','edge_type', name='uix_source_target_edge'))
+                  UniqueConstraint('source_node_id', 'target_node_id', 'edge_type', name='uix_source_target_edge'))
 
 # create table to sqlite
 meta.create_all(engine)
+
 
 class Node(db.Model):
     __tablename__ = "nodes"
@@ -134,6 +133,7 @@ class Edge(db.Model):
         self.edge_type = edge_type
         self.edge_attr = edge_attr
 
+
 # %%
 
 def initiate_from_db():
@@ -141,6 +141,7 @@ def initiate_from_db():
         result = conn.execute(text("SELECT * FROM nodes"))
         for row in result:
             print(row)
+
 
 def get_node_types():
     with engine.connect() as conn:
@@ -150,60 +151,51 @@ def get_node_types():
         # return result
 
 
-def get_all_attributes(node_type):
+def get_node_type_attributes(node_type):
     """
     retrieve a set of all attributes from a specified node_type
     """
-    with engine.connect() as conn:
-        result = conn.execute(text("SELECT node_attr FROM nodes WHERE node_type = '{}'".format(node_type)))
-        k = []
-        for row in result:
-            for ky in ast.literal_eval(row[0]).keys():
-                k.append(ky)
+    result = Node.query.filter_by(node_type=node_type)
+    k = []
+    for node in result:
+        for key in ast.literal_eval(node.node_attr).keys():
+            k.append(key)
 
-        return set(k)
+    return set(k)
+
 
 def update_node_attributes(node_type):
     """
-
+    function to update missing attribute keys from nodes. All nodes of a specific type should have the same attributes
     """
-    full_attribute_list = get_all_attributes(node_type)
-    with engine.connect() as conn:
-        result = conn.execute(text("SELECT node_type, node_id, node_attr FROM nodes WHERE node_type = '{}'".format(node_type)))
-        for row in result:
-            print(row)
-            # get attributes dict
-            d = ast.literal_eval(row[2])
-            missing_attributes = [x for x in full_attribute_list if x not in d.keys()]
-            if len(missing_attributes) > 0:
-                for missing_key in missing_attributes:
-                    d[missing_key] = ''
+    full_attribute_list = get_node_type_attributes(node_type)
 
-                my_node = db.session.query(Node).filter_by(node_type = row[0], node_id=row[1]).first()
-                if my_node:
-                    print('my_node found')
-                    my_node.node_attr = d
-                    db.session.add(my_node)
+    result = Node.query.filter_by(node_type=node_type)
+    for node in result:
+        attrs = ast.literal_eval(node.node_attr)
+        node_id = node.node_id
+        missing_attributes = [x for x in full_attribute_list if x not in attrs.keys()]
+        if len(missing_attributes) > 0:
+            for missing_key in missing_attributes:
+                attrs[missing_key] = ''
+
+            my_node = db.session.query(Node).filter_by(node_type=node_type, node_id=node_id).first()
+            print(my_node)
+
+            if my_node:
+                print('my_node found')
+                my_node.node_attr = str(attrs)
+                print('adding node')
+                db.session.add(my_node)
+                try:
+                    print('pre commit')
                     db.session.commit()
+                    print('commit')
+                except:
+                    print('pre rollback')
+                    db.session.rollback()
+                    print('rollback')
 
-def update_node_attributes(node_type):
-    """
-    update node attribute 'key' with an empty 'value' if it does not already exist. All node_types should have the same attributes
-    """
-    #   UPDATE EXISTING NODE
-    my_node = db.session.query(Node).filter_by(node_type='place', node_id='leek').first()
-    # my_node = db.session.models.Node.query.filter_by(node_type=node_type, node_id=node_id).first()
-    print(my_node)
-    if my_node:
-        print('my_node found')
-        my_node.node_type = 'place'
-        my_node.node_id = 'leek'
-        my_node.node_attr = "{'a':'b'}"
-        # db.session.add(models.Node(node_type, node_id, str(props)))
-        db.session.add(my_node)
-        db.session.commit()
-
-    return 0
 
 class create_node():
     def __init__(self, node_type, node_id, node_attributes):
@@ -236,33 +228,47 @@ class create_node():
             print('pre db session add')
             db.session.add(Node(self.node_type, self.node_id, str(self.node_attributes)))
             print('pre commit')
-            db.session.commit()
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
+            finally:
+                db.session.close()
             print('commit')
         except:
-            print('pre rollback')
+
             db.session.update(Node(self.node_type, self.node_id, str(self.node_attributes)))
-            db.session.rollback()
-            print('transaction rollback')
+            try:
+                db.session.commit()
+            except:
+                print('pre rollback')
+                db.session.rollback()
+                print('transaction rollback')
+            finally:
+                db.session.close()
+
 
 # %%
-create_node('person', 'willemse,marjan', {'node_type':'person', 'node_id':'willemse,marjan','firstname': 'marjan', 'lastname': 'willemse'}).create_node()
-create_node('person', 'huizinga,paul', {'node_type':'person', 'node_id':'huizinga,paul','firstname': 'paul', 'lastname': 'huizinga'}).create_node()
-create_node('place', 'groningen', {'node_type':'place', 'node_id':'groningen'}).create_node()
-create_node('place', 'leek', {'node_type':'place', 'node_id':'leek'}).create_node()
+create_node('person', 'willemse,marjan', {'node_type': 'person', 'node_id': 'willemse,marjan', 'firstname': 'marjan',
+                                          'lastname': 'willemse'}).create_node()
+create_node('person', 'huizinga,paul', {'node_type': 'person', 'node_id': 'huizinga,paul', 'firstname': 'paul',
+                                        'lastname': 'huizinga'}).create_node()
+create_node('place', 'groningen', {'node_type': 'place', 'node_id': 'groningen'}).create_node()
+create_node('place', 'leek', {'node_type': 'place', 'node_id': 'leek', 'testkey': 'testvalue'}).create_node()
 
-#%%
+# %%
 #   UPDATE EXISTING NODE
-my_node = db.session.query(Node).filter_by(node_type = 'place', node_id='leek').first()
-# my_node = db.session.models.Node.query.filter_by(node_type=node_type, node_id=node_id).first()
-    print(my_node)
-    if my_node:
-        print('my_node found')
-        my_node.node_type = 'place'
-        my_node.node_id = 'leek'
-        my_node.node_attr = "{'a':'b'}"
-        # db.session.add(models.Node(node_type, node_id, str(props)))
-        db.session.add(my_node)
-        db.session.commit()
+# my_node = db.session.query(Node).filter_by(node_type = 'place', node_id='leek').first()
+# # my_node = db.session.models.Node.query.filter_by(node_type=node_type, node_id=node_id).first()
+#     print(my_node)
+#     if my_node:
+#         print('my_node found')
+#         my_node.node_type = 'place'
+#         my_node.node_id = 'leek'
+#         my_node.node_attr = "{'a':'b'}"
+#         # db.session.add(models.Node(node_type, node_id, str(props)))
+#         db.session.add(my_node)
+#         db.session.commit()
 # %%
 # sqlalchemy
 # import json
@@ -287,10 +293,10 @@ my_node = db.session.query(Node).filter_by(node_type = 'place', node_id='leek').
 #     print('{} nodes add to graph'.format(len(G.nodes)))
 
 # %%
-node_id = 'marjan'
-node_properties = {'firstname': 'marjan', 'lastname': 'willemse'}
-sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id,
-                                                                                                 str(node_properties))
-print(sql)
-cnx.execute(sql)
-add node to database
+# node_id = 'marjan'
+# node_properties = {'firstname': 'marjan', 'lastname': 'willemse'}
+# sql = 'insert into nodes (node_type, node_id, node_properties) values ("{}", "{}", "{}")'.format('test', node_id,
+#                                                                                                  str(node_properties))
+# print(sql)
+# cnx.execute(sql)
+# add node to database

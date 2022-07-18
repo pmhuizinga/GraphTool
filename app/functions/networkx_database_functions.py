@@ -1,4 +1,5 @@
 from app import db
+import ast
 # from app import graph
 from app import models
 import logging
@@ -64,24 +65,55 @@ def find_matching_collections(input):
         #                                                                                       int(result * 100),
         #                                                                                       set_match, len_match))
 
-
-def get_collection_keys(type, collection):
+def get_node_type_attributes(node_edge, node_type):
     """
-    Get full set of keys from a collection
-    :param collection: collection name
-    :return: all keys for the collection as a list
+    retrieve a set of all attributes from a specified node_type
     """
-    if type == 'node':
-        query = "match (n:{}) return properties(n)".format(collection)
-    elif type == 'edge':
-        query = "match(a)-[r:{}]-(b) return properties(r)".format(collection)
+    result = models.Node.query.filter_by(node_type=node_type)
+    k = []
+    for node in result:
+        for key in ast.literal_eval(node.node_attr).keys():
+            k.append(key)
 
-    result = graph.run(query).to_ndarray()
-    list = [n[0] for n in result]
-    all_keys = set().union(*(d.keys() for d in list))
-    keys = [k for k in all_keys]
+    k.remove('node_id')
+    return list(set(k))
 
-    return keys
+def get_collection_keys(node_edge, node_type):
+    """
+    retrieve a set of all attributes from a specified node_type
+    """
+    # todo: add code for edges
+    result = models.Node.query.filter_by(node_type=node_type).first()
+    k = []
+    for key in ast.literal_eval(result.node_attr).keys():
+        k.append(key)
+
+    return k
+
+    # for node in result:
+    #     for key in ast.literal_eval(node.node_attr).keys():
+    #         k.append(key)
+    #
+    # k.remove('node_id')
+    # return list(set(k))
+#
+# def get_collection_keys(type, collection):
+#     """
+#     Get full set of keys from a collection
+#     :param collection: collection name
+#     :return: all keys for the collection as a list
+#     """
+#     if type == 'node':
+#         query = "match (n:{}) return properties(n)".format(collection)
+#     elif type == 'edge':
+#         query = "match(a)-[r:{}]-(b) return properties(r)".format(collection)
+#
+#     result = graph.run(query).to_ndarray()
+#     list = [n[0] for n in result]
+#     all_keys = set().union(*(d.keys() for d in list))
+#     keys = [k for k in all_keys]
+#
+#     return keys
 
 
 def get_collection_id(collection):
@@ -93,22 +125,39 @@ def get_collection_id(collection):
 
     return lst
 
-
 def get_collection_detail(type, collection, name):
-    """Get full set of ids from a collection"""
+    """
+    Get full set of ids from a collection
+    """
+    print(type, collection, name)
+    a = models.Node.query.filter_by(node_type=collection, node_id=name)
 
-    # "match(a: {}) where a.name = '{}' return a".format(collection, name)
-    query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
-    a = graph.evaluate(query)
+    # query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
+    # a = graph.evaluate(query)
 
     result = {}
     if a is None:
         return result
+    else:
+        return ast.literal_eval(a.node_attr).keys()
 
-    for k in a.keys():
-        result[k] = a[k]
 
-    return result
+
+# def get_collection_detail(type, collection, name):
+#     """Get full set of ids from a collection"""
+#
+#     # "match(a: {}) where a.name = '{}' return a".format(collection, name)
+#     query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
+#     a = graph.evaluate(query)
+#
+#     result = {}
+#     if a is None:
+#         return result
+#
+#     for k in a.keys():
+#         result[k] = a[k]
+#
+#     return result
 
 
 def get_node_names():
@@ -260,13 +309,19 @@ def upsert_node_data(data, source_target_id):
                 logger.debug('add existing node to db')
                 db.session.add(my_node)
                 logger.debug('commit')
-                db.session.commit()
+                try:
+                    db.session.commit()
+                except:
+                    db.session.rollback()
 
             else:
                 # new node
                 logger.debug('add new node to db')
                 db.session.add(models.Node(node_type, node_id, str(props)))
-                db.session.commit()
+                try:
+                    db.session.commit()
+                except:
+                    db.session.rollback()
 
             logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 

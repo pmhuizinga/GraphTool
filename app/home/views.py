@@ -119,12 +119,15 @@ def get_collection_fieldnames2(type, collection):
     try:
         field_list = dbf.get_collection_keys(type, collection)
 
-        # field_list.remove('_id')
+        field_list.remove('node_id')
+        field_list.remove('node_type')
+
     except:
 
         field_list = []
 
     return jsonify(field_list)
+    # return field_list
 
 
 @home.route('/get_collection_ids/<type>/<collection>')
