@@ -1,13 +1,25 @@
 # from app import db
 # from app import graph
-from app.functions import neo4j_database_functions as dbf
+from app import models
+from app.functions import networkx_database_functions as dbf
 import networkx as nx
+import ast
 
 def get_nodes_per_type(type):
+    """
+
+    """
+    lst = [x.node_id for x in models.Node.query.filter_by(node_type='person')]
     query = "MATCH(a:{}) return a".format(type)
     query_result = graph.run(query).to_ndarray()
     result = [n[0] for n in query_result]
     return result
+
+# def get_nodes_per_type(type):
+#     query = "MATCH(a:{}) return a".format(type)
+#     query_result = graph.run(query).to_ndarray()
+#     result = [n[0] for n in query_result]
+#     return result
 
 def get_all_nodes_list(base, id="all"):
     """
@@ -18,43 +30,51 @@ def get_all_nodes_list(base, id="all"):
     :return: list of nodes including node type
     """
 
-    collections = dbf.get_node_names()
+    # collections = dbf.get_node_names()
 
     node_list = []
 
-    if id == 'all':
-        for item in collections:
-            if base == 'node':
-                for node in get_nodes_per_type(item):
-                    node_val = dict(node)
-                    if 'id' in node_val:
-                        node_val['name'] = node_val['id']
-                    if 'name' in node_val:
-                        node_val['id'] = node_val['name']
-                    node_val['type'] = item
-                    node_list.append(node_val)
-                # for identifier in dbf.get_collection_id(item):
-                #     node_list.append({"id": str(identifier), "type": item})
+    if id == 'all' and base == 'node':
+        node_list = ([ast.literal_eval(x.node_attr) for x in models.Node.query.distinct(models.Node.node_type)])
+        # todo: onderstaande moet weg. Alle functies moeten werken op node_id en node_type
+        for d in node_list:
+            d['id'] = d['node_id']
+            d['type'] = d['node_type']
 
-    else:
-        # get all edges that include the specified node
-        if base == 'node':
-            edge_list = get_all_edge_list(base='node', id=id)
-            print(edge_list)
-        elif base == 'edge':
-            edge_list = get_all_edge_list(base='edge', id=id)
 
-        lst = []
-        # create (set) list of nodes
-        for record in edge_list:
-            lst.append(record['source'])
-            lst.append(record['target'])
-        lst = list(set(lst))
-        # add node characteristics to node list
-        for item in collections:
-            for record in dbf.get_collection_id(item):
-                if record in lst:
-                    node_list.append({"id": record, "type": item})
+    # if id == 'all':
+    #     for item in collections:
+    #         if base == 'node':
+    #             for node in get_nodes_per_type(item):
+    #                 node_val = dict(node)
+    #                 if 'id' in node_val:
+    #                     node_val['name'] = node_val['id']
+    #                 if 'name' in node_val:
+    #                     node_val['id'] = node_val['name']
+    #                 node_val['type'] = item
+    #                 node_list.append(node_val)
+    #             # for identifier in dbf.get_collection_id(item):
+    #             #     node_list.append({"id": str(identifier), "type": item})
+    #
+    # else:
+    #     # get all edges that include the specified node
+    #     if base == 'node':
+    #         edge_list = get_all_edge_list(base='node', id=id)
+    #         print(edge_list)
+    #     elif base == 'edge':
+    #         edge_list = get_all_edge_list(base='edge', id=id)
+    #
+    #     lst = []
+    #     # create (set) list of nodes
+    #     for record in edge_list:
+    #         lst.append(record['source'])
+    #         lst.append(record['target'])
+    #     lst = list(set(lst))
+    #     # add node characteristics to node list
+    #     for item in collections:
+    #         for record in dbf.get_collection_id(item):
+    #             if record in lst:
+    #                 node_list.append({"id": record, "type": item})
 
     return node_list
 

@@ -1,11 +1,11 @@
 from flask import request, render_template, redirect, url_for, jsonify
 # from app import graph
 from . import home
-from app import models
+from app import models, db
 import logging
 import requests
 from app.functions import networkx_database_functions as dbf
-# from app.functions import networkx_analytic_functions as af
+from app.functions import networkx_analytic_functions as af
 # from app.functions import import_export as db_functions
 from py2neo import Graph, Node, Relationship
 
@@ -54,13 +54,16 @@ def create():
                 sticky_target = [1, request.form['target_collection_name'], request.form['target_collection_id']]
 
             logger.debug('upserting source node')
-            dbf.upsert_node_data(request.form, 'source')
+            source_node_id = dbf.upsert_node_data(request.form, 'source')
+            print(source_node_id)
 
-            # logger.debug('upserting target node')
-            # dbf.upsert_node_data(request.form, 'target')
-            #
-            # logger.debug('upserting edge')
-            # dbf.upsert_edge_data(request.form)
+            logger.debug('upserting target node')
+            target_node_id = dbf.upsert_node_data(request.form, 'target')
+            print(target_node_id)
+
+            if target_node_id and source_node_id:
+                # logger.debug('upserting edge')
+                dbf.upsert_edge_data(source_node_id, target_node_id, request.form)
 
         elif request.form['submitbutton'] == 'remove':
             pass
@@ -75,10 +78,10 @@ def create():
 
 
 
-# @home.route('/graph_nodes/<base>/<id>')
-# def get_graph_nodes(base, id):
-#     return jsonify(af.get_all_nodes_list(base=base, id=id))
-#
+@home.route('/graph_nodes/<base>/<id>')
+def get_graph_nodes(base, id):
+    return jsonify(af.get_all_nodes_list(base=base, id=id))
+
 #
 # @home.route('/graph_edges/<base>/<id>')
 # def get_graph_edges(base, id):
@@ -95,7 +98,7 @@ def get_collections(type):
     """
 
     if type == 'node':
-        result = dbf.get_node_names()
+        result = dbf.get_node_type()
         # query = "CALL db.labels()"
     elif type == 'edge':
         result = dbf.get_edge_names()
@@ -176,11 +179,12 @@ def get_collection_record(type, collection, id):
         if x not in result:
             result[x] = ''
 
-    # try:
-    #     # remove '_id'
-    #     result.pop('_id')
-    # except:
-    #     result = []
+    try:
+        # remove '_id'
+        result.pop('node_id')
+        result.pop('node_type')
+    except:
+        result = []
 
     # return dumps(result)
     # todo: remove dumps method (change to dict)
@@ -253,8 +257,8 @@ def api():
 #     return jsonify(dict(af.get_graph_betweennes_centrality()))
 
 
-@home.route('/degrees')
-def degrees():
-    return jsonify(dict(af.get_graph_degrees()))
+# @home.route('/degrees')
+# def degrees():
+#     return jsonify(dict(af.get_graph_degrees()))
 
 

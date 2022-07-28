@@ -7,7 +7,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
-
+db = SQLAlchemy()
 # %%
 # create sample data
 node_list = ['A', 'B', 'C', 'D']

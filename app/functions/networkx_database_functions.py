@@ -75,7 +75,7 @@ def get_node_type_attributes(node_edge, node_type):
         for key in ast.literal_eval(node.node_attr).keys():
             k.append(key)
 
-    k.remove('node_id')
+
     return list(set(k))
 
 def get_collection_keys(node_edge, node_type):
@@ -120,6 +120,7 @@ def get_collection_id(collection):
     """Get full set of ids from a collection"""
 
     lst = []
+    # todo: replace session with standard sqlalchemy query
     for value in db.session.query(models.Node.node_id).filter_by(node_type=collection):
         lst.append(value[0])
 
@@ -130,16 +131,14 @@ def get_collection_detail(type, collection, name):
     Get full set of ids from a collection
     """
     print(type, collection, name)
-    a = models.Node.query.filter_by(node_type=collection, node_id=name)
-
-    # query = "match(a: {}) where a.name = '{}' return a".format(collection, name)
-    # a = graph.evaluate(query)
+    a = models.Node.query.filter_by(node_type=collection, node_id=name).first()
 
     result = {}
     if a is None:
         return result
     else:
-        return ast.literal_eval(a.node_attr).keys()
+        print(a.node_attr)
+        return ast.literal_eval(a.node_attr)
 
 
 
@@ -160,14 +159,17 @@ def get_collection_detail(type, collection, name):
 #     return result
 
 
-def get_node_names():
+def get_node_type():
     """
     retrieve a list of all node types
     """
-    lst = []
-    for value in db.session.query(models.Node.node_type).distinct():
-        lst.append(value[0])
-
+    # lst = list(set([x.node_type for x in Node.query.distinct(Node.node_type)]))
+    lst = list(set([x.node_type for x in models.Node.query.distinct(models.Node.node_type)]))
+    # for value in db.session.query(models.Node.node_type).distinct():
+    #     lst.append(value[0])
+    #
+    # print(lst)
+    # print(list(set([x.node_type for x in models.Node.query.distinct(models.Node.node_type)])))
     return lst
 
 
@@ -176,6 +178,7 @@ def get_edge_names():
     get all edge names
     """
     lst = []
+    # todo: remove session query,  replace with models.edge.query...etc
     for value in db.session.query(models.Edge.edge_type).distinct():
         lst.append(value[0])
 
@@ -225,23 +228,23 @@ def get_node_id(data, source_target_id):
     return id
 
 
-def create_neo_dict(d):
-    """
-    returns a dictionairy in neo4j format, so a key without string characters ('')
-    :param d: dictionairy
-    :return: neo dictionairy
-    """
-    neodict = ''
-    for k, v in d.items():
-        if type(v) == 'str':
-            neodict = neodict + f"{k}:'{v}',"
-        elif type(v) == int:
-            neodict = neodict + f"{k}:{v},"
-        else:
-            neodict = neodict + f"{k}:'{v}',"
-    neodict = neodict[:-1]
-
-    return neodict
+# def create_neo_dict(d):
+#     """
+#     returns a dictionairy in neo4j format, so a key without string characters ('')
+#     :param d: dictionairy
+#     :return: neo dictionairy
+#     """
+#     neodict = ''
+#     for k, v in d.items():
+#         if type(v) == 'str':
+#             neodict = neodict + f"{k}:'{v}',"
+#         elif type(v) == int:
+#             neodict = neodict + f"{k}:{v},"
+#         else:
+#             neodict = neodict + f"{k}:'{v}',"
+#     neodict = neodict[:-1]
+#
+#     return neodict
 
 
 def upsert_node_data(data, source_target_id):
@@ -253,6 +256,10 @@ def upsert_node_data(data, source_target_id):
     """
     props = {}
     logger.debug(data)
+    if not data:
+        print("data is empty")
+        return None
+
     for k, v in data.items():
         # filter by source or target node
         if source_target_id in k:
@@ -325,12 +332,26 @@ def upsert_node_data(data, source_target_id):
 
             logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
+            print(node_type, node_id)
+
+            return get_id(node_type,node_id)
+
+        else:
+            # no node id
+            return None
     except:
         print('input error')
         raise
 
+def get_id(node_type, node_id):
+    """
+    get the id for a specific node
+    """
+    id = db.session.query(models.Node.id).filter_by(node_type=node_type, node_id=node_id).first()[0]
 
-def upsert_edge_data(data):
+    return id
+
+def upsert_edge_data(source_node_id, target_node_id, data):
     """
     insert or update a new edge.
 
@@ -340,11 +361,11 @@ def upsert_edge_data(data):
     logger.debug(data)
 
     try:
-        source_type = data['source_collection_name']
-        source_id = data['source_collection_id']
-
-        target_type = data['target_collection_name']
-        target_id = data['target_collection_id']
+        # source_type = data['source_collection_name']
+        # source_id = data['source_collection_id']
+        #
+        # target_type = data['target_collection_name']
+        # target_id = data['target_collection_id']
 
         edge_type = data['edge_value']
 
@@ -364,18 +385,17 @@ def upsert_edge_data(data):
                     if value2 != '':
                         props[v] = value2
 
-        neoprops = create_neo_dict(props)
+        logger.debug('add new edge to db')
+        db.session.add(models.Edge(source_node_id, target_node_id, edge_type, str(props)))
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
 
-        query = """
-            MATCH(NodeName1:{} {{name: '{}'}}), (NodeName2:{} {{name: '{}'}})
-            MERGE(NodeName1) - [r:{} {{{}}}]->(NodeName2)
-            """.format(source_type, source_id, target_type, target_id, edge_type, neoprops)
-
-        logger.debug(query)
-        graph.run(query)
+        logger.debug("upserting edge with type {}".format(edge_type))
 
     except:
-        print('input error')
+        print('edge input error')
         return
 
 
