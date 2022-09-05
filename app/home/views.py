@@ -82,10 +82,10 @@ def create():
 def get_graph_nodes(base, id):
     return jsonify(af.get_all_nodes_list(base=base, id=id))
 
-#
-# @home.route('/graph_edges/<base>/<id>')
-# def get_graph_edges(base, id):
-#     return jsonify(af.get_all_edge_list(base=base, id=id))
+
+@home.route('/graph_edges/<base>/<id>')
+def get_graph_edges(base, id):
+    return jsonify(af.get_all_edge_list(base=base, id=id))
 
 #
 @home.route('/get_collections/<type>')

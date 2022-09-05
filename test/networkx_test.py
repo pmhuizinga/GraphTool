@@ -4,9 +4,10 @@ from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
+
 db = SQLAlchemy()
 # %%
 # create sample data
@@ -77,7 +78,7 @@ db = SQLAlchemy(app)
 # %%
 # define meta data for table
 db.drop_all()
-
+# %%
 meta = MetaData()
 Nodetable = Table('nodes', meta,
                   Column('id', Integer, primary_key=True),
@@ -97,6 +98,41 @@ Edgetable = Table('edges', meta,
 # create table to sqlite
 meta.create_all(engine)
 
+
+# class Node(db.Model):
+#     __tablename__ = "nodes"
+#     __table_args__ = {'extend_existing': True}
+#
+#     # columns
+#     id = db.Column(db.Integer(), primary_key=True)
+#     node_type = db.Column(db.String(64))
+#     node_id = db.Column(db.String(64))
+#     node_attr = db.Column(db.String(256))
+#     UniqueConstraint('node_type', 'node_id', name='uix_node_type_node_id')
+#
+#     def __init__(self, node_type, node_id, node_attr):
+#         self.node_type = node_type
+#         self.node_id = node_id
+#         self.node_attr = node_attr
+#
+#
+# class Edge(db.Model):
+#     __tablename__ = "edges"
+#     __table_args__ = {'extend_existing': True}
+#
+#     # columns
+#     id = db.Column(db.Integer(), primary_key=True)
+#     source_node_id = db.Column(db.Integer())
+#     target_node_id = db.Column(db.Integer())
+#     edge_type = db.Column(db.String(128))
+#     edge_attr = db.Column(db.String(256))
+#     UniqueConstraint('source_node', 'target_node', 'edge_type', name='uix_source_target_edge')
+#
+#     def __init__(self, source_node_id, target_node_id, edge_type, edge_attr):
+#         self.source_node_id = source_node_id
+#         self.target_node_id = target_node_id
+#         self.edge_type = edge_type
+#         self.edge_attr = edge_attr
 
 class Node(db.Model):
     __tablename__ = "nodes"
@@ -121,10 +157,14 @@ class Edge(db.Model):
 
     # columns
     id = db.Column(db.Integer(), primary_key=True)
-    source_node_id = db.Column(db.Integer())
-    target_node_id = db.Column(db.Integer())
+    # source_node_id = db.Column(db.Integer())
+    # target_node_id = db.Column(db.Integer())
+    source_node_id = db.Column(db.Integer, db.ForeignKey(Node.id), nullable=False)
+    target_node_id = db.Column(db.Integer, db.ForeignKey(Node.id), nullable=False)
     edge_type = db.Column(db.String(128))
     edge_attr = db.Column(db.String(256))
+    source_node_id_R = db.relationship('Node', foreign_keys='Edge.source_node_id')
+    target_node_id_R = db.relationship('Node', foreign_keys='Edge.target_node_id')
     UniqueConstraint('source_node', 'target_node', 'edge_type', name='uix_source_target_edge')
 
     def __init__(self, source_node_id, target_node_id, edge_type, edge_attr):
@@ -255,7 +295,50 @@ create_node('person', 'huizinga,paul', {'node_type': 'person', 'node_id': 'huizi
                                         'lastname': 'huizinga'}).create_node()
 create_node('place', 'groningen', {'node_type': 'place', 'node_id': 'groningen'}).create_node()
 create_node('place', 'leek', {'node_type': 'place', 'node_id': 'leek', 'testkey': 'testvalue'}).create_node()
+# %%
+query = """
+select  source.node_type as source_node_type
+        ,source.node_id as source_node_id
+        ,e.edge_type
+        ,target.node_type as target_node_type
+        ,target.node_id as target_node_id 
+from Edges as e 
+left join Nodes as source
+        on e.source_node_id = source.id
+left join Nodes as target
+        on e.target_node_id = target.id
+"""
+lst = []
+for record in db.engine.execute(query):
+    lst.append({'source': record[1]
+                   , 'source_node_type': record[0]
+                   , 'target': record[3]
+                   , 'target_node_type': record[4]
+                   , 'type': record[2]})
 
+print(lst)
+
+"""
+[{'source': 'personD', 'target': 'language!', 'type': 'knows', 'sourcenodetype': 'person', 'targetnodetype': 'programming_language'}, {'source': 'personE', 'target': 'personB', 'type': 'knows', 'sourcenodetype': 'person', 'targetnodetype': 'person'}]
+
+[
+  {
+    "source": "personD", 
+    "sourcenodetype": "person", 
+    "target": "language!", 
+    "targetnodetype": "programming_language", 
+    "type": "knows"
+  }, 
+  {
+    "source": "personE", 
+    "sourcenodetype": "person", 
+    "target": "personB", 
+    "targetnodetype": "person", 
+    "type": "knows"
+  }
+] 
+
+"""
 # %%
 #   UPDATE EXISTING NODE
 # my_node = db.session.query(Node).filter_by(node_type = 'place', node_id='leek').first()

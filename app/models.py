@@ -24,10 +24,14 @@ class Edge(db.Model):
 
     # columns
     id = db.Column(db.Integer(), primary_key=True)
-    source_node_id = db.Column(db.Integer())
-    target_node_id = db.Column(db.Integer())
+    # source_node_id = db.Column(db.Integer())
+    # target_node_id = db.Column(db.Integer())
+    source_node_id = db.Column(db.Integer, db.ForeignKey(Node.id), nullable=False)
+    target_node_id = db.Column(db.Integer, db.ForeignKey(Node.id), nullable=False)
     edge_type = db.Column(db.String(128))
     edge_attr = db.Column(db.String(256))
+    source_node_id_R = db.relationship('Node', foreign_keys='Edge.source_node_id')
+    target_node_id_R = db.relationship('Node', foreign_keys='Edge.target_node_id')
     UniqueConstraint('source_node', 'target_node', 'edge_type', name='uix_source_target_edge')
 
     def __init__(self, source_node_id, target_node_id, edge_type, edge_attr):
