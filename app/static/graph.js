@@ -88,14 +88,14 @@ function create_graph(base, id) {
 
             var labels = node.append("text")
                 .text(function (d) {
-                    return d.id;
+                    return d.name;
                 })
                 .attr('x', 10)
                 .attr('y', 3);
 
             node.append("title")
                 .text(function (d) {
-                    return d.id;
+                    return d.name;
                 });
 
             simulation

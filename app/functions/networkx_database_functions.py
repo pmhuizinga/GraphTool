@@ -334,7 +334,7 @@ def upsert_node_data(data, source_target_id):
 
             print(node_type, node_id)
 
-            return get_id(node_type,node_id)
+            return get_id(node_type, node_id)
 
         else:
             # no node id
