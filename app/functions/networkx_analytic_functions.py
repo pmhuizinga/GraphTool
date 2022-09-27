@@ -183,49 +183,49 @@ def get_all_edge_list(base, id="all"):
         #                          "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
 
         # return edge_list
+    #
+    # def get_graph_degrees():
+    #     """
+    #     :return: sorted (desc) list of nodes and degrees
+    #     """
+    #     G = nx.Graph()
+    #     G.add_edges_from([(x['source'], x['target']) for x in get_all_edge_list(base='node')])
+    #
+    #     out = list(G.degree())
+    #     a = dict(out)
+    #
+    #     b = sorted(a.items(), key=lambda item: item[1], reverse=True)
+    #
+    #     return b
 
-    def get_graph_degrees():
-        """
-        :return: sorted (desc) list of nodes and degrees
-        """
-        G = nx.Graph()
-        G.add_edges_from([(x['source'], x['target']) for x in get_all_edge_list(base='node')])
+    # def get_graph_pagerank():
+    #     """
+    #     PageRanks
+    #     PageRank computes a ranking of the nodes in the graph G based on the structure of the incoming links.
+    #     It was originally designed as an algorithm to rank web pages
+    #     """
+    #     G = nx.Graph()
+    #     G.add_edges_from([(x['source'], x['target']) for x in get_all_edge_list(base='node')])
+    #
+    #     a = dict(nx.pagerank(G))
+    #     b = sorted(a.items(), key=lambda item: item[1], reverse=True)
+    #
+    #     return b
 
-        out = list(G.degree())
-        a = dict(out)
+    # def get_graph_betweennes_centrality():
+    #     """
+    #     Betweenness Centrality
+    #     Betweenness Centrality is a way of detecting the amount of influence a node has over the flow of information
+    #     in a graph. It is often used to find nodes that serve as a bridge from one part of a graph to another,
+    #     for example in package delivery process or a telecommunication network.
+    #     """
+    #     G = nx.Graph()
+    #     G.add_edges_from([(x['source'], x['target']) for x in get_all_edge_list(base='node')])
+    #
+    #     a = dict(nx.betweenness_centrality(G))
+    #     b = sorted(a.items(), key=lambda item: item[1], reverse=True)
+    #
+    #     return b
 
-        b = sorted(a.items(), key=lambda item: item[1], reverse=True)
-
-        return b
-
-    def get_graph_pagerank():
-        """
-        PageRanks
-        PageRank computes a ranking of the nodes in the graph G based on the structure of the incoming links.
-        It was originally designed as an algorithm to rank web pages
-        """
-        G = nx.Graph()
-        G.add_edges_from([(x['source'], x['target']) for x in get_all_edge_list(base='node')])
-
-        a = dict(nx.pagerank(G))
-        b = sorted(a.items(), key=lambda item: item[1], reverse=True)
-
-        return b
-
-    def get_graph_betweennes_centrality():
-        """
-        Betweenness Centrality
-        Betweenness Centrality is a way of detecting the amount of influence a node has over the flow of information
-        in a graph. It is often used to find nodes that serve as a bridge from one part of a graph to another,
-        for example in package delivery process or a telecommunication network.
-        """
-        G = nx.Graph()
-        G.add_edges_from([(x['source'], x['target']) for x in get_all_edge_list(base='node')])
-
-        a = dict(nx.betweenness_centrality(G))
-        b = sorted(a.items(), key=lambda item: item[1], reverse=True)
-
-        return b
-
-    def get_direct_node_relations():
-        pass
+    # def get_direct_node_relations():
+    #     pass

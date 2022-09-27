@@ -16,7 +16,7 @@ c_handler = logging.StreamHandler()  # Create handlers
 c_format = logging.Formatter('%(levelname)s - %(message)s')
 c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
 logger.addHandler(c_handler)  # Add handlers to the logger
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # pages
 @home.route('/')
@@ -66,8 +66,12 @@ def create():
                 dbf.upsert_edge_data(source_node_id, target_node_id, request.form)
 
         elif request.form['submitbutton'] == 'remove':
-            pass
-            # dbf.remove_node(request.form, 'source')
+            try:
+                id = dbf.get_id(request.form['source_collection_name'], request.form['source_collection_id'])
+                # print('node id for removal: {}'.format(id))
+                dbf.remove_node(id)
+            except:
+                logger.debug('id not found for delete')
 
         elif request.form['submitbutton'] == 'merge':
             pass

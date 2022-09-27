@@ -11,7 +11,7 @@ c_handler = logging.StreamHandler()  # Create handlers
 c_format = logging.Formatter('%(levelname)s - %(message)s')
 c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
 logger.addHandler(c_handler)  # Add handlers to the logger
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 
 # engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
@@ -399,22 +399,21 @@ def upsert_edge_data(source_node_id, target_node_id, data):
         return
 
 
-def remove_node(data, source_target_id):
+# def remove_node(data, source_target_id):
+def remove_node(id):
     """
     Remove a record from a collection.
-    In case the collection is empty the collection will be removed
 
-    :param data:
-    :param source_target_id:
-    :return:
+    :param id: node id
+    :return: nothing
     """
-
-    source_type = data['source_collection_name']
-    source_id = data['source_collection_id']
-
-    query = "match(n:{} {{name:'{}'}}) detach delete n".format(source_type, source_id)
-    graph.run(query)
-
+    models.Edge.query.filter_by(source_node_id=id).delete()
+    logger.debug('source node with ID {} removed from edges'.format(id))
+    models.Edge.query.filter_by(target_node_id=id).delete()
+    logger.debug('target node with ID {} removed from edges'.format(id))
+    models.Node.query.filter_by(id=id).delete()
+    logger.debug('node with ID {} removed from nodes'.format(id))
+    models.db.session.commit()
 
 # def update_node_id(type, old_id, new_id):
 #     """
