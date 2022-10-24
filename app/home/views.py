@@ -7,7 +7,7 @@ import requests
 from app.functions import networkx_database_functions as dbf
 from app.functions import networkx_analytic_functions as af
 # from app.functions import import_export as db_functions
-from py2neo import Graph, Node, Relationship
+# from py2neo import Graph, Node, Relationship
 
 
 logger = logging.getLogger(__name__)  # initialize logger

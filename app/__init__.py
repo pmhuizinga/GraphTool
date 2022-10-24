@@ -3,7 +3,6 @@
 # todo: add possibility to remove or modify an edge
 # todo: add full dependencies as visual
 # todo: switch graph view to community view (and back)
-# todo: learn BERT for NLP
 # todo: add 'api/' to api string
 # todo: move all database actions to database_functions.py (not in views.py)
 # todo: property 'type' is used for d3.js. This should be changed to node_type
