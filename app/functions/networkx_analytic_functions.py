@@ -1,20 +1,20 @@
 from app import db
-# from app import graph
 from app import models
+from app.functions import logging_settings
 from app.functions import networkx_database_functions as dbf
 import networkx as nx
 import ast
 
 
-def get_nodes_per_type(type):
-    """
-
-    """
-    lst = [x.node_id for x in models.Node.query.filter_by(node_type='person')]
-    query = "MATCH(a:{}) return a".format(type)
-    query_result = graph.run(query).to_ndarray()
-    result = [n[0] for n in query_result]
-    return result
+# def get_nodes_per_type(type):
+#     """
+#
+#     """
+#     lst = [x.node_id for x in models.Node.query.filter_by(node_type='person')]
+#     query = "MATCH(a:{}) return a".format(type)
+#     query_result = graph.run(query).to_ndarray()
+#     result = [n[0] for n in query_result]
+#     return result
 
 
 # def get_nodes_per_type(type):
@@ -22,6 +22,14 @@ def get_nodes_per_type(type):
 #     query_result = graph.run(query).to_ndarray()
 #     result = [n[0] for n in query_result]
 #     return result
+
+import os
+def file_function_decorator(func):
+    def inner_function():
+        filename = os.path.basename(__file__)
+        logging_settings.logger.debug(filename)
+
+    return inner_function()
 
 def get_all_nodes_list(base, id="all"):
     """
@@ -31,15 +39,13 @@ def get_all_nodes_list(base, id="all"):
     :param node: node id
     :return: list of nodes including node type
     """
-
-    # collections = dbf.get_node_names()
+    logging_settings.logger.debug('base is {} and id = {}'.format(base, id))
+    collections = dbf.get_node_names()
 
     node_list = []
 
     if id == 'all' and base == 'node':
         node_list = ([(ast.literal_eval(x.node_attr), x.id) for x in models.Node.query.distinct(models.Node.node_type)])
-        print('node_list:')
-        print(node_list)
         # todo: onderstaande moet weg. Alle functies moeten werken op node_id en node_type
         for d in node_list:
             d[0]['id'] = d[1]
@@ -48,42 +54,46 @@ def get_all_nodes_list(base, id="all"):
             # d['type'] = d['node_type']
 
         node_list = [x[0] for x in node_list]
-    # if id == 'all':
+
+        @file_function_decorator
+        logging_settings.logger.debug('node_list:'.format(node_list))
+    # if id == 'all' and base == 'node':
     #     for item in collections:
-    #         if base == 'node':
-    #             for node in get_nodes_per_type(item):
-    #                 node_val = dict(node)
-    #                 if 'id' in node_val:
-    #                     node_val['name'] = node_val['id']
-    #                 if 'name' in node_val:
-    #                     node_val['id'] = node_val['name']
-    #                 node_val['type'] = item
-    #                 node_list.append(node_val)
-    #             # for identifier in dbf.get_collection_id(item):
-    #             #     node_list.append({"id": str(identifier), "type": item})
-    #
-    # else:
-    #     # get all edges that include the specified node
-    #     if base == 'node':
-    #         edge_list = get_all_edge_list(base='node', id=id)
-    #         print(edge_list)
-    #     elif base == 'edge':
-    #         edge_list = get_all_edge_list(base='edge', id=id)
-    #
-    #     lst = []
-    #     # create (set) list of nodes
-    #     for record in edge_list:
-    #         lst.append(record['source'])
-    #         lst.append(record['target'])
-    #     lst = list(set(lst))
-    #     # add node characteristics to node list
-    #     for item in collections:
-    #         for record in dbf.get_collection_id(item):
-    #             if record in lst:
-    #                 node_list.append({"id": record, "type": item})
+    #         #if base == 'node':
+    #         for node in get_nodes_per_type(item):
+    #             node_val = dict(node)
+    #             if 'id' in node_val:
+    #                 node_val['name'] = node_val['id']
+    #             if 'name' in node_val:
+    #                 node_val['id'] = node_val['name']
+    #             node_val['type'] = item
+    #             node_list.append(node_val)
+    #         # for identifier in dbf.get_collection_id(item):
+    #         #     node_list.append({"id": str(identifier), "type": item})
+
+    else:
+        # get all edges that include the specified node
+        if base == 'node':
+            edge_list = get_all_edge_list(base='node', id=id)
+            print(edge_list)
+        elif base == 'edge':
+            edge_list = get_all_edge_list(base='edge', id=id)
+
+        lst = []
+        # create (set) list of nodes
+        for record in edge_list:
+            lst.append(record['source'])
+            lst.append(record['target'])
+        lst = list(set(lst))
+        # add node characteristics to node list
+        for item in collections:
+            for record in dbf.get_collection_id(item):
+                if record in lst:
+                    node_list.append({"id": record, "type": item})
 
     # node_list = [{"id": 1, "name": "paul", "type": "person"}, {"id": 2, "name": "marjan", "type": "person"}]
     # node_list = [{"id": "paul", "type": "person"}, {"id": "marjan", "type": "person"}]
+    logging_settings.logger.debug('node_list:'.format(node_list))
     return node_list
 
 
@@ -114,7 +124,7 @@ def get_all_edge_list(base, id="all"):
     edge_list = []
 
     for idx, record in enumerate(db.engine.execute(query)):
-        print(idx)
+        # print(idx)
         edge_list.append({
             'sourcenodetype': record[0]
             , 'source': record[1]
@@ -128,61 +138,61 @@ def get_all_edge_list(base, id="all"):
         #     edge_list = ([ast.literal_eval(x.edge_type) for x in models.Edge.query.join(models.Node, models.Node.id == models.Edge.source_node_id).add_columns(models.Edge.edge_type, models.Node.node_type)])
         # edge_list = ([ast.literal_eval(x.edge_type) for x in models.Edge.query.distinct(models.Edge.edge_type)])
         # edge_list = [{"source": "paul", "target": "marjan", "type": "knows"}]
-    print('edge_list')
-    print(edge_list)
+    # print('edge_list')
+    # print(edge_list)
     return edge_list
 
-        # collections = dbf.get_edge_names()
-        # edge_list = []
-        #
-        # if base == 'edge':
-        #     if id == 'all':
-        #         for item in collections:
-        #             # if item[:4] == 'edge':
-        #             coll = dbf.get_edge_relations(item)
-        #             # coll = db[item].find()
-        #             type = item
-        #             for record in coll:
-        #                 # record.pop('_id')
-        #                 # record['type'] = item
-        #                 if id == "all":
-        #                     edge_list.append(
-        #                         {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]), "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
-        #
-        #     else:
-        #         coll = dbf.get_edge_relations(id)
-        #         for record in coll:
-        #             edge_list.append(
-        #                 # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-        #                 # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-        #                 {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
-        #                  "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
-        #
-        # elif base == 'node':
-        #     # get only nodes of the specific relation
-        #     for item in collections:
-        #             coll = dbf.get_edge_relations(item)
-        #             for record in coll:
-        #                 if id == "all":
-        #                     # edge_list.append(record)
-        #                     edge_list.append(
-        #                         # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-        #                     {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
-        #                      "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
-        #                 elif record[0] == id:
-        #                     # edge_list.append(record)
-        #                     edge_list.append(
-        #                         # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-        #                         {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
-        #                          "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
-        #                 elif record[2] == id:
-        #                     # edge_list.append(record)
-        #                     edge_list.append(
-        #                         # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
-        #                         {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
-        #                          "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
+    # collections = dbf.get_edge_names()
+    # edge_list = []
+    #
+    # if base == 'edge':
+    #     if id == 'all':
+    #         for item in collections:
+    #             # if item[:4] == 'edge':
+    #             coll = dbf.get_edge_relations(item)
+    #             # coll = db[item].find()
+    #             type = item
+    #             for record in coll:
+    #                 # record.pop('_id')
+    #                 # record['type'] = item
+    #                 if id == "all":
+    #                     edge_list.append(
+    #                         {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]), "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
+    #
+    #     else:
+    #         coll = dbf.get_edge_relations(id)
+    #         for record in coll:
+    #             edge_list.append(
+    #                 # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+    #                 # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+    #                 {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+    #                  "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
+    #
+    # elif base == 'node':
+    #     # get only nodes of the specific relation
+    #     for item in collections:
+    #             coll = dbf.get_edge_relations(item)
+    #             for record in coll:
+    #                 if id == "all":
+    #                     # edge_list.append(record)
+    #                     edge_list.append(
+    #                         # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+    #                     {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+    #                      "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
+    #                 elif record[0] == id:
+    #                     # edge_list.append(record)
+    #                     edge_list.append(
+    #                         # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+    #                         {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+    #                          "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
+    #                 elif record[2] == id:
+    #                     # edge_list.append(record)
+    #                     edge_list.append(
+    #                         # {"source": str(record[0]), "target": str(record[2]), "type": str(record[1])})
+    #                         {"source": str(record[0]), "target": str(record[2]), "type": str(record[1]),
+    #                          "sourcenodetype": str(record[3]), "targetnodetype": str(record[4])})
 
-        # return edge_list
+    # return edge_list
     #
     # def get_graph_degrees():
     #     """

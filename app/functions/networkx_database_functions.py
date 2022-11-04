@@ -1,18 +1,8 @@
 from app import db
 import ast
-# from app import graph
 from app import models
-import logging
+from app.functions import logging_settings
 from sqlalchemy import create_engine
-
-logger = logging.getLogger(__name__)  # initialize logger
-logger.handlers = []
-c_handler = logging.StreamHandler()  # Create handlers
-c_format = logging.Formatter('%(levelname)s - %(message)s')
-c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
-logger.addHandler(c_handler)  # Add handlers to the logger
-logger.setLevel(logging.INFO)
-
 
 # engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 #
@@ -130,14 +120,14 @@ def get_collection_detail(type, collection, name):
     """
     Get full set of ids from a collection
     """
-    print(type, collection, name)
+    # print(type, collection, name)
     a = models.Node.query.filter_by(node_type=collection, node_id=name).first()
 
     result = {}
     if a is None:
         return result
     else:
-        print(a.node_attr)
+        # print(a.node_attr)
         return ast.literal_eval(a.node_attr)
 
 
@@ -170,6 +160,17 @@ def get_node_type():
     #
     # print(lst)
     # print(list(set([x.node_type for x in models.Node.query.distinct(models.Node.node_type)])))
+    return lst
+
+def get_node_names():
+    """
+    get all node names
+    """
+    lst = []
+    # todo: remove session query,  replace with models.edge.query...etc
+    for value in db.session.query(models.Node.node_type).distinct():
+        lst.append(value[0])
+
     return lst
 
 
@@ -255,7 +256,7 @@ def upsert_node_data(data, source_target_id):
     :return:
     """
     props = {}
-    logger.debug(data)
+    logging_settings.logger.debug(data)
     if not data:
         print("data is empty")
         return None
@@ -270,15 +271,15 @@ def upsert_node_data(data, source_target_id):
                 if k == source_target_id + '_collection_name':
                     node_type = data[source_target_id + "_collection_name"].lower().strip()
                     props['node_type'] = node_type
-                    logger.debug('collection name')
-                    logger.debug(node_type)
+                    logging_settings.logger.debug('collection name')
+                    logging_settings.logger.debug(node_type)
 
                 # get id
                 elif k == source_target_id + '_collection_id':
                     node_id = data[k]
                     props['node_id'] = node_id
                     props['name'] = node_id
-                    logger.debug('node_id {}'.format(node_id))
+                    logging_settings.logger.debug('node_id {}'.format(node_id))
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -286,36 +287,36 @@ def upsert_node_data(data, source_target_id):
                     value2 = data[value]
                     if value2 != '':
                         props[v] = value2
-                        logger.debug('new property')
-                        logger.debug(v + " : " + value2)
+                        logging_settings.logger.debug('new property')
+                        logging_settings.logger.debug(v + " : " + value2)
 
                 # all other properties
                 else:
                     newkey = k[len(source_target_id) + 1:]
                     if not (newkey == 'name' and v == ''):
                         props[newkey] = v
-                    logger.debug('other property')
-                    logger.debug(newkey + " : " + v)
+                    logging_settings.logger.debug('other property')
+                    logging_settings.logger.debug(newkey + " : " + v)
 
     # # update database
     try:
         if not node_id == '':
 
-            logger.debug('props')
-            logger.debug(props)
-            logger.debug('my node')
+            logging_settings.logger.debug('props')
+            logging_settings.logger.debug(props)
+            logging_settings.logger.debug('my node')
             my_node = db.session.query(models.Node).filter_by(node_type=node_type, node_id=node_id).first()
-            logger.debug(my_node)
+            logging_settings.logger.debug(my_node)
 
             if my_node:
                 # if node exists
-                logger.debug('my_node found')
+                logging_settings.logger.debug('my_node found')
                 my_node.node_type = node_type
                 my_node.node_id = node_id
                 my_node.node_attr = str(props)
-                logger.debug('add existing node to db')
+                logging_settings.logger.debug('add existing node to db')
                 db.session.add(my_node)
-                logger.debug('commit')
+                logging_settings.logger.debug('commit')
                 try:
                     db.session.commit()
                 except:
@@ -323,14 +324,14 @@ def upsert_node_data(data, source_target_id):
 
             else:
                 # new node
-                logger.debug('add new node to db')
+                logging_settings.logger.debug('add new node to db')
                 db.session.add(models.Node(node_type, node_id, str(props)))
                 try:
                     db.session.commit()
                 except:
                     db.session.rollback()
 
-            logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
+            logging_settings.logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
             print(node_type, node_id)
 
@@ -358,7 +359,7 @@ def upsert_edge_data(source_node_id, target_node_id, data):
     :param data:
     :return:
     """
-    logger.debug(data)
+    logging_settings.logger.debug(data)
 
     try:
         # source_type = data['source_collection_name']
@@ -385,14 +386,14 @@ def upsert_edge_data(source_node_id, target_node_id, data):
                     if value2 != '':
                         props[v] = value2
 
-        logger.debug('add new edge to db')
+        logging_settings.logger.debug('add new edge to db')
         db.session.add(models.Edge(source_node_id, target_node_id, edge_type, str(props)))
         try:
             db.session.commit()
         except:
             db.session.rollback()
 
-        logger.debug("upserting edge with type {}".format(edge_type))
+        logging_settings.logger.debug("upserting edge with type {}".format(edge_type))
 
     except:
         print('edge input error')
@@ -408,11 +409,11 @@ def remove_node(id):
     :return: nothing
     """
     models.Edge.query.filter_by(source_node_id=id).delete()
-    logger.debug('source node with ID {} removed from edges'.format(id))
+    logging_settings.logger.debug('source node with ID {} removed from edges'.format(id))
     models.Edge.query.filter_by(target_node_id=id).delete()
-    logger.debug('target node with ID {} removed from edges'.format(id))
+    logging_settings.logger.debug('target node with ID {} removed from edges'.format(id))
     models.Node.query.filter_by(id=id).delete()
-    logger.debug('node with ID {} removed from nodes'.format(id))
+    logging_settings.logger.debug('node with ID {} removed from nodes'.format(id))
     models.db.session.commit()
 
 # def update_node_id(type, old_id, new_id):

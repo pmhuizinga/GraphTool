@@ -1,22 +1,11 @@
 from flask import request, render_template, redirect, url_for, jsonify
-# from app import graph
 from . import home
 from app import models, db
-import logging
 import requests
+from app.functions import logging_settings
 from app.functions import networkx_database_functions as dbf
 from app.functions import networkx_analytic_functions as af
 # from app.functions import import_export as db_functions
-# from py2neo import Graph, Node, Relationship
-
-
-logger = logging.getLogger(__name__)  # initialize logger
-logger.handlers = []
-c_handler = logging.StreamHandler()  # Create handlers
-c_format = logging.Formatter('%(levelname)s - %(message)s')
-c_handler.setFormatter(c_format)  # Create formatters and add it to handlers
-logger.addHandler(c_handler)  # Add handlers to the logger
-logger.setLevel(logging.INFO)
 
 # pages
 @home.route('/')
@@ -28,7 +17,7 @@ def index():
 @home.route('/create', methods=['GET', 'POST'])
 def create():
     '''
-    docstring
+    Function
     '''
     # get all node types
     nodes = requests.get(url_for("home.get_collections", type='node', _external=True)).json()
@@ -39,6 +28,7 @@ def create():
     if request.method == 'GET':
         return render_template('create2.html', types=nodes, sticky_source=sticky_source, sticky_edge=sticky_edge,
                                sticky_target=sticky_target)
+
 
     elif request.method == 'POST':
         if request.form['submitbutton'] == 'enter':
@@ -53,13 +43,11 @@ def create():
             if request.form.get('sticky_target'):
                 sticky_target = [1, request.form['target_collection_name'], request.form['target_collection_id']]
 
-            logger.debug('upserting source node')
+            logging_settings.logger.debug('upserting source node')
             source_node_id = dbf.upsert_node_data(request.form, 'source')
-            print(source_node_id)
 
-            logger.debug('upserting target node')
+            logging_settings.logger.debug('upserting target node')
             target_node_id = dbf.upsert_node_data(request.form, 'target')
-            print(target_node_id)
 
             if target_node_id and source_node_id:
                 # logger.debug('upserting edge')
@@ -71,7 +59,7 @@ def create():
                 # print('node id for removal: {}'.format(id))
                 dbf.remove_node(id)
             except:
-                logger.debug('id not found for delete')
+                logging_settings.logger.debug('id not found for delete')
 
         elif request.form['submitbutton'] == 'merge':
             pass
@@ -118,11 +106,7 @@ def get_collection_fieldnames2(type, collection):
     :param collection: collection name
     :return: list of fieldnames
     """
-    # print('get collection fieldnames')
-    # print(type)
-    # print(collection)
 
-    # collection = type + "_" + collection
     try:
         field_list = dbf.get_collection_keys(type, collection)
 
@@ -134,7 +118,6 @@ def get_collection_fieldnames2(type, collection):
         field_list = []
 
     return jsonify(field_list)
-    # return field_list
 
 
 @home.route('/get_collection_ids/<type>/<collection>')
