@@ -55,7 +55,6 @@ def get_all_nodes_list(base, id="all"):
 
         node_list = [x[0] for x in node_list]
 
-        @file_function_decorator
         logging_settings.logger.debug('node_list:'.format(node_list))
     # if id == 'all' and base == 'node':
     #     for item in collections:
