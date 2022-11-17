@@ -191,6 +191,8 @@ def get_edge_relations(edge):
     return a list of edges including sources and targets
     :param edge: edge label
     """
+    result = ([(x.edge_type, x.source_node_id) for x in models.Edge.query.filter_by(edge_type='knows')])
+
     # query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source,type(r), b.name as target".format(edge)
     query = "MATCH p=(a)-[r:{}]->(b) RETURN a.name as source, type(r), b.name as target, labels(a) as source_type, labels(b) as target_type".format(
         edge)

@@ -10,6 +10,10 @@
 # todo: use consistent naming for node_type and node_id
 # todo: import js libraries (otherwise dependent on internet connection)
 # todo: on start -> create database if not exists
+# todo: bij het opzetten van een node wordt soms het attribuut 'source' toegevoegd. Dit moet niet.
+# todo: bij foutieve invoer bij de api's moet een correct foutafhandeling komen
+# todo: bij het toevoegen van een nieuw attribuut aan een node wordt deze niet toegevoegd aan andere nodes van hetzelfde type.
+
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy

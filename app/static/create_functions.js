@@ -61,6 +61,7 @@ $(document).ready(
                                 '</div>';
                         });
                     });
+                console.log('node: ' +  record_id)
                 create_graph('node', record_id)
             }
         )

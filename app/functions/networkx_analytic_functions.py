@@ -3,7 +3,7 @@ from app import models
 from app.functions import logging_settings
 from app.functions import networkx_database_functions as dbf
 import networkx as nx
-import ast
+import ast  # om text om te zetten, dus "'txt'" naar 'txt'
 
 
 # def get_nodes_per_type(type):
@@ -23,77 +23,51 @@ import ast
 #     result = [n[0] for n in query_result]
 #     return result
 
-import os
-def file_function_decorator(func):
-    def inner_function():
-        filename = os.path.basename(__file__)
-        logging_settings.logger.debug(filename)
-
-    return inner_function()
-
 def get_all_nodes_list(base, id="all"):
     """
-    get nodes including node type using Neo4j as source
+    get nodes including node type
     Default is all, unless node id is entered
     Used for d3.js graph
+    d3.js requires an "id" attribute in the node list for creating the edges to the nodes
     :param node: node id
     :return: list of nodes including node type
     """
     logging_settings.logger.debug('base is {} and id = {}'.format(base, id))
     collections = dbf.get_node_names()
-
+    logging_settings.logger.debug('collections:  {}'.format(collections))
     node_list = []
 
-    if id == 'all' and base == 'node':
+    if base == 'node' and id == 'all':
         node_list = ([(ast.literal_eval(x.node_attr), x.id) for x in models.Node.query.distinct(models.Node.node_type)])
         # todo: onderstaande moet weg. Alle functies moeten werken op node_id en node_type
         for d in node_list:
             d[0]['id'] = d[1]
-            # d['id'] = d['node_id']
             d[0]['type'] = d[0]['node_type']
-            # d['type'] = d['node_type']
 
         node_list = [x[0] for x in node_list]
 
-        @file_function_decorator
-        logging_settings.logger.debug('node_list:'.format(node_list))
-    # if id == 'all' and base == 'node':
-    #     for item in collections:
-    #         #if base == 'node':
-    #         for node in get_nodes_per_type(item):
-    #             node_val = dict(node)
-    #             if 'id' in node_val:
-    #                 node_val['name'] = node_val['id']
-    #             if 'name' in node_val:
-    #                 node_val['id'] = node_val['name']
-    #             node_val['type'] = item
-    #             node_list.append(node_val)
-    #         # for identifier in dbf.get_collection_id(item):
-    #         #     node_list.append({"id": str(identifier), "type": item})
-
     else:
         # get all edges that include the specified node
-        if base == 'node':
-            edge_list = get_all_edge_list(base='node', id=id)
-            print(edge_list)
-        elif base == 'edge':
-            edge_list = get_all_edge_list(base='edge', id=id)
+        # base can be 'node' or 'edge'.
+        edge_list = get_all_edge_list(base=base, id=id)
+        logging_settings.logger.debug('edges: {}'.format(edge_list))
 
         lst = []
-        # create (set) list of nodes
+        # create (set) list of nodes from edge list
         for record in edge_list:
             lst.append(record['source'])
             lst.append(record['target'])
+        # make list of unique nodes
         lst = list(set(lst))
-        # add node characteristics to node list
-        for item in collections:
-            for record in dbf.get_collection_id(item):
-                if record in lst:
-                    node_list.append({"id": record, "type": item})
 
-    # node_list = [{"id": 1, "name": "paul", "type": "person"}, {"id": 2, "name": "marjan", "type": "person"}]
-    # node_list = [{"id": "paul", "type": "person"}, {"id": "marjan", "type": "person"}]
-    logging_settings.logger.debug('node_list:'.format(node_list))
+        # populate node_list based on the node id's found in the edge list
+        node_list = []
+        for node_id in lst:
+            node_details = models.Node.query.filter_by(id=node_id).first()
+            node_list.append(
+                {"id": node_details.id, "node_id": node_details.node_id, "node_type": node_details.node_type,
+                 "name": node_details.node_id, "type": node_details.node_type})
+
     return node_list
 
 
@@ -106,20 +80,42 @@ def get_all_edge_list(base, id="all"):
     """
     # collections = db.list_collection_names()
 
-    query = """
-    select  source.node_type as source_node_type
-            ,source.id as source_node_id
-            ,e.edge_type
-            ,target.node_type as target_node_type
-            ,target.id as target_node_id
-            ,source.node_id as source_node_name
-            ,target.node_id as target_node_name 
-    from Edges as e 
-    left join Nodes as source
-            on e.source_node_id = source.id
-    left join Nodes as target
-            on e.target_node_id = target.id
-    """
+    # ALERT; the sequence of selections in the query below matter.
+    if id == 'all':
+        query = """
+        select  source.node_type as source_node_type
+                ,source.id as source_node_id
+                ,e.edge_type as edge_type
+                ,target.node_type as target_node_type
+                ,target.id as target_node_id
+                ,source.node_id as source_node_name
+                ,target.node_id as target_node_name 
+                ,source.node_attr as source_node_attributes
+                ,target.node_attr as target_node_attributes
+        from Edges as e 
+        left join Nodes as source
+                on e.source_node_id = source.id
+        left join Nodes as target
+                on e.target_node_id = target.id
+        """
+    else:
+        query = """
+        select  source.node_type as source_node_type
+                ,source.id as source_node_id
+                ,e.edge_type as edge_type
+                ,target.node_type as target_node_type
+                ,target.id as target_node_id
+                ,source.node_id as source_node_name
+                ,target.node_id as target_node_name 
+                ,source.node_attr as source_node_attributes
+                ,target.node_attr as target_node_attributes
+        from Edges as e 
+        left join Nodes as source
+                on e.source_node_id = source.id
+        left join Nodes as target
+                on e.target_node_id = target.id
+        where source.node_id ='{}' or target.node_id = '{}'
+        """.format(id, id)
 
     edge_list = []
 
@@ -140,6 +136,8 @@ def get_all_edge_list(base, id="all"):
         # edge_list = [{"source": "paul", "target": "marjan", "type": "knows"}]
     # print('edge_list')
     # print(edge_list)
+    logging_settings.logger.debug('edge_list: {}'.format(edge_list))
+    logging_settings.logger.debug('end of function get_all_edge_list')
     return edge_list
 
     # collections = dbf.get_edge_names()
