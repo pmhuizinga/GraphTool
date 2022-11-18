@@ -14,7 +14,7 @@ function create_graph(base, id) {
         .force("link", d3.forceLink().id(function (d) {
             return d.id;
         }))
-        .force("charge", d3.forceManyBody().strength(-20))
+        .force("charge", d3.forceManyBody().strength(-40))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {

@@ -1,7 +1,5 @@
-# from app import models
 import requests
 import ast
-import numpy as np
 import os
 from time import sleep
 import pandas as pd
@@ -18,31 +16,14 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'gr
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
-excel_folder = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Desktop\\'
-# excel_folder = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\WIJ\\'
+# excel_folder = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Desktop\\'
+excel_folder = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\WIJ\\'
 excel_file = 'manual_inventory.xlsx'
 excel_sheet = 'ontology'
 
 # sqlite init to app
 db = SQLAlchemy(app)
-
 meta = MetaData()
-# Nodetable = Table('nodes', meta,
-#                   Column('id', Integer, primary_key=True),
-#                   Column('node_type', String),
-#                   Column('node_id', String),
-#                   Column('node_attr', String),
-#                   UniqueConstraint('node_type', 'node_id', name='uix_node_type_node_id'))
-#
-# Edgetable = Table('edges', meta,
-#                   Column('id', Integer, primary_key=True),
-#                   Column('source_node_id', Integer),
-#                   Column('target_node_id', Integer),
-#                   Column('edge_type', String),
-#                   Column('edge_attr', String),
-#                   UniqueConstraint('source_node_id', 'target_node_id', 'edge_type', name='uix_source_target_edge'))
-#
-# # create table to sqlite
 meta.create_all(engine)
 
 
@@ -92,7 +73,6 @@ def upsert_node_data(data, source_target_id):
     :param source_target_id: 'source' or 'target
     :return:
     """
-
     props = {}
     logging_settings.logger.debug(data)
     if not data:
@@ -225,22 +205,27 @@ def read_data(path_name, file_name, sheet_name):
 
 
 def create_nodes(df):
-    node_data = {}
-    for node_type, node_id, node_attributes in zip(df['node_type'], df['node_id'], df['node_attr'].astype(str)):
-        node_data['source_collection_name'] = node_type
-        node_data['source_collection_id'] = node_id
-        node_data = {'source_collection_name': node_type, 'source_collection_id': node_id}
-        print(node_data)
-        if not node_attributes == 'no attributes':
-            print('if loop')
-            node_attributes_dict = ast.literal_eval(node_attributes)
-            print(node_attributes_dict)
-            for k, v in node_attributes_dict.items():
-                print('k: {}, v: {}'.format(k,v))
-                node_data[k] = v
-            print(node_data)
-        upsert_node_data(node_data, 'source')
 
+    for node_type, node_id, node_attributes in zip(df['node_type'], df['node_id'], df['node_attr'].astype(str)):
+
+        if not node_attributes == 'no attributes':
+            node_attributes_dict = ast.literal_eval(node_attributes)
+        else:
+            node_attributes_dict = {}
+
+        node_attributes_dict['node_type'] = node_type
+        node_attributes_dict['node_id'] = node_id
+        node_attributes_dict['name'] = node_id
+        print('type: {}, id: {}, attr: {}'.format(node_type, node_id, str(node_attributes_dict)))
+        db.session.add(Node(node_type, node_id, str(node_attributes_dict)))
+        try:
+            db.session.commit()
+            print('node {} committed'.format(node_id))
+        except:
+            db.session.rollback()
+            print('node {} NOT committed'.format(node_id))
+
+    return None
 
 
 def get_node_id(node_type, node_id):
