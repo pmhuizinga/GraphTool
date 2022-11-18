@@ -21,6 +21,8 @@ spacy
 neuralcoref
 nltk
 matplotlib
+openpyxl
+scipy
 
 
 

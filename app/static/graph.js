@@ -14,7 +14,7 @@ function create_graph(base, id) {
         .force("link", d3.forceLink().id(function (d) {
             return d.id;
         }))
-        .force("charge", d3.forceManyBody().strength(-200))
+        .force("charge", d3.forceManyBody().strength(-20))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
@@ -92,6 +92,36 @@ function create_graph(base, id) {
                 })
                 .attr('x', 10)
                 .attr('y', 3);
+
+            // var link_labels = link.append("text")
+            //     .text(function (d) {
+            //         // return d.edge_type;
+            //         return "test";
+            //     })
+            //     .attr('x', 10)
+            //     .attr('y', 3);
+
+            // link.append("text")
+            //     .attr("font-family", "Arial, Helvetica, sans-serif")
+            //     .attr("fill", "Black")
+            //     .style("font", "normal 12px Arial")
+            //     .attr("transform", function(d) {
+            //         return "translate(" +
+            //             ((d.source.y + d.target.y)/2) + "," +
+            //             ((d.source.x + d.target.x)/2) + ")";
+            //     })
+            //     .attr("dy", ".35em")
+            //     .attr("text-anchor", "middle")
+            //     .text(function(d) {
+            //         console.log(d.edge_type);
+            //          return d.edge_type;
+            //     });
+
+            // link.append("title")
+            //     .text(function (d) {
+            //         // return d.edge_type;
+            //         return "test";
+            //     });
 
             node.append("title")
                 .text(function (d) {

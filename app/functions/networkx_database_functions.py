@@ -257,6 +257,7 @@ def upsert_node_data(data, source_target_id):
     :param source_target_id: 'source' or 'target
     :return:
     """
+    print(data)
     props = {}
     logging_settings.logger.debug(data)
     if not data:
@@ -327,6 +328,8 @@ def upsert_node_data(data, source_target_id):
             else:
                 # new node
                 logging_settings.logger.debug('add new node to db')
+                logging_settings.logger.debug('upserting node type {} and node id {} and props'.format(node_type, node_id, props))
+
                 db.session.add(models.Node(node_type, node_id, str(props)))
                 try:
                     db.session.commit()
@@ -345,6 +348,7 @@ def upsert_node_data(data, source_target_id):
     except:
         print('input error')
         raise
+
 
 def get_id(node_type, node_id):
     """

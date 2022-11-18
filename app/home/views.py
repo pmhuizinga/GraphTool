@@ -223,29 +223,29 @@ def api():
     return render_template('api.html')
 
 
-# @home.route('/analytics')
-# def analytics():
-#     degrees = dict(af.get_graph_degrees())
-#     pagerank = dict(af.get_graph_pagerank())
-#     betweennes_centrality = dict(af.get_graph_betweennes_centrality())
-#
-#     data = [degrees, pagerank, betweennes_centrality]
-#
-#     return render_template('analytics.html', data=data)
-#
-#
-# @home.route('/pagerank')
-# def pagerank():
-#     return jsonify(dict(af.get_graph_pagerank()))
-#
-#
-# @home.route('/betweenness')
-# def betweennes():
-#     return jsonify(dict(af.get_graph_betweennes_centrality()))
+@home.route('/analytics')
+def analytics():
+    degrees = dict(af.get_graph_degrees())
+    pagerank = dict(af.get_graph_pagerank())
+    betweennes_centrality = dict(af.get_graph_betweennes_centrality())
+
+    data = [degrees, pagerank, betweennes_centrality]
+
+    return render_template('analytics.html', data=data)
 
 
-# @home.route('/degrees')
-# def degrees():
-#     return jsonify(dict(af.get_graph_degrees()))
+@home.route('/pagerank')
+def pagerank():
+    return jsonify(dict(af.get_graph_pagerank()))
+
+
+@home.route('/betweenness')
+def betweennes():
+    return jsonify(dict(af.get_graph_betweennes_centrality()))
+
+
+@home.route('/degrees')
+def degrees():
+    return jsonify(dict(af.get_graph_degrees()))
 
 
