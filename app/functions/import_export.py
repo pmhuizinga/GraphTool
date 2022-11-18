@@ -1,5 +1,7 @@
-from app import models
+# from app import models
 import requests
+import ast
+import numpy as np
 import os
 from time import sleep
 import pandas as pd
@@ -7,7 +9,6 @@ from app.functions import logging_settings
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
-
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -17,7 +18,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'gr
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
-excel_folder = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\WIJ\\'
+excel_folder = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Desktop\\'
+# excel_folder = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\WIJ\\'
 excel_file = 'manual_inventory.xlsx'
 excel_sheet = 'ontology'
 
@@ -25,22 +27,22 @@ excel_sheet = 'ontology'
 db = SQLAlchemy(app)
 
 meta = MetaData()
-Nodetable = Table('nodes', meta,
-                  Column('id', Integer, primary_key=True),
-                  Column('node_type', String),
-                  Column('node_id', String),
-                  Column('node_attr', String),
-                  UniqueConstraint('node_type', 'node_id', name='uix_node_type_node_id'))
-
-Edgetable = Table('edges', meta,
-                  Column('id', Integer, primary_key=True),
-                  Column('source_node_id', Integer),
-                  Column('target_node_id', Integer),
-                  Column('edge_type', String),
-                  Column('edge_attr', String),
-                  UniqueConstraint('source_node_id', 'target_node_id', 'edge_type', name='uix_source_target_edge'))
-
-# create table to sqlite
+# Nodetable = Table('nodes', meta,
+#                   Column('id', Integer, primary_key=True),
+#                   Column('node_type', String),
+#                   Column('node_id', String),
+#                   Column('node_attr', String),
+#                   UniqueConstraint('node_type', 'node_id', name='uix_node_type_node_id'))
+#
+# Edgetable = Table('edges', meta,
+#                   Column('id', Integer, primary_key=True),
+#                   Column('source_node_id', Integer),
+#                   Column('target_node_id', Integer),
+#                   Column('edge_type', String),
+#                   Column('edge_attr', String),
+#                   UniqueConstraint('source_node_id', 'target_node_id', 'edge_type', name='uix_source_target_edge'))
+#
+# # create table to sqlite
 meta.create_all(engine)
 
 
@@ -140,7 +142,7 @@ def upsert_node_data(data, source_target_id):
             logging_settings.logger.debug('props')
             logging_settings.logger.debug(props)
             logging_settings.logger.debug('my node')
-            my_node = db.session.query(models.Node).filter_by(node_type=node_type, node_id=node_id).first()
+            my_node = db.session.query(Node).filter_by(node_type=node_type, node_id=node_id).first()
             logging_settings.logger.debug(my_node)
 
             if my_node:
@@ -160,7 +162,7 @@ def upsert_node_data(data, source_target_id):
             else:
                 # new node
                 logging_settings.logger.debug('add new node to db')
-                db.session.add(models.Node(node_type, node_id, str(props)))
+                db.session.add(Node(node_type, node_id, str(props)))
                 try:
                     db.session.commit()
                 except:
@@ -193,7 +195,7 @@ def upsert_edge_data(source_node_id, target_node_id, data):
     try:
 
         logging_settings.logger.debug('add new edge to db')
-        db.session.add(models.Edge(source_node_id, target_node_id, edge_type, str(props)))
+        db.session.add(Edge(source_node_id, target_node_id, edge_type, str(props)))
         try:
             db.session.commit()
         except:
@@ -213,21 +215,30 @@ def read_data(path_name, file_name, sheet_name):
     :param sheet: sheetname
     :return: dataframe
     '''
-    try:
-        df = pd.read_excel(path_name + file_name, sheet_name=sheet_name)
-    except:
-        print("file not found")
+    # try:
+    frame = pd.read_excel(path_name + file_name, sheet_name=sheet_name)
+    frame['node_attr'] = frame['node_attr'].fillna('no attributes')
+    # except:
+    #     print("file not found")
 
-    return df
+    return frame
 
 
 def create_nodes(df):
     node_data = {}
-    for node_type, node_id, node_attributes in zip(df['node_type'], df['node_id'], df['node_attr']):
+    for node_type, node_id, node_attributes in zip(df['node_type'], df['node_id'], df['node_attr'].astype(str)):
         node_data['source_collection_name'] = node_type
         node_data['source_collection_id'] = node_id
-        node_data['attributes'] = node_attributes
         node_data = {'source_collection_name': node_type, 'source_collection_id': node_id}
+        print(node_data)
+        if not node_attributes == 'no attributes':
+            print('if loop')
+            node_attributes_dict = ast.literal_eval(node_attributes)
+            print(node_attributes_dict)
+            for k, v in node_attributes_dict.items():
+                print('k: {}, v: {}'.format(k,v))
+                node_data[k] = v
+            print(node_data)
         upsert_node_data(node_data, 'source')
 
 
@@ -255,15 +266,10 @@ def create_edges(df):
 
     return None
 
-df = read_data(excel_folder, excel_file, excel_sheet)
-create_nodes(df)
-create_edges(df)
-
-
-
 def database_clear():
     Node.query.delete()
     Edge.query.delete()
+    db.session.commit()
     sleep(3)
 
 
@@ -274,3 +280,13 @@ def read_from_api(url):
     r = requests.get(url)
     data = r.json()
     return data
+
+
+def read_manual_data(clear_database=False):
+
+    if clear_database:
+        database_clear()
+
+    df = read_data(excel_folder, excel_file, excel_sheet)
+    create_nodes(df)
+    create_edges(df)
