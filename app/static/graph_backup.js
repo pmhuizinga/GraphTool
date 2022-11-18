@@ -1,5 +1,5 @@
 function create_graph(base, id) {
-    console.log('base: ' + base)
+    console.log('base: ' + base + '. id: ' + id)
     d3.select('svg').selectAll("*").remove();
 
     var svg = d3.select("svg"),
@@ -14,17 +14,22 @@ function create_graph(base, id) {
         .force("link", d3.forceLink().id(function (d) {
             return d.id;
         }))
-        .force("charge", d3.forceManyBody())
+        .force("charge", d3.forceManyBody().strength(-200))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
+        // remove alias nodes
+        nodes = nodes.filter(function(d) { return d.type != 'alias'})
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
-            // LEGEND
+            // remove alias links
+            links = links.filter(function(d) { return d.type != 'has_alias'})
 
+            // LEGEND
             // get unique list of nodes
             node_names = d3.set(nodes.map(d => d.type)).values()
 
             console.log(node_names)
+
             const legend = svg.append("g")
                 .attr("transform", `translate(${50}, ${10})`)
 
@@ -61,6 +66,7 @@ function create_graph(base, id) {
                 .data(links)
                 .enter().append("line")
                 // .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+                .filter(function(d) {return d.type != 'has_alias'})
                 .attr("stroke-width", 2);
 
             var node = svg.append("g")
@@ -68,6 +74,7 @@ function create_graph(base, id) {
                 .selectAll("g")
                 .data(nodes)
                 .enter().append("g")
+                // .filter(function(d) {return d.type != 'alias'})
 
             var circles = node.append("circle")
                 .attr("r", 9)
@@ -81,14 +88,14 @@ function create_graph(base, id) {
 
             var labels = node.append("text")
                 .text(function (d) {
-                    return d.id;
+                    return d.name;
                 })
                 .attr('x', 10)
                 .attr('y', 3);
 
             node.append("title")
                 .text(function (d) {
-                    return d.id;
+                    return d.name;
                 });
 
             simulation

@@ -1,5 +1,5 @@
 function create_graph(base, id) {
-    // console.log('base: ' + base)
+    console.log('base: ' + base + '. id: ' + id)
     d3.select('svg').selectAll("*").remove();
 
     var svg = d3.select("svg"),
@@ -14,26 +14,26 @@ function create_graph(base, id) {
         .force("link", d3.forceLink().id(function (d) {
             return d.id;
         }))
-        .force("charge", d3.forceManyBody().strength(-200))
+        .force("charge", d3.forceManyBody().strength(-40))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     d3.json('/graph_nodes/' + base + '/' + id, function (error, nodes) {
         // remove alias nodes
-        nodes = nodes.filter(function(d) { return d.type != 'alias'})
+        nodes = nodes.filter(function(d) { return d.node_type != 'alias'})
         d3.json('/graph_edges/' + base + '/' + id, function (error, links) {
             // remove alias links
-            links = links.filter(function(d) { return d.type != 'has_alias'})
+            links = links.filter(function(d) { return d.edge_type != 'has_alias'})
 
             // LEGEND
             // get unique list of nodes
-            node_names = d3.set(nodes.map(d => d.type)).values()
+            node_types = d3.set(nodes.map(d => d.node_type)).values()
 
-            console.log(node_names)
+            console.log(node_types)
 
             const legend = svg.append("g")
                 .attr("transform", `translate(${50}, ${10})`)
 
-            node_names.forEach((name, i) => {
+            node_types.forEach((node_id, i) => {
 
                 const legendRow = legend.append("g")
                     .attr("transform", `translate(0, ${i * 20})`)
@@ -41,7 +41,7 @@ function create_graph(base, id) {
                 legendRow.append("circle")
                     .attr("class", "nodes")
                     .attr("r", 7)
-                    .attr("fill", color(name))
+                    .attr("fill", color(node_id))
                     .attr("stroke", "white")
                     .attr("stroke-width", "1.5px")
 
@@ -49,7 +49,7 @@ function create_graph(base, id) {
                     .attr("x", 10)
                     .attr("y", 5)
                     .attr("text-anchor", "start")
-                    .text(name)
+                    .text(node_id)
             })
 
             // END LEGEND
@@ -66,7 +66,7 @@ function create_graph(base, id) {
                 .data(links)
                 .enter().append("line")
                 // .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
-                .filter(function(d) {return d.type != 'has_alias'})
+                .filter(function(d) {return d.node_type != 'has_alias'})
                 .attr("stroke-width", 2);
 
             var node = svg.append("g")
@@ -74,12 +74,12 @@ function create_graph(base, id) {
                 .selectAll("g")
                 .data(nodes)
                 .enter().append("g")
-                // .filter(function(d) {return d.type != 'alias'})
+                // .filter(function(d) {return d.node_type != 'alias'})
 
             var circles = node.append("circle")
                 .attr("r", 9)
                 .attr("fill", function (d) {
-                    return color(d.type);
+                    return color(d.node_type);
                 })
                 .call(d3.drag()
                     .on("start", dragstarted)
@@ -88,14 +88,44 @@ function create_graph(base, id) {
 
             var labels = node.append("text")
                 .text(function (d) {
-                    return d.id;
+                    return d.node_id;
                 })
                 .attr('x', 10)
                 .attr('y', 3);
 
+            // var link_labels = link.append("text")
+            //     .text(function (d) {
+            //         // return d.edge_type;
+            //         return "test";
+            //     })
+            //     .attr('x', 10)
+            //     .attr('y', 3);
+
+            // link.append("text")
+            //     .attr("font-family", "Arial, Helvetica, sans-serif")
+            //     .attr("fill", "Black")
+            //     .style("font", "normal 12px Arial")
+            //     .attr("transform", function(d) {
+            //         return "translate(" +
+            //             ((d.source.y + d.target.y)/2) + "," +
+            //             ((d.source.x + d.target.x)/2) + ")";
+            //     })
+            //     .attr("dy", ".35em")
+            //     .attr("text-anchor", "middle")
+            //     .text(function(d) {
+            //         console.log(d.edge_type);
+            //          return d.edge_type;
+            //     });
+
+            // link.append("title")
+            //     .text(function (d) {
+            //         // return d.edge_type;
+            //         return "test";
+            //     });
+
             node.append("title")
                 .text(function (d) {
-                    return d.id;
+                    return d.node_id;
                 });
 
             simulation

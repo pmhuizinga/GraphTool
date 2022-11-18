@@ -22,22 +22,24 @@ Excel sheets, word documents, Confluence pages, etc.
 
 
 ## <a id="goal"></a>Goal
-- easy to use tool for adding and maintaining entities and relations
+### Basic knowledge graph
+- easy to use tool for (manually) adding and maintaining entities and relations
+- less to no dependency on external applications (use python as much as possible)
+### read data from documents
 - create the organisations taxonomy/ontology
-- extract entities and relations from documents and create the organization's ontology based on that  
-- be the master data repository (?)
+- extract entities and relations from documents and create the organization's ontology based on that
 - ability to recognize an ontology 'item' using machine learning from documents
 - train a nlp model using the initial classified dataset
 - avoid time consuming maintanance
 - Containerized  
 - Deployable in AWS  
-
-Graphical interface using d3.js  
+### Graphical interface using d3.js  
 The tool should supply several analytical options, like:
-- shortest path to node y
+- insight into entity characteristics and the entities relationships
+- abilty to drill down into relationships (like neo4j desktop)
 - basic graph analytics: degree, centrality, betweenness
 - proces analytics based on edge types
-- show semantical problems caused by using different namings for the same entity
+- show semantical problems caused by synonyms
 - show all direct relations to a specific node
 
 ## <a id="hierarchy"></a>Hierarchy
@@ -48,7 +50,8 @@ The tool should supply several analytical options, like:
 https://www.amundsen.io/
 
 ## <a id="database"></a>Database
-Current db is Neo4j but it should be easy to switch to AWS Neptune or any other graph db. 
+Very basis database: sqlite
+But there should be an ability to upgrade to more sophisticated databases. CRUD transactions should therefore be generic.
 
 ## <a id="userinterface"></a>User interface
 Basic HTML setup: 
