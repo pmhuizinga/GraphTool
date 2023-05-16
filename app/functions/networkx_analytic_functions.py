@@ -1,6 +1,6 @@
 from app import db
 from app import models
-from app.functions import logging_settings
+from app.functions import log
 from app.functions import networkx_database_functions as dbf
 import networkx as nx
 import scipy
@@ -10,15 +10,16 @@ import ast  # om text om te zetten, dus "'txt'" naar 'txt'
 def get_all_nodes_list(base, id="all"):
     """
     get nodes including node type
-    Default is all, unless node id is entered
+    Default is all.
+    When a node_id is supplied this node and all directly related nodes will be returned
     Used for d3.js graph
     d3.js requires an "id" attribute in the node list for creating the edges to the nodes
     :param node: node id
     :return: list of nodes including node type
     """
-    logging_settings.logger.debug('base is {} and id = {}'.format(base, id))
+    log.logger.debug('base is {} and id = {}'.format(base, id))
     collections = dbf.get_node_names()
-    logging_settings.logger.debug('collections:  {}'.format(collections))
+    log.logger.debug('collections:  {}'.format(collections))
     node_list = []
 
     if base == 'node' and id == 'all':
@@ -26,13 +27,13 @@ def get_all_nodes_list(base, id="all"):
         for node in all_nodes:
             node_list.append(
                 {"id": node.id, "node_id": node.node_id, "node_type": node.node_type,
-                 "name": node.node_id, "type": node.node_type})
+                 "name": node.node_id, "type": node.node_type, "node_attr": node.node_attr})
 
     elif base == 'node' and id != 'all':
         # get all edges that include the specified node
         # base can be 'node' or 'edge'.
         edge_list = get_all_edge_list(base=base, id=id)
-        logging_settings.logger.debug('edges: {}'.format(edge_list))
+        log.logger.debug('edges: {}'.format(edge_list))
 
         lst = []
         # create (set) list of nodes from edge list
@@ -48,13 +49,13 @@ def get_all_nodes_list(base, id="all"):
             node_details = models.Node.query.filter_by(id=node_id).first()
             node_list.append(
                 {"id": node_details.id, "node_id": node_details.node_id, "node_type": node_details.node_type,
-                 "name": node_details.node_id, "type": node_details.node_type})
+                 "name": node_details.node_id, "type": node_details.node_type, "node_attr": node_details.node_attr})
 
     elif base == 'edge':
         # get all edges that include the specified node
         # base can be 'node' or 'edge'.
         edge_list = get_all_edge_list(base=base, id=id)
-        logging_settings.logger.debug('edges: {}'.format(edge_list))
+        log.logger.debug('edges: {}'.format(edge_list))
 
         lst = []
         # create (set) list of nodes from edge list
@@ -70,7 +71,7 @@ def get_all_nodes_list(base, id="all"):
             node_details = models.Node.query.filter_by(id=node_id).first()
             node_list.append(
                 {"id": node_details.id, "node_id": node_details.node_id, "node_type": node_details.node_type,
-                 "name": node_details.node_id, "type": node_details.node_type})
+                 "name": node_details.node_id, "type": node_details.node_type, "node_attr": node_details.node_attr})
 
 
     return node_list
@@ -154,8 +155,8 @@ def get_all_edge_list(base, id="all"):
             , 'targetnodename': record[6]})
 
 
-    logging_settings.logger.debug('edge_list: {}'.format(edge_list))
-    logging_settings.logger.debug('end of function get_all_edge_list')
+    log.logger.debug('edge_list: {}'.format(edge_list))
+    log.logger.debug('end of function get_all_edge_list')
     return edge_list
 
 

@@ -1,7 +1,7 @@
 from app import db
 import ast
 from app import models
-from app.functions import logging_settings
+from app.functions import log
 from sqlalchemy import create_engine
 
 # engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
@@ -55,7 +55,7 @@ def find_matching_collections(input):
         #                                                                                       int(result * 100),
         #                                                                                       set_match, len_match))
 
-def get_node_type_attributes(node_edge, node_type):
+def get_collection_keys(node_edge, node_type):
     """
     retrieve a set of all attributes from a specified node_type
     """
@@ -64,21 +64,22 @@ def get_node_type_attributes(node_edge, node_type):
     for node in result:
         for key in ast.literal_eval(node.node_attr).keys():
             k.append(key)
-
+    # log.logger.debug('attributes: {}'.format(list(set(k))))
 
     return list(set(k))
 
-def get_collection_keys(node_edge, node_type):
-    """
-    retrieve a set of all attributes from a specified node_type
-    """
-    # todo: add code for edges
-    result = models.Node.query.filter_by(node_type=node_type).first()
-    k = []
-    for key in ast.literal_eval(result.node_attr).keys():
-        k.append(key)
-
-    return k
+# def get_collection_keys(node_edge, node_type):
+#     """
+#     retrieve a set of all attributes from a specified node_type
+#     """
+#     # todo: add code for edges
+#     result = models.Node.query.filter_by(node_type=node_type).first()
+#     k = []
+#     for key in ast.literal_eval(result.node_attr).keys():
+#         k.append(key)
+#
+#     log.logger.debug('attributes: {}'.format(list(set(k))))
+#     return k
 
     # for node in result:
     #     for key in ast.literal_eval(node.node_attr).keys():
@@ -257,9 +258,8 @@ def upsert_node_data(data, source_target_id):
     :param source_target_id: 'source' or 'target
     :return:
     """
-    print(data)
     props = {}
-    logging_settings.logger.debug(data)
+    log.logger.debug(data)
     if not data:
         print("data is empty")
         return None
@@ -274,15 +274,15 @@ def upsert_node_data(data, source_target_id):
                 if k == source_target_id + '_collection_name':
                     node_type = data[source_target_id + "_collection_name"].lower().strip()
                     props['node_type'] = node_type
-                    logging_settings.logger.debug('collection name')
-                    logging_settings.logger.debug(node_type)
+                    log.logger.debug('collection name')
+                    log.logger.debug(node_type)
 
                 # get id
                 elif k == source_target_id + '_collection_id':
                     node_id = data[k]
                     props['node_id'] = node_id
-                    props['name'] = node_id
-                    logging_settings.logger.debug('node_id {}'.format(node_id))
+                    # props['name'] = node_id
+                    log.logger.debug('node_id {}'.format(node_id))
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -290,36 +290,36 @@ def upsert_node_data(data, source_target_id):
                     value2 = data[value]
                     if value2 != '':
                         props[v] = value2
-                        logging_settings.logger.debug('new property')
-                        logging_settings.logger.debug(v + " : " + value2)
+                        log.logger.debug('new property')
+                        log.logger.debug(v + " : " + value2)
 
                 # all other properties
                 else:
                     newkey = k[len(source_target_id) + 1:]
                     if not (newkey == 'name' and v == ''):
                         props[newkey] = v
-                    logging_settings.logger.debug('other property')
-                    logging_settings.logger.debug(newkey + " : " + v)
+                    log.logger.debug('other property')
+                    log.logger.debug(newkey + " : " + v)
 
     # # update database
     try:
         if not node_id == '':
 
-            logging_settings.logger.debug('props')
-            logging_settings.logger.debug(props)
-            logging_settings.logger.debug('my node')
+            log.logger.debug('props')
+            log.logger.debug(props)
+            log.logger.debug('my node')
             my_node = db.session.query(models.Node).filter_by(node_type=node_type, node_id=node_id).first()
-            logging_settings.logger.debug(my_node)
+            log.logger.debug(my_node)
 
             if my_node:
                 # if node exists
-                logging_settings.logger.debug('my_node found')
+                log.logger.debug('my_node found')
                 my_node.node_type = node_type
                 my_node.node_id = node_id
                 my_node.node_attr = str(props)
-                logging_settings.logger.debug('add existing node to db')
+                log.logger.debug('add existing node to db')
                 db.session.add(my_node)
-                logging_settings.logger.debug('commit')
+                log.logger.debug('commit')
                 try:
                     db.session.commit()
                 except:
@@ -327,8 +327,8 @@ def upsert_node_data(data, source_target_id):
 
             else:
                 # new node
-                logging_settings.logger.debug('add new node to db')
-                logging_settings.logger.debug('upserting node type {} and node id {} and props'.format(node_type, node_id, props))
+                log.logger.debug('add new node to db')
+                log.logger.debug('upserting node type {} and node id {} and props'.format(node_type, node_id, props))
 
                 db.session.add(models.Node(node_type, node_id, str(props)))
                 try:
@@ -336,9 +336,9 @@ def upsert_node_data(data, source_target_id):
                 except:
                     db.session.rollback()
 
-            logging_settings.logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
+            log.logger.debug("upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
-            print(node_type, node_id)
+            # print(node_type, node_id)
 
             return get_id(node_type, node_id)
 
@@ -365,7 +365,7 @@ def upsert_edge_data(source_node_id, target_node_id, data):
     :param data:
     :return:
     """
-    logging_settings.logger.debug(data)
+    log.logger.debug(data)
 
     try:
         # source_type = data['source_collection_name']
@@ -392,14 +392,14 @@ def upsert_edge_data(source_node_id, target_node_id, data):
                     if value2 != '':
                         props[v] = value2
 
-        logging_settings.logger.debug('add new edge to db')
+        log.logger.debug('add new edge to db')
         db.session.add(models.Edge(source_node_id, target_node_id, edge_type, str(props)))
         try:
             db.session.commit()
         except:
             db.session.rollback()
 
-        logging_settings.logger.debug("upserting edge with type {}".format(edge_type))
+        log.logger.debug("upserting edge with type {}".format(edge_type))
 
     except:
         print('edge input error')
@@ -415,11 +415,11 @@ def remove_node(id):
     :return: nothing
     """
     models.Edge.query.filter_by(source_node_id=id).delete()
-    logging_settings.logger.debug('source node with ID {} removed from edges'.format(id))
+    log.logger.debug('source node with ID {} removed from edges'.format(id))
     models.Edge.query.filter_by(target_node_id=id).delete()
-    logging_settings.logger.debug('target node with ID {} removed from edges'.format(id))
+    log.logger.debug('target node with ID {} removed from edges'.format(id))
     models.Node.query.filter_by(id=id).delete()
-    logging_settings.logger.debug('node with ID {} removed from nodes'.format(id))
+    log.logger.debug('node with ID {} removed from nodes'.format(id))
     models.db.session.commit()
 
 # def update_node_id(type, old_id, new_id):
@@ -489,25 +489,25 @@ def merge_nodes(data):
             coll.update_many(my_target_query, new_target_values)
 
 
-def remove_key_from_collection(type, coll, key):
-    """
-    removes a key from a specified collection.
-    keys {name} cannot be removed from an node
-    keys {from, to} cannot be removed from an edge
-
-    :param type: node or edge
-    :param coll: collectiun nanme
-    :param key: key name
-    :return: nothinhg
-    """
-
-    node_query = "MATCH (m:{}) REMOVE m.{} RETURN m".format(coll, key)
-    edge_query = ""
-
-    node_exceptions = ['name']
-    edge_exceptions = ['from', 'to']
-
-    if type == 'node' and key not in node_exceptions:
-        graph.run(node_query)
-    elif type == 'edge' and key not in edge_exceptions:
-        graph.run(edge_query)
+# def remove_key_from_collection(type, coll, key):
+#     """
+#     removes a key from a specified collection.
+#     keys {name} cannot be removed from an node
+#     keys {from, to} cannot be removed from an edge
+#
+#     :param type: node or edge
+#     :param coll: collectiun nanme
+#     :param key: key name
+#     :return: nothinhg
+#     """
+#
+#     node_query = "MATCH (m:{}) REMOVE m.{} RETURN m".format(coll, key)
+#     edge_query = ""
+#
+#     node_exceptions = ['name']
+#     edge_exceptions = ['from', 'to']
+#
+#     if type == 'node' and key not in node_exceptions:
+#         graph.run(node_query)
+#     elif type == 'edge' and key not in edge_exceptions:
+#         graph.run(edge_query)

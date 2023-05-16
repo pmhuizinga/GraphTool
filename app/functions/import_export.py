@@ -3,7 +3,7 @@ import ast
 import os
 from time import sleep
 import pandas as pd
-from app.functions import logging_settings
+from app.functions import log
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import *
@@ -18,7 +18,8 @@ engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
 # excel_folder = 'C:\\Users\\pahuizinga\\OneDrive - Aegon\\Desktop\\'
 excel_folder = 'C:\\Users\\PaulMarjanIlseMeike\\Dropbox\\Paul\\DataScience\\Projects\\WIJ\\'
-excel_file = 'manual_inventory.xlsx'
+# excel_file = 'manual_inventory.xlsx'
+excel_file = 'proces_inventory.xlsx'
 excel_sheet = 'ontology'
 
 # sqlite init to app
@@ -74,7 +75,7 @@ def upsert_node_data(data, source_target_id):
     :return:
     """
     props = {}
-    logging_settings.logger.debug(data)
+    log.logger.debug(data)
     if not data:
         print("data is empty")
         return None
@@ -89,15 +90,15 @@ def upsert_node_data(data, source_target_id):
                 if k == source_target_id + '_collection_name':
                     node_type = data[source_target_id + "_collection_name"].lower().strip()
                     props['node_type'] = node_type
-                    logging_settings.logger.debug('collection name')
-                    logging_settings.logger.debug(node_type)
+                    log.logger.debug('collection name')
+                    log.logger.debug(node_type)
 
                 # get id
                 elif k == source_target_id + '_collection_id':
                     node_id = data[k]
                     props['node_id'] = node_id
                     props['name'] = node_id
-                    logging_settings.logger.debug('node_id {}'.format(node_id))
+                    log.logger.debug('node_id {}'.format(node_id))
 
                 # new properties
                 elif source_target_id + '_property_name' in k:
@@ -106,15 +107,15 @@ def upsert_node_data(data, source_target_id):
                     if value2 != '':
                         props[v] = value2
                         logging_settings.logger.debug('new property')
-                        logging_settings.logger.debug(v + " : " + value2)
+                        log.logger.debug(v + " : " + value2)
 
                 # all other properties
                 else:
                     newkey = k[len(source_target_id) + 1:]
                     if not (newkey == 'name' and v == ''):
                         props[newkey] = v
-                    logging_settings.logger.debug('other property')
-                    logging_settings.logger.debug(newkey + " : " + v)
+                    log.logger.debug('other property')
+                    log.logger.debug(newkey + " : " + v)
 
     try:
         if not node_id == '':
@@ -127,7 +128,7 @@ def upsert_node_data(data, source_target_id):
 
             if my_node:
                 # if node exists
-                logging_settings.logger.debug('my_node found')
+                log.logger.debug('my_node found')
                 my_node.node_type = node_type
                 my_node.node_id = node_id
                 my_node.node_attr = str(props)
@@ -148,7 +149,7 @@ def upsert_node_data(data, source_target_id):
                 except:
                     db.session.rollback()
 
-            logging_settings.logger.debug(
+            log.logger.debug(
                 "upserting {} node {} as type {}".format(source_target_id, node_id, node_type))
 
             print(node_type, node_id)
@@ -170,11 +171,11 @@ def upsert_edge_data(source_node_id, target_node_id, data):
     :param data:
     :return:
     """
-    logging_settings.logger.debug(data)
+    log.logger.debug(data)
 
     try:
 
-        logging_settings.logger.debug('add new edge to db')
+        log.logger.debug('add new edge to db')
         db.session.add(Edge(source_node_id, target_node_id, edge_type, str(props)))
         try:
             db.session.commit()
@@ -215,7 +216,7 @@ def create_nodes(df):
 
         node_attributes_dict['node_type'] = node_type
         node_attributes_dict['node_id'] = node_id
-        node_attributes_dict['name'] = node_id
+        # node_attributes_dict['name'] = node_id
         print('type: {}, id: {}, attr: {}'.format(node_type, node_id, str(node_attributes_dict)))
         db.session.add(Node(node_type, node_id, str(node_attributes_dict)))
         try:
@@ -241,6 +242,7 @@ def create_edges(df):
     for node_type, node_id, edges in zip(df['node_type'], df['node_id'], df['edges']):
         source_node_id = get_node_id(node_type, node_id)
         for edge in edges.split(";"):
+            log.logger.debug('edge upsert {}'.format(edge))
             d = edge.split("|")
             target_node_id = get_node_id(d[1], d[2])
             db.session.add(Edge(source_node_id, target_node_id, d[0], ''))

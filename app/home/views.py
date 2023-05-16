@@ -2,12 +2,10 @@ from flask import request, render_template, redirect, url_for, jsonify
 from . import home
 from app import models, db
 import requests
-from app.functions import logging_settings
+from app.functions import log
 from app.functions import networkx_database_functions as dbf
 from app.functions import networkx_analytic_functions as af
-# from app.functions import import_export as db_functions
 
-# pages
 @home.route('/')
 @home.route('/index')
 def index():
@@ -43,10 +41,10 @@ def create():
             if request.form.get('sticky_target'):
                 sticky_target = [1, request.form['target_collection_name'], request.form['target_collection_id']]
 
-            logging_settings.logger.debug('upserting source node')
+            log.logger.debug('upserting source node')
             source_node_id = dbf.upsert_node_data(request.form, 'source')
 
-            logging_settings.logger.debug('upserting target node')
+            log.logger.debug('upserting target node')
             target_node_id = dbf.upsert_node_data(request.form, 'target')
 
             if target_node_id and source_node_id:
@@ -59,7 +57,7 @@ def create():
                 # print('node id for removal: {}'.format(id))
                 dbf.remove_node(id)
             except:
-                logging_settings.logger.debug('id not found for delete')
+                log.logger.debug('id not found for delete')
 
         elif request.form['submitbutton'] == 'merge':
             pass
@@ -91,7 +89,6 @@ def get_collections(type):
 
     if type == 'node':
         result = dbf.get_node_type()
-        # query = "CALL db.labels()"
     elif type == 'edge':
         result = dbf.get_edge_names()
 
@@ -128,7 +125,7 @@ def get_collection_ids(type, collection):
     :param collection: collection name
     :return: list of record is's
     """
-    # collection = type + "_" + collection
+
     id_list = dbf.get_collection_id(collection)
 
     return jsonify(id_list)
@@ -146,15 +143,8 @@ def get_collection_record(type, collection, id):
     :param id:
     :return:
     """
-    # collection = type + "_" + collection
     available_fields = dbf.get_collection_keys(type, collection)
-    # print('available fields')
-    # print(available_fields)
-    # get node data
     result = dbf.get_collection_detail(type, collection, id)
-    # print('node data')
-    # print(result)
-    # result = db[collection].find_one({'id': id})
 
     # fetch non existing records
     if result is None:
@@ -192,18 +182,6 @@ def get_collection_record(type, collection, id):
 #     dbf.remove_key_from_collection(type, collection, key)
 #
 #     return jsonify(['removed'])
-
-# @home.route('/database/<action>/<dbname>')
-# def database_action(action,dbname):
-#
-#     if action == 'switch':
-#         db_functions.database_switch(dbname)
-#         return jsonify(['Database changed to: {}'.format(dbname)])
-#
-#     if action == 'create':
-#         db_functions.database_create(dbname)
-#         return jsonify(['Database {} created'.format(dbname)])
-
 
 
 # @home.route('/read', methods=['GET'])
